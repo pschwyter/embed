@@ -1,0 +1,27 @@
+.ADA-CHAPERONE-Button {
+  width: 44px;
+  height: 44px;
+  background-color: #23bbda;
+  background: none;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10000;
+  cursor: pointer;
+  border: 1px solid rgba(black, 0.05);
+  transition: all 120ms ease;
+  box-shadow: 0 2px 4px rgba(black, 0.1);
+  visibility: visible;
+  padding: 0;
+  margin: 0;
+  min-width: initial;
+  max-width: initial;
+  min-height: initial;
+  max-height: initial;
+  overflow: hidden;
+  background-image: url("https://d124s1zbdqkqqe.cloudfront.net/Dialogue.svg");
+  background-size: 28px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
