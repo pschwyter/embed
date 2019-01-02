@@ -18,7 +18,13 @@
   "author": "Zouhir <zouhir@zouhir.org>",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.5.0",
+    "babel-eslint": "8",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb": "17.0.0",
+    "eslint-import-resolver-webpack": "^0.10.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
     "identity-obj-proxy": "^3.0.0",
     "if-env": "^1.0.0",
     "jest": "^21.2.1",
@@ -31,10 +37,14 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-jest": "^21.26.1",
+    "eslint-plugin-prettier": "^3.0.0",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
     "preact-habitat": "^3.1.0",
-    "preact-router": "^2.5.7"
+    "preact-router": "^2.5.7",
+    "prettier": "^1.14.3"
   },
   "jest": {
     "verbose": true,
