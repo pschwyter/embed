@@ -99,7 +99,8 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-tag-spacing": "error",
     "react/jsx-wrap-multilines": "error",
-    "react/prop-types": [1]
+    "react/prop-types": [1],
+    "react/react-in-jsx-scope": "off"
   },
   "env": {
     "browser": true,
