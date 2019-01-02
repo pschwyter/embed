@@ -12,5 +12,6 @@ export default (config, env, helpers) => {
   const { loader: cssLoader } =
     helpers.getLoadersByName(config, 'css-loader')[0];
     
+  // This is to fix the issue where the compiled CSS classnames were given a localIdentName of [local]__[hash], but this did not match the component class names
   cssLoader.options.localIdentName = '[local]';
 };
