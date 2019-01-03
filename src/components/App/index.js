@@ -42,6 +42,7 @@ export default class App extends Component {
         <Drawer
           handle={handle}
           isDrawerOpen={isDrawerOpen}
+          toggleDrawer={this.toggleDrawer}
         />
         <Button
           toggleDrawer={this.toggleDrawer}
