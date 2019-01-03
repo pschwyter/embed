@@ -10,7 +10,7 @@ export default class Button extends Component {
         title="Open Support Chat"
         accessKey="1"
         tabIndex="0"
-        className="ADA-CHAPERONE-Button"
+        className="ada-chaperone-Button"
         onClick={toggleDrawer}
       >
         BUTTON

@@ -33,6 +33,7 @@
     "preact-cli": "^2.0.2",
     "preact-render-to-string": "^3.7.0",
     "preact-widget-scripts": "^0.6.0",
+    "sass-lint": "^1.12.1",
     "sass-loader": "^7.1.0"
   },
   "dependencies": {

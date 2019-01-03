@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "property-sort-order": [
+      1,
+      {
+        "order": [
+          "display",
+          "margin"
+        ],
+        "ignore-custom-properties": true
+      }
+    ]
+  }
+}

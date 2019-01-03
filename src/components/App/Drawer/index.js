@@ -13,18 +13,18 @@ export default class Drawer extends Component {
     return (
       <div
         class={classnames(
-          "ADA-CHAPERONE-Drawer",
+          "ada-chaperone-Drawer",
           {
-            "ADA-CHAPERONE-Drawer--hidden": !isDrawerOpen
+            "ada-chaperone-Drawer--hidden": !isDrawerOpen
           }
         )}
       >
         <div 
-          class="ADA-CHAPERONE-Drawer__mask"
+          class="ada-chaperone-Drawer__mask"
           onClick={toggleDrawer}
         />
         <iframe 
-          class="ADA-CHAPERONE-Drawer__iframe"
+          class="ada-chaperone-Drawer__iframe"
           src={`https://${handle}.ada.support/chat/`} 
         />
       </div>
