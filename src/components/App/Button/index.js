@@ -3,7 +3,7 @@ import "./style.scss";
 
 export default class Button extends Component {
   render(props) {
-    const { toggleDrawer } = props;
+    const { openChat } = props;
 
     return (
       <button
@@ -11,7 +11,7 @@ export default class Button extends Component {
         accessKey="1"
         tabIndex="0"
         className="ada-chaperone-button"
-        onClick={toggleDrawer}
+        onClick={openChat}
       >
         BUTTON
       </button>

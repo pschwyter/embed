@@ -18,7 +18,13 @@ export default class Drawer extends Component {
    * @returns {ReactElement}
    */
   render(props) {
-    const { handle, isDrawerOpen, toggleDrawer } = props;
+    const {
+      handle,
+      isDrawerOpen,
+      openChat,
+      chatURL,
+      mobileOverlay
+    } = props;
 
     return (
       <div
@@ -26,17 +32,18 @@ export default class Drawer extends Component {
           "ada-chaperone-drawer",
           {
             "ada-chaperone-drawer--hidden": !isDrawerOpen,
-            "ada-chaperone-drawer--isIE9": this.isIE9OrBelow
+            "ada-chaperone-drawer--isIE9": this.isIE9OrBelow,
+            "ada-chaperone-drawer--mobile-overlay": mobileOverlay
           }
         )}
       >
         <div
           className="ada-chaperone-drawer__mask"
-          onClick={toggleDrawer}
+          onClick={openChat}
         />
         <iframe
           className="ada-chaperone-drawer__iframe"
-          src={`https://${handle}.ada.support/chat/`}
+          src={chatURL}
           title={`${handle} chat support`}
         />
       </div>
