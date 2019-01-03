@@ -54,11 +54,11 @@ $mask-color: rgba($color-black, .16);
     display: none;
   }
 
-  &--hidden#{&}--mobile-overlay {
+  &--hidden#{&}--mobile-overlay &__iframe {
     transform: translate(100vw, 0);
   }
 
-  &--mobile-overlay {
+  &--mobile-overlay &__iframe {
     height: 100%;
     max-width: none;
     min-height: 100%;

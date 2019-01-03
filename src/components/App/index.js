@@ -10,6 +10,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    const { mobileOverlay } = props;
+
     this.state = {
       isDrawerOpen: false
     };
@@ -18,6 +20,7 @@ export default class App extends Component {
     this.isInMobile = (
       navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) !== null
     );
+    this.openChatInNewWindow = !mobileOverlay && this.isInMobile;
   }
 
   /**
@@ -25,11 +28,10 @@ export default class App extends Component {
    */
   openChat() {
     const { isDrawerOpen } = this.state;
-    const { mobileOverlay } = this.props;
     const nextIsDrawerOpen = !isDrawerOpen;
 
     // Open Chat in a new window if mobile
-    if (!mobileOverlay && this.isInMobile) {
+    if (this.openChatInNewWindow) {
       window.open(this.constructURL());
 
       return;
@@ -69,13 +71,16 @@ export default class App extends Component {
 
     return (
       <div>
-        <Drawer
-          handle={handle}
-          isDrawerOpen={isDrawerOpen}
-          openChat={this.openChat}
-          chatURL={this.constructURL()}
-          mobileOverlay={mobileOverlay}
-        />
+        {/* Do not render Drawer if Chat will be opened in new window */}
+        {!this.openChatInNewWindow && (
+          <Drawer
+            handle={handle}
+            isDrawerOpen={isDrawerOpen}
+            openChat={this.openChat}
+            chatURL={this.constructURL()}
+            useMobileOverlay={mobileOverlay && this.isInMobile}
+          />
+        )}
         <Button
           openChat={this.openChat}
         />

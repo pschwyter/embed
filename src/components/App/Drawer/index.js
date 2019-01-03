@@ -10,7 +10,25 @@ export default class Drawer extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      drawerHasBeenOpened: false
+    };
+
     this.isIE9OrBelow = isIE9OrBelow();
+  }
+
+  /**
+   * @param {Object} nextProps
+   */
+  componentWillReceiveProps(nextProps) {
+    const { isDrawerOpen } = this.props;
+    const { drawerHasBeenOpened } = this.state;
+
+    if (isDrawerOpen !== nextProps.isDrawerOpen && !drawerHasBeenOpened) {
+      this.setState({
+        drawerHasBeenOpened: true
+      });
+    }
   }
 
   /**
@@ -23,8 +41,9 @@ export default class Drawer extends Component {
       isDrawerOpen,
       openChat,
       chatURL,
-      mobileOverlay
+      useMobileOverlay
     } = props;
+    const { drawerHasBeenOpened } = this.state;
 
     return (
       <div
@@ -33,7 +52,7 @@ export default class Drawer extends Component {
           {
             "ada-chaperone-drawer--hidden": !isDrawerOpen,
             "ada-chaperone-drawer--isIE9": this.isIE9OrBelow,
-            "ada-chaperone-drawer--mobile-overlay": mobileOverlay
+            "ada-chaperone-drawer--mobile-overlay": useMobileOverlay
           }
         )}
       >
@@ -41,11 +60,13 @@ export default class Drawer extends Component {
           className="ada-chaperone-drawer__mask"
           onClick={openChat}
         />
-        <iframe
-          className="ada-chaperone-drawer__iframe"
-          src={chatURL}
-          title={`${handle} chat support`}
-        />
+        {drawerHasBeenOpened && (
+          <iframe
+            className="ada-chaperone-drawer__iframe"
+            src={chatURL}
+            title={`${handle} chat support`}
+          />
+        )}
       </div>
     );
   }
