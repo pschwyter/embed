@@ -60,13 +60,15 @@ export default class Drawer extends Component {
           className="ada-chaperone-drawer__mask"
           onClick={openChat}
         />
-        {drawerHasBeenOpened && (
-          <iframe
-            className="ada-chaperone-drawer__iframe"
-            src={chatURL}
-            title={`${handle} chat support`}
-          />
-        )}
+        <div className="ada-chaperone-drawer__iframe-container">
+          {drawerHasBeenOpened && (
+            <iframe
+              className="ada-chaperone-drawer__iframe-container__iframe"
+              src={chatURL}
+              title={`${handle} chat support`}
+            />
+          )}
+        </div>
       </div>
     );
   }

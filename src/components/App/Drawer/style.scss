@@ -4,16 +4,14 @@
 $mask-color: rgba($color-black, .16);
 
 .ada-chaperone-drawer {
-  &__iframe {
+  &__iframe-container {
     background-color: $color-white;
-    border: 0;
     bottom: 0;
     box-shadow: $box-shadow;
     box-sizing: border-box;
     display: block;
     height: 100vh;
     max-width: 375px;
-    outline: none;
     overflow: initial;
     pointer-events: all;
     position: fixed;
@@ -22,9 +20,16 @@ $mask-color: rgba($color-black, .16);
     transition: transform 200ms ease, opacity 200ms ease;
     width: 100%;
     z-index: 9999;
+
+    &__iframe {
+      border: 0;
+      height: 100%;
+      outline: none;
+      width: 100%;
+    }
   }
 
-  &--hidden &__iframe {
+  &--hidden &__iframe-container {
     opacity: 0;
     transform: translate(375px, 0);
   }
@@ -54,11 +59,11 @@ $mask-color: rgba($color-black, .16);
     display: none;
   }
 
-  &--hidden#{&}--mobile-overlay &__iframe {
+  &--hidden#{&}--mobile-overlay &__iframe-container {
     transform: translate(100vw, 0);
   }
 
-  &--mobile-overlay &__iframe {
+  &--mobile-overlay &__iframe-container {
     height: 100%;
     max-width: none;
     min-height: 100%;
