@@ -20,13 +20,13 @@ $mask-color: rgba($color-black, .16);
     transition: transform 200ms ease, opacity 200ms ease;
     width: 100%;
     z-index: 9999;
+  }
 
-    &__iframe {
-      border: 0;
-      height: 100%;
-      outline: none;
-      width: 100%;
-    }
+  &__iframe {
+    border: 0;
+    height: 100%;
+    outline: none;
+    width: 100%;
   }
 
   &--hidden &__iframe-container {

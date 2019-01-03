@@ -63,7 +63,7 @@ export default class Drawer extends Component {
         <div className="ada-chaperone-drawer__iframe-container">
           {drawerHasBeenOpened && (
             <iframe
-              className="ada-chaperone-drawer__iframe-container__iframe"
+              className="ada-chaperone-drawer__iframe"
               src={chatURL}
               title={`${handle} chat support`}
             />

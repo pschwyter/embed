@@ -1,16 +1,7 @@
 {
   "rules": {
-    "class-name-format": [
-      1,
-      {
-        "convention": "hyphenatedbem"
-      }
-    ],
-    "quotes": [
-      1,
-      {
-        "style": "double"
-      }
-    ]
+    "bem-depth": [ 1, { "max_elements": 1 } ],
+    "class-name-format": [ 1, { "convention": "hyphenatedbem" } ],
+    "quotes": [ 1, { "style": "double" } ]
   }
 }
