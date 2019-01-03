@@ -5,6 +5,12 @@
       {
         "convention": "hyphenatedbem"
       }
+    ],
+    "quotes": [
+      1,
+      {
+        "style": "double"
+      }
     ]
   }
 }
