@@ -1,13 +1,9 @@
 {
   "rules": {
-    "property-sort-order": [
+    "class-name-format": [
       1,
       {
-        "order": [
-          "display",
-          "margin"
-        ],
-        "ignore-custom-properties": true
+        "convention": "hyphenatedbem"
       }
     ]
   }
