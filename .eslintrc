@@ -5,13 +5,14 @@
     "prettier/react"
   ],
   "plugins": [
+    "typescript",
     "jest",
     "prettier"
   ],
   "settings": {
     "import/resolver": "webpack"
   },
-  "parser": "babel-eslint",
+  "parser": "typescript-eslint-parser",
   "parserOptions": {
     "allowImportExportEverywhere": true
   },
@@ -100,7 +101,8 @@
     "react/jsx-tag-spacing": "error",
     "react/jsx-wrap-multilines": "error",
     "react/prop-types": [1],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "typescript/rule-name": "error"
   },
   "env": {
     "browser": true,
