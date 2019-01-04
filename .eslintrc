@@ -14,7 +14,8 @@
   },
   "parser": "typescript-eslint-parser",
   "parserOptions": {
-    "allowImportExportEverywhere": true
+    "allowImportExportEverywhere": true,
+    "jsx": true
   },
   "rules": {
     "array-bracket-newline": ["error", "consistent"],
@@ -100,9 +101,7 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-tag-spacing": "error",
     "react/jsx-wrap-multilines": "error",
-    "react/prop-types": [1],
-    "react/react-in-jsx-scope": "off",
-    "typescript/rule-name": "error"
+    "react/prop-types": [1]
   },
   "env": {
     "browser": true,

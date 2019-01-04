@@ -34,7 +34,7 @@ export default class Drawer extends Component<DrawerInterface, State> {
 
     if (isDrawerOpen !== nextProps.isDrawerOpen && !drawerHasBeenOpened) {
       this.setState({
-        drawerHasBeenOpened: true
+        drawerHasBeenOpened: true,
       });
     }
   }
