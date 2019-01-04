@@ -48,7 +48,7 @@
     "preact-habitat": "^3.1.0",
     "preact-router": "^2.5.7",
     "prettier": "^1.14.3",
-    "ts-loader": "^5.3.2"
+    "ts-loader": "^3.5"
   },
   "jest": {
     "verbose": true,

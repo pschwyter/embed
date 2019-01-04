@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import classnames from "classnames";
-import { isIE9OrBelow } from "services/browsers";
+import { isIE9OrBelow } from "../../../services/browsers";
 import "./style.scss";
 
 interface DrawerInterface {
@@ -16,9 +16,8 @@ interface State {
 }
 
 export default class Drawer extends Component<DrawerInterface, State> {
-  /**
-   * @param {Object} props
-   */
+  isIE9OrBelow: boolean
+
   constructor(props: DrawerInterface) {
     super(props);
 
