@@ -5,15 +5,16 @@
     "prettier/react"
   ],
   "plugins": [
-    "typescript",
     "jest",
-    "prettier"
+    "prettier",
+    "typescript"
   ],
   "settings": {
     "import/resolver": "webpack"
   },
-  "parser": "typescript-eslint-parser",
+  "parser": "babel-eslint",
   "parserOptions": {
+    "parser": "typescript-eslint-parser",
     "allowImportExportEverywhere": true,
     "jsx": true
   },

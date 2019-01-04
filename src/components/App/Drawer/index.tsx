@@ -1,9 +1,9 @@
-import { h, Component } from "preact";
 import classnames from "classnames";
+import { Component, h } from "preact";
 import { isIE9OrBelow } from "services/browsers";
 import "./style.scss";
 
-interface DrawerInterface {
+interface InterfaceDrawer {
   handle: string,
   isDrawerOpen: boolean,
   openChat(): void,
@@ -15,10 +15,10 @@ interface State {
   drawerHasBeenOpened: boolean
 }
 
-export default class Drawer extends Component<DrawerInterface, State> {
-  isIE9OrBelow: boolean
+export default class Drawer extends Component<InterfaceDrawer, State> {
+  isIE9OrBelow: boolean;
 
-  constructor(props: DrawerInterface) {
+  constructor(props: InterfaceDrawer) {
     super(props);
 
     this.state = {
@@ -28,13 +28,13 @@ export default class Drawer extends Component<DrawerInterface, State> {
     this.isIE9OrBelow = isIE9OrBelow();
   }
 
-  componentWillReceiveProps(nextProps: DrawerInterface) {
+  componentWillReceiveProps(nextProps: InterfaceDrawer) {
     const { isDrawerOpen } = this.props;
     const { drawerHasBeenOpened } = this.state;
 
     if (isDrawerOpen !== nextProps.isDrawerOpen && !drawerHasBeenOpened) {
       this.setState({
-        drawerHasBeenOpened: true,
+        drawerHasBeenOpened: true
       });
     }
   }
