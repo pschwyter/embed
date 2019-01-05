@@ -1,13 +1,27 @@
-import { Component } from "preact";
-import Drawer from "./Drawer";
+import { Component, h } from "preact";
 import Button from "./Button";
+import Drawer from "./Drawer";
 import "./style.scss";
 
-export default class App extends Component {
-  /**
-   * @param {Object} props
-   */
-  constructor(props) {
+interface InterfaceApp {
+  chatURL: string,
+  cluster: string,
+  handle: string,
+  language: string,
+  mobileOverlay: boolean,
+  private: string,
+  useMobileOverlay: boolean
+}
+
+interface InterfaceState {
+  isDrawerOpen: boolean
+}
+
+export default class App extends Component<InterfaceApp, InterfaceState> {
+  isInMobile: boolean;
+  openChatInNewWindow: boolean;
+
+  constructor(props: InterfaceApp) {
     super(props);
 
     const { mobileOverlay } = props;
@@ -44,26 +58,24 @@ export default class App extends Component {
 
   /**
    * Generate the Chat App URL
-   * @returns {String}
    */
   constructURL() {
     const {
       handle,
-      cluster: _cluster,
-      private: _private,
-      language: _language
+      cluster,
+      private: privateMode,
+      language
     } = this.props;
-    const cluster = _cluster ? `.${_cluster}` : "";
-    const privateMode = _private ? "?private=1" : "";
-    const hasPrivateMode = privateMode.length ? "&" : "?";
-    const language = _language ? `${hasPrivateMode}language=${_language}` : "";
+    const clusterString = cluster ? `.${cluster}` : "";
+    const newPrivateMode = privateMode ? "?private=1" : "";
+    const hasPrivateMode = newPrivateMode.length ? "&" : "?";
+    const languageString = language ? `${hasPrivateMode}language=${language}` : "";
 
-    return `https://${handle}${cluster}.ada.support/chat/${privateMode}${language}`;
+    return `https://${handle}${clusterString}.ada.support/chat/${newPrivateMode}${languageString}`;
   }
 
   /**
-   * @param {Object} props
-   * @returns {ReactElement}
+   *
    */
   render(props) {
     const { handle, mobileOverlay } = props;
