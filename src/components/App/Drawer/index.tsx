@@ -1,6 +1,6 @@
 import classnames from "classnames";
 import { Component, h } from "preact";
-import { isIE9OrBelow } from "services/browsers";
+import { isIE9OrBelow } from "../../../services/browsers";
 import "./style.scss";
 
 interface InterfaceDrawer {

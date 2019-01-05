@@ -20,7 +20,7 @@ export default (config, env, helpers) => {
     loaders: ["ts-loader"]
   });
 
-  config.resolve.alias["preact-cli-entrypoint"] = resolve(process.cwd(), "src", "index");
+  // config.resolve.alias["preact-cli-entrypoint"] = resolve(process.cwd(), "src", "index");
 
   // This is to fix the issue where the compiled CSS classnames were given a localIdentName of
   // [local]__[hash], but this did not match the component class names
