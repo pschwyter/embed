@@ -1,15 +1,18 @@
-import { Component } from "preact";
+import { Component, h } from "preact";
 import "./style.scss";
 
-export default class Button extends Component {
-  render(props) {
+interface InterfaceButton {
+  openChat(): void
+}
+
+export default class Button extends Component<InterfaceButton> {
+  render(props: InterfaceButton) {
     const { openChat } = props;
 
     return (
       <button
         title="Open Support Chat"
         accessKey="1"
-        tabIndex="0"
         className="ada-chaperone-button"
         onClick={openChat}
       >
