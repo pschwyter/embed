@@ -3,18 +3,20 @@
   "extends": [
     "tslint:recommended",
     "tslint-config-airbnb",
-    "tslint-react"
+    "tslint-react",
+    "tslint-react-a11y"
   ],
   "jsRules": {},
-  "quotemark": [true, "double"],
   "rules": {
     "member-access": [true, "no-public"],
+    "jsx-no-multiline-js": false,
+    "quotemark": [true, "double"],
     "semicolon": [
       true,
      "always",
      "ignore-interfaces"
     ],
-    "trailing-comma": true
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
   },
   "rulesDirectory": []
 }

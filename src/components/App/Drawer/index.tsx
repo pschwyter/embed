@@ -6,16 +6,16 @@ import "./style.scss";
 interface InterfaceDrawer {
   handle: string,
   isDrawerOpen: boolean,
-  openChat(): void,
   chatURL: string,
-  useMobileOverlay: boolean
+  useMobileOverlay: boolean,
+  openChat(): void
 }
 
-interface State {
+interface InterfaceState {
   drawerHasBeenOpened: boolean
 }
 
-export default class Drawer extends Component<InterfaceDrawer, State> {
+export default class Drawer extends Component<InterfaceDrawer, InterfaceState> {
   isIE9OrBelow: boolean;
 
   constructor(props: InterfaceDrawer) {
