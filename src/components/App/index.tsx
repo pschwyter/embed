@@ -77,7 +77,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   /**
    *
    */
-  render(props) {
+  render(props: InterfaceApp) {
     const { handle, mobileOverlay } = props;
     const { isDrawerOpen } = this.state;
 
