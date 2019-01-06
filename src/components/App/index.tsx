@@ -1,7 +1,7 @@
 import { Component, h } from "preact";
+import httpRequest from "services/httpRequest";
 import Button from "./Button";
 import Drawer from "./Drawer";
-import httpRequest from "services/http";
 import "./style.scss";
 
 interface InterfaceApp {
