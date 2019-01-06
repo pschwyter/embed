@@ -1,10 +1,10 @@
 declare var XDomainRequest;
 
 interface InterfaceRequestObject {
-  headers: object,
-  method: string,
   url: string,
-  body: string
+  body?: object,
+  method?: string,
+  headers?: object
 }
 
 /**

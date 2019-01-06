@@ -1,6 +1,7 @@
 import { Component, h } from "preact";
 import Button from "./Button";
 import Drawer from "./Drawer";
+import httpRequest from "services/http";
 import "./style.scss";
 
 interface InterfaceApp {
@@ -35,6 +36,22 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) !== null
     );
     this.openChatInNewWindow = !mobileOverlay && this.isInMobile;
+  }
+
+  componentDidMount() {
+    this.fetchClient();
+  }
+
+  fetchClient() {
+    const { handle, cluster } = this.props;
+
+    httpRequest({
+      url: `https://${handle}.ada.support/api/`
+    }).then(response => {
+      console.log(response);
+    }, error => {
+      console.warn(error);
+    });
   }
 
   /**
