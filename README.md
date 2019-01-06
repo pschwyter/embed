@@ -4,6 +4,7 @@ Version 2 of the Ada embed script.
 Chaperone2 provides the same functionality as Chaperone, but with modern development tools to increase reliability, as well reduce development time.
 
 Some of these tools include:
+
 [PreactJS](https://preactjs.com/): A fast 3kB alternative to React with a stripped down API.
 
 [Jest](https://jestjs.io/): For unit testing.
