@@ -5,10 +5,15 @@ Chaperone2 provides the same functionality as Chaperone, but with modern develop
 
 Some of these tools include:
 [PreactJS](https://preactjs.com/): A fast 3kB alternative to React with a stripped down API.
+
 [Jest](https://jestjs.io/): For unit testing.
+
 [TypeScript](https://www.typescriptlang.org/): Static typing, in lieu of `propTypes` (which the current version of Preact does not currently support).
+
 [TSLint](https://palantir.github.io/tslint/): Linter for TypeScript.
+
 [Sass-Lint](https://github.com/sasstools/sass-lint): Linter for `sass` and `scss`.
+
 
 Webpack is also used under the hood and can be modified via the `preact.config.js` file.
 
