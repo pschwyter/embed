@@ -27,6 +27,13 @@ export default (config, env, helpers) => {
   const { loader: cssLoader } = helpers.getLoadersByName(config, "css-loader")[0];
   cssLoader.options.localIdentName = "[local]";
 
-  config.resolve.alias.services = path.join(__dirname, "/src/services");
-  config.resolve.alias.style = path.join(__dirname, "/src/style");
+  // Directory aliases
+  config.resolve.alias = Object.assign(
+    {},
+    {
+      services: resolve(__dirname, "src/services/"),
+      style: resolve(__dirname, "src/style/")
+    },
+    config.resolve.alias
+  );
 };

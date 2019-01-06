@@ -6,6 +6,12 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
+    "baseUrl": ".",
+    "paths": {
+      "services/*": [
+        "src/services/*"
+      ]
+    }
   }
 }
