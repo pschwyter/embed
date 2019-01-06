@@ -12,17 +12,17 @@ interface InterfaceRequestObject {
  */
 export default function httpRequest(obj: InterfaceRequestObject): Promise<object> {
   return new Promise((resolve, reject) => {
+    const method = obj.method || "GET";
     let xhr = new XMLHttpRequest();
-    // xhr.open(obj.method || "GET", obj.url);
 
     if ("withCredentials" in xhr) {
       // XMLHttpRequest for Chrome/Firefox/Opera/Safari.
-      xhr.open("GET", obj.url, true);
+      xhr.open(method, obj.url, true);
 
     } else if (typeof XDomainRequest !== "undefined") {
       // XDomainRequest for IE.
       xhr = new XDomainRequest();
-      xhr.open("GET", obj.url);
+      xhr.open(method, obj.url);
 
     } else {
       // CORS not supported.
