@@ -21,9 +21,9 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Deploy to s3
-        command: |
-          yarn run build -p true
+          name: Deploy to s3
+          command: |
+            yarn run build -p true
 
 workflows:
   version: 2
