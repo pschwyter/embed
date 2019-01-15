@@ -21,6 +21,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Build
+          command: |
+            yarn install
+      - run:
           name: Deploy to s3
           command: |
             yarn run build -p true
