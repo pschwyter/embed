@@ -10,7 +10,6 @@ export default (config, env, helpers) => {
   let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   plugin.options.disable = true;
   if (env.production) {
-    console.log(process.env)
     config.output = {
       libraryTarget : "umd",
     }
@@ -21,7 +20,7 @@ export default (config, env, helpers) => {
       s3Options: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: 'us-west-1',
+        region: process.env.AWS_REGION,
       },
       s3UploadOptions: {
         Bucket: process.env.AWS_BUCKET
