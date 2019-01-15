@@ -1,5 +1,5 @@
 ---
-version: 1
+version: 2
 jobs:
   build-test:
     docker:
@@ -25,9 +25,8 @@ jobs:
         command: |
           yarn run build -p true
 
-
 workflows:
-  version: 1
+  version: 2
   chaperone-workflow:
     jobs:
       - build-test
