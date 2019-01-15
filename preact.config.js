@@ -1,4 +1,5 @@
 const path = require("path");
+var S3Uploader = require('webpack-s3-uploader')
 
 const { resolve } = path;
 
@@ -8,10 +9,27 @@ export default (config, env, helpers) => {
 
   let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   plugin.options.disable = true;
-
+  console.log(env)
   if (env.production) {
-    config.output.libraryTarget = "umd";
+    config.output = {
+      libraryTarget : "umd",
+    }
+    //S3 Upload
+    config.plugins.push(new S3Uploader({
+      include: /.*\.(js)$/,
+      exclude: /.*\.(png|json|icon|txt)/,
+      s3Options: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: 'us-west-1',
+      },
+      s3UploadOptions: {
+        Bucket: 'ada-samson'
+      },
+    }));
+
   }
+
 
   // Add loader for TypeScript
   config.module.loaders.push({
@@ -36,4 +54,6 @@ export default (config, env, helpers) => {
     },
     config.resolve.alias
   );
+
+
 };
