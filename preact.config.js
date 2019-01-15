@@ -24,7 +24,7 @@ export default (config, env, helpers) => {
         region: 'us-west-1',
       },
       s3UploadOptions: {
-        Bucket: 'ada-samson'
+        Bucket: process.env.AWS_BUCKET
       },
     }));
 
