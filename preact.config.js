@@ -9,7 +9,6 @@ export default (config, env, helpers) => {
 
   let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   plugin.options.disable = true;
-  console.log(env)
   if (env.production) {
     config.output = {
       libraryTarget : "umd",
