@@ -1,6 +1,6 @@
 const path = require("path");
 var S3Uploader = require('webpack-s3-uploader')
-
+require("dotenv").config();
 const { resolve } = path;
 
 export default (config, env, helpers) => {
@@ -18,7 +18,7 @@ export default (config, env, helpers) => {
       include: /.*\.(js)$/,
       exclude: /.*\.(png|json|icon|txt)/,
       s3Options: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        accessKeyId: process.env.AWS_ACCESS_KEY,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         region: process.env.AWS_REGION,
       },
