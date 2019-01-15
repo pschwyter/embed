@@ -1,0 +1,40 @@
+---
+version: 1
+jobs:
+  build-test:
+    docker:
+      - image: node:11
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: |
+            yarn install
+      - run:
+          name: Test
+          command: |
+            yarn test
+
+  deploy:
+    docker:
+      - image: node:11
+    steps:
+      - checkout
+      - run:
+        name: Deploy to s3
+        command: |
+          yarn run build -p true
+
+
+workflows:
+  version: 1
+  chaperone-workflow:
+    jobs:
+      - build-test
+      - deploy:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build-test
+
