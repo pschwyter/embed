@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Deploy to s3
           command: |
-            yarn run build -p true
+            yarn run deploy
 
 workflows:
   version: 2
