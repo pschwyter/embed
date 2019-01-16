@@ -9,10 +9,13 @@ export default (config, env, helpers) => {
 
   let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   plugin.options.disable = true;
-  if (env.production) {
+
+  //Explicitly checking for production flag set to true
+  if (env.production == true) {
     config.output = {
       libraryTarget : "umd",
     }
+
     //S3 Upload
     config.plugins.push(new S3Uploader({
       include: /.*\.(js)$/,
