@@ -13,11 +13,12 @@ export default (config, env, helpers) => {
   if (env.production) {
     config.output = {
       libraryTarget : "umd",
+      filename: 'embed.js',
     }
 
     //S3 Upload
     config.plugins.push(new S3Uploader({
-      include: /.*\.(js)$/,
+      include: /.*\.(js)/,
       exclude: /.*\.(png|json|icon|txt)/,
       s3Options: {
         accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -57,3 +58,5 @@ export default (config, env, helpers) => {
 
 
 };
+
+//Revert this
