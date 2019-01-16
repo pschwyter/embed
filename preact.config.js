@@ -32,7 +32,6 @@ export default (config, env, helpers) => {
 
   }
 
-
   // Add loader for TypeScript
   config.module.loaders.push({
     test: /\.tsx?$/,
