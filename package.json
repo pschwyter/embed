@@ -9,11 +9,11 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
-    "build": "preact build --no-prerender --clean --template src/index.ejs --service-worker false -p false",
+    "build": "preact build --no-prerender --clean --template src/index.ejs --service-worker false -- --production false",
     "serve": "npm run build && preact serve",
     "dev": "preact watch --template src/index.ejs",
     "dist": "microbundle --entry src/components/hello-world/index.js",
-    "deploy": "preact build --no-prerender --clean --template src/index.ejs --service-worker false -p true"
+    "deploy": "NODE_ENV=production preact build  --no-prerender --clean --template src/index.ejs --service-worker false"
   },
   "keywords": [],
   "author": "Zouhir <zouhir@zouhir.org>",
@@ -43,7 +43,7 @@
     "preact-habitat": "^3.1.0",
     "prettier": "^1.14.3",
     "ts-loader": "^3.5",
-    "webpack-s3-uploader": "^1.3.0"
+    "webpack-s3-uploader": "^1.3.1"
   },
   "jest": {
     "verbose": true,
