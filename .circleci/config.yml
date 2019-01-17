@@ -28,6 +28,10 @@ jobs:
           name: Deploy to s3
           command: |
             yarn run deploy
+      - run:
+          name: Deploy static copy to s3
+          command: |
+            yarn run deploy-static
 
 workflows:
   version: 2

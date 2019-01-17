@@ -12,7 +12,8 @@
     "serve": "npm run build && preact serve",
     "dev": "preact watch --template src/index.ejs",
     "dist": "microbundle --entry src/components/hello-world/index.js",
-    "deploy": "NODE_ENV=production preact build  --no-prerender --clean --template src/index.ejs --service-worker false"
+    "deploy": "NODE_ENV=production preact build  --no-prerender --clean --template src/index.ejs --service-worker false",
+    "deploy-static": "NODE_ENV=production preact build  --no-prerender --clean --template src/index.ejs --service-worker false -c preact-static.config.js"
   },
   "keywords": [],
   "author": "Zouhir <zouhir@zouhir.org>",
