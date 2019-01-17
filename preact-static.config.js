@@ -2,6 +2,7 @@ const path = require("path");
 var S3Uploader = require('webpack-s3-uploader')
 require("dotenv").config();
 const { resolve } = path;
+const childProc = require('child_process');
 
 export default (config, env, helpers) => {
   delete config.entry.polyfills;
@@ -11,12 +12,17 @@ export default (config, env, helpers) => {
   plugin.options.disable = true;
 
   if (env.production) {
+
+    const miniCommitHash = childProc.execSync('git rev-parse HEAD')
+    .toString()
+    .substr(0, 8);
+
     config.output = {
       libraryTarget : "umd",
-      filename: 'embed.js',
+      filename: `embed.${miniCommitHash}.js`,
     }
 
-    // S3 Upload
+    //S3 Upload
     config.plugins.push(new S3Uploader({
       include: /.*\.(js)/,
       exclude: /.*\.(png|json|icon|txt)/,
@@ -26,8 +32,7 @@ export default (config, env, helpers) => {
         region: process.env.AWS_REGION,
       },
       s3UploadOptions: {
-        Bucket: process.env.AWS_BUCKET,
-        CacheControl: "no-cache"
+        Bucket: process.env.AWS_BUCKET
       },
     }));
   }
@@ -53,6 +58,4 @@ export default (config, env, helpers) => {
     },
     config.resolve.alias
   );
-
-
 };
