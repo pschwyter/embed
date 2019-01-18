@@ -33,6 +33,15 @@ jobs:
           command: |
             yarn run deploy-static
 
+  cloudfront-invalidate:
+    docker:
+      - image: mesosphere/aws-cli
+    steps:
+      - run:
+          name: Invalidate
+          command: |
+            aws cloudfront create-invalidation --distribution-id CLOUDFRONT_DISTRIBUTION_ID --paths /embed.js /embed.js.map
+
 workflows:
   version: 2
   chaperone-workflow:
@@ -44,4 +53,12 @@ workflows:
               only: master
           requires:
             - build-test
+      - cloudfront-invalidate:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build-test
+            - deploy
+
 
