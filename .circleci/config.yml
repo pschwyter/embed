@@ -40,7 +40,7 @@ jobs:
       - run:
           name: Invalidate
           command: |
-            aws cloudfront create-invalidation --distribution-id CLOUDFRONT_DISTRIBUTION_ID --paths /embed.js /embed.js.map
+            aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /embed.js /embed.js.map
 
 workflows:
   version: 2
