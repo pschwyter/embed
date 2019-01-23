@@ -1,17 +1,22 @@
 ---
 var_1: &default_docker_image node:11
+var_2: &aws_docker_image mesosphere/aws-cli
 version: 2.1
 
 commands:
-  chaperone2build:
-    description: "Build command"
+  chaperone2-yarn:
+    description: "Yarn command << parameters.cmd >>"
+    parameters:
+      cmd:
+        type: string
+        default: ""
     steps:
       - checkout
       - run:
           name: Build
-          command: yarn install
+          command: yarn << parameters.cmd >>
 
-  chaperone2deploy:
+  chaperone2-deploy:
     description: "Command to deploy to different use cases"
     parameters:
       to:
@@ -22,53 +27,89 @@ commands:
           name: Deploy << parameters.to >>
           command: yarn run deploy<< parameters.to >>
 
+  chaperone2-invalidate:
+    description: "Invalidate AWS cache for chaperone2"
+    parameters:
+      deploy-to-beta:
+        type: boolean
+        default: false
+    steps:
+      - when:
+          condition: << parameters.deploy-to-beta >>
+          steps:
+            - run:
+                name: Invalidate Beta
+                command: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /embed.beta.js /embed.beta.js.map
+      - unless:
+          condition: << parameters.deploy-to-beta >>
+          steps:
+            - run:
+                name: Invalidate
+                command: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /embed.js /embed.js.map
+
 jobs:
   build-test:
     docker:
       - image: *default_docker_image
     steps:
-      - chaperone2build
-      - run:
-          name: Test
-          command: |
-            yarn test
+      - chaperone2-yarn:
+          cmd: "install"
+      - chaperone2-yarn:
+          cmd: "test"
 
   deploy:
     docker:
       - image: *default_docker_image
     steps:
-      - chaperone2build
-      - chaperone2deploy:
-          to: ""
-      - chaperone2deploy:
+      - chaperone2-yarn:
+          cmd: "install"
+      - chaperone2-deploy
+      - chaperone2-deploy:
           to: "-static"
 
-  # beta-deploy:
-  #   docker:
-  #     - image: *default_docker_image
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Build
-  #         command: |
-  #           yarn install
-  #     - chaperone2deploy:
-  #         to: "-beta"
+  beta-deploy:
+    docker:
+      - image: *default_docker_image
+    steps:
+      - chaperone2-yarn:
+          cmd: "install"
+      - chaperone2-deploy:
+          to: "-beta"
 
   cloudfront-invalidate:
     docker:
-      - image: mesosphere/aws-cli
+      - image: *aws_docker_image
     steps:
-      - run:
-          name: Invalidate
-          command: |
-            aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /embed.js /embed.js.map
+      - chaperone2-invalidate:
+          deploy-to-beta: false
+
+  beta-cloudfront-invalidate:
+    docker:
+      - image: *aws_docker_image
+    steps:
+      - chaperone2-invalidate:
+          deploy-to-beta: true
 
 workflows:
   version: 2
   chaperone-workflow:
     jobs:
       - build-test
+      - beta-deploy:
+          filters:
+            branches:
+              only: beta
+          requires:
+            - build-test
+
+      - beta-cloudfront-invalidate:
+          filters:
+            branches:
+              only: beta
+          requires:
+            - build-test
+            - beta-deploy
+
       - deploy:
           filters:
             branches:

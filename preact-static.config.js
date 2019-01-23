@@ -1,5 +1,6 @@
 require("dotenv").config();
 import configSetup from "./parent.config"
+const childProc = require('child_process');
 
 export default (config, env, helpers) => {
   delete config.entry.polyfills;
