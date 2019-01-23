@@ -1,5 +1,3 @@
-import { consoleTestResultsHandler } from "tslint/lib/test";
-
 require("dotenv").config();
 import configSetup from "./parent.config"
 
@@ -8,7 +6,12 @@ export default (config, env, helpers) => {
 
   let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   plugin.options.disable = true;
-  config = configSetup(config, env.production, true)
+
+  const miniCommitHash = childProc.execSync('git rev-parse HEAD')
+    .toString()
+    .substr(0, 8);
+
+  config = configSetup(config, env.production, true, miniCommitHash)
 
   // This is to fix the issue where the compiled CSS classnames were given a localIdentName of
   // [local]__[hash], but this did not match the component class names
