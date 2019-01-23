@@ -2,7 +2,6 @@ const path = require("path");
 var S3Uploader = require('webpack-s3-uploader')
 require("dotenv").config();
 const { resolve } = path;
-const childProc = require('child_process');
 
 
 let configSetup = (config, production, static_file, filepath) =>{
@@ -11,7 +10,8 @@ let configSetup = (config, production, static_file, filepath) =>{
 
     const CACHE_CONTROL_MAX_AGE_SECONDS = 48 * 60 * 60; // 48 hours
 
-    const filename = static_file ? `embed.${filepath}.js` : 'embed.js'
+    const filename = filepath ? `embed.${filepath}.js` : 'embed.js'
+
     const cacheControl = static_file ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache"
     config.output = {
       libraryTarget : "umd",
