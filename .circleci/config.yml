@@ -1,15 +1,33 @@
 ---
-version: 2
-jobs:
-  build-test:
-    docker:
-      - image: node:11
+var_1: &default_docker_image node:11
+version: 2.1
+
+commands:
+  chaperone2build:
+    description: "Build command"
     steps:
       - checkout
       - run:
           name: Build
-          command: |
-            yarn install
+          command: yarn install
+
+  chaperone2deploy:
+    description: "Command to deploy to different use cases"
+    parameters:
+      to:
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: Deploy << parameters.to >>
+          command: yarn run deploy<< parameters.to >>
+
+jobs:
+  build-test:
+    docker:
+      - image: *default_docker_image
+    steps:
+      - chaperone2build
       - run:
           name: Test
           command: |
@@ -17,21 +35,25 @@ jobs:
 
   deploy:
     docker:
-      - image: node:11
+      - image: *default_docker_image
     steps:
-      - checkout
-      - run:
-          name: Build
-          command: |
-            yarn install
-      - run:
-          name: Deploy to s3
-          command: |
-            yarn run deploy
-      - run:
-          name: Deploy static copy to s3
-          command: |
-            yarn run deploy-static
+      - chaperone2build
+      - chaperone2deploy:
+          to: ""
+      - chaperone2deploy:
+          to: "-static"
+
+  # beta-deploy:
+  #   docker:
+  #     - image: *default_docker_image
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Build
+  #         command: |
+  #           yarn install
+  #     - chaperone2deploy:
+  #         to: "-beta"
 
   cloudfront-invalidate:
     docker:
