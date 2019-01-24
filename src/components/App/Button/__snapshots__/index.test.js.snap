@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Button /> should match snapshot 1`] = `
+preact-render-spy (1 nodes)
+-------
+<div class="ada-chaperone-button-container">
+  <button
+    title="Open Support Chat"
+    accessKey="1"
+    class="ada-chaperone-button"
+    style="background-color: #000;"
+  >
+    <div class="ada-chaperone-button__icon"></div>
+  </button>
+</div>
+
+`;

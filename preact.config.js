@@ -14,6 +14,5 @@ export default (config, env, helpers) => {
   const { loader: cssLoader } = helpers.getLoadersByName(config, "css-loader")[0];
   cssLoader.options.localIdentName = "[local]";
 
-
 };
 

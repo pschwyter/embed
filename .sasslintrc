@@ -2,7 +2,7 @@
   "rules": {
     "bem-depth": [ 1, { "max_elements": 1 } ],
     "class-name-format": [ 1, { "convention": "hyphenatedbem" } ],
-    "property-sort-order": [ 1, { "order": "concentric" } ],
+    "property-sort-order": [ 0 ],
     "quotes": [ 1, { "style": "double" } ]
   }
 }
