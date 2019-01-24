@@ -21,14 +21,16 @@ Webpack is also used under the hood and can be modified via the `preact.config.j
 ## Setup
 To get started, simply run `yarn && yarn start`. This will start a local development server at `http://localhost:8080/`. To make use of `tslint` and `sasslint`, you will need to install the `TypeScript TSLint Plugin` and `Sass Lint` extensions in the text editor of your choice.
 
-## Deployment ##
-Chaperone2 is setup to deploy automatically on push to the `master` branch, using CircleCI. Please be mindful of this while developing.
+## Beta branch and Deployment ###
+The `beta` branch is set as the base branch for this repo. All PRs should be merged into the `beta` branch 1st, this deploys a beta embed script for testing `embed.beta.js`  at `https://static.ada.support/` for testing.
 
-CircleCI generates 2 Chaperone2 scripts, `embed,js` and `embed.[git-hash 1st 8 chars].js` at `https://static.ada.support/`
+After robust testing, only the `beta` branch should be merged directly into `master` with admin approval
+
+Chaperone2 is setup to deploy automatically on merge to the `master` branch, using CircleCI, generating 2 Chaperone2 scripts `embed.js` and `embed.[git-hash 1st 8 chars].js` at `https://static.ada.support/`
 
 ## Rollback Instructions ##
 
-To rollback a version of chaperone, simply revert the master branch to the last stable commit
+To rollback a version of chaperone, simply revert the master branch to the last stable commit (will require admin access)
 
 #### To list the commits ####
 

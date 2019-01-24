@@ -14,6 +14,9 @@ let configSetup = (config, production, staticFile, filepath) => {
     const filename = filepath ? `embed.${filepath}.js` : 'embed.js'
 
     const cacheControl = staticFile ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache"
+
+    console.log(`Deploying filename: ${filename}`);
+
     config.output = {
       libraryTarget : "umd",
       filename: filename,
