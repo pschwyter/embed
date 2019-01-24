@@ -4,7 +4,8 @@ require("dotenv").config();
 const { resolve } = path;
 
 
-let configSetup = (config, production, static_file, filepath) =>{
+let configSetup = (config, production, staticFile, filepath) => {
+  config.node.process = true;
 
   if (production){
 
@@ -12,7 +13,7 @@ let configSetup = (config, production, static_file, filepath) =>{
 
     const filename = filepath ? `embed.${filepath}.js` : 'embed.js'
 
-    const cacheControl = static_file ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache"
+    const cacheControl = staticFile ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache"
     config.output = {
       libraryTarget : "umd",
       filename: filename,
@@ -33,6 +34,7 @@ let configSetup = (config, production, static_file, filepath) =>{
       },
     }));
   }
+  config.resolve.alias["preact-cli-entrypoint"] = resolve(process.cwd(), "src", "index");
 
   // Add loader for TypeScript
   config.module.loaders.push({
@@ -45,8 +47,10 @@ let configSetup = (config, production, static_file, filepath) =>{
   config.resolve.alias = Object.assign(
     {},
     {
+      models: resolve(__dirname, "src/models/"),
       services: resolve(__dirname, "src/services/"),
-      style: resolve(__dirname, "src/style/")
+      style: resolve(__dirname, "src/style/"),
+      constants: resolve(__dirname, "src/constants/")
     },
     config.resolve.alias
   );

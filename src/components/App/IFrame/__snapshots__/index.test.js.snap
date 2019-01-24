@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IFrame /> should match snapshot 1`] = `
+preact-render-spy (1 nodes)
+-------
+<iframe
+  name="ada-chaperone-iframe"
+  class="ada-chaperone-iframe"
+  src="https://nic.ca.ada.support/chat/"
+  title="Nic Support Chat"
+  onLoad={[Function bound ]}
+>
+</iframe>
+
+`;

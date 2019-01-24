@@ -8,8 +8,13 @@
   ],
   "jsRules": {},
   "rules": {
+    "align": [true, "parameters", "statements", "members", "elements"],
+    "interface-name": [true, "never-prefix"],
     "member-access": [true, "no-public"],
     "jsx-no-multiline-js": false,
+    "no-console": [true, "log", "error"],
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
     "quotemark": [true, "double"],
     "semicolon": [
       true,

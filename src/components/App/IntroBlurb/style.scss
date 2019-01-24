@@ -1,0 +1,115 @@
+@import "~style/utilities/colors";
+@import "~style/utilities/variables";
+
+$shadow-color: rgba(2, 14, 29, .08);
+$intro-shadow: drop-shadow(0 0 2px $shadow-color);
+
+.ada-chaperone-intro-blurb {
+  position: fixed;
+  right: 76px;
+  bottom: 24px;
+  opacity: 0;
+  max-width: 224px;
+
+  &--show {
+    animation-name: messageBlowup;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+  }
+
+  &--hide {
+    animation-name: messageBlowdown;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+  }
+
+  &:hover &__dismiss-button,
+  &__dismiss-button--mobile-show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &__dismiss-button {
+    position: absolute;
+    top: -8px;
+    transition: opacity 180ms;
+    opacity: 0;
+    border: 0;
+    border-radius: 50%;
+    background-image: url("https://static.ada.support/Clear.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    filter: $intro-shadow;
+    pointer-events: none;
+
+    &:focus {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  &__message {
+    z-index: 10000;
+    margin-bottom: 0;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 9px 0 rgba(2, 11, 41, 0.08), 0 0 0 1px rgba(4, 33, 66, 0.02);
+    background-color: $color-white;
+    cursor: pointer;
+    padding: 8px 12px;
+    width: auto;
+    max-width: 224px;
+    height: auto;
+    max-height: 100px;
+    overflow: hidden;
+    font-size: 16px;
+    resize: none;
+    word-break: break-word;
+  }
+}
+
+@keyframes messageBlowup {
+  0% {
+    transform: scale3d(0, 0, 0);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale3d(1.1, 1.1, 1.1);
+    animation-timing-function: ease-in-out;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes messageBlowdown {
+  0% {
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+
+  25% {
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale3d(1.1, 1.1, 1.1);
+    animation-timing-function: ease-in-out;
+    opacity: 1;
+  }
+
+  100% {
+    display: none;
+    transform: scale3d(0, 0, 0);
+    opacity: 1;
+  }
+}
