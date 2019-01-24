@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Drawer /> should match snapshot 1`] = `
+preact-render-spy (1 nodes)
+-------
+<div class="ada-chaperone-drawer ada-chaperone-drawer--mobile-overlay">
+  <div
+    class="ada-chaperone-drawer__mask"
+    onClick={[Function mockConstructor]}
+    role="button"
+  >
+  </div>
+  <div class="ada-chaperone-drawer__iframe-container">
+    <IFrame
+      client={
+        Object {
+          "tint": "#000"
+        }
+      }
+      handle="nic"
+      isDrawerOpen={true}
+      chatURL="https://nic.ca.ada.support/chat/"
+      useMobileOverlay={true}
+      drawerHasBeenOpened={true}
+      openChat={[Function mockConstructor]}
+      setIFrameRef={[Function mockConstructor]}
+    >
+    </IFrame>
+  </div>
+</div>
+
+`;

@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> should match snapshot 1`] = `
+preact-render-spy (1 nodes)
+-------
+<div
+  id="ada-embed"
+  class="ada-chaperone-app"
+>
+  <div class="ada-chaperone-drawer ada-chaperone-drawer--hidden">
+    <div
+      class="ada-chaperone-drawer__mask"
+      onClick={[Function bound ]}
+      role="button"
+    >
+    </div>
+    <div class="ada-chaperone-drawer__iframe-container"></div>
+  </div>
+  <div class="ada-chaperone-button-container">
+    <button
+      title="Open Support Chat"
+      accessKey="1"
+      class="ada-chaperone-button"
+      onClick={[Function bound ]}
+    >
+      <div class="ada-chaperone-button__icon"></div>
+    </button>
+  </div>
+</div>
+
+`;

@@ -1,17 +1,21 @@
+@import "~style/utilities/colors";
+@import "~style/utilities/variables";
+
+$button-shadow: 0 2px 4px rgba($color-black, .1);
+$button-border-color: 1px solid rgba($color-black, .05);
+
 .ada-chaperone-button {
   width: 44px;
   height: 44px;
-  background-color: #23bbda;
-  background: none;
   border-radius: 50%;
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 10000;
   cursor: pointer;
-  border: 1px solid rgba(black, 0.05);
-  transition: all 120ms ease;
-  box-shadow: 0 2px 4px rgba(black, 0.1);
+  border: $button-border-color;
+  transition: 120ms ease;
+  box-shadow: $button-shadow;
   visibility: visible;
   padding: 0;
   margin: 0;
@@ -20,8 +24,95 @@
   min-height: initial;
   max-height: initial;
   overflow: hidden;
-  background-image: url("https://d124s1zbdqkqqe.cloudfront.net/Dialogue.svg");
-  background-size: 28px;
-  background-repeat: no-repeat;
-  background-position: center;
+
+  &__icon {
+    width: 100% ;
+    height: 100% ;
+    top: 0;
+    background-image: url("https://d124s1zbdqkqqe.cloudfront.net/Dialogue.svg");
+    background-size: 28px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    z-index: 10010;
+
+    &--hide {
+      animation-duration: 2s;
+      animation-name: dialogue-fade;
+    }
+  }
+
+  &__emoji {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10010;
+    width: 100%;
+    height: 100%;
+
+    &--show {
+      animation-duration: 2s;
+      animation-name: emoji-bounce;
+      animation-fill-mode: forwards;
+    }
+  }
+}
+
+@keyframes emoji-bounce {
+  0% {
+    transform: translateY(60px);
+  }
+
+  10% {
+    transform: translateY(0);
+  }
+
+  17% {
+    transform: rotateZ(-12deg);
+    animation-timing-function: ease-in-out;
+  }
+
+  23% {
+    transform: rotateZ(18deg);
+    animation-timing-function: ease-in-out;
+  }
+
+  30% {
+    transform: rotateZ(0deg);
+    animation-timing-function: ease-in-out;
+  }
+
+  80% {
+    transform: translateY(0);
+  }
+
+  90% {
+    transform: translateY(3px);
+  }
+
+  100% {
+    transform: translateY(-60px);
+  }
+}
+
+@keyframes dialogue-fade {
+  0% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+
+  10% {
+    opacity: 0;
+    transform: scale3d(0, 0, 0);
+  }
+
+  90% {
+    opacity: 0;
+    transform: scale3d(0, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
 }

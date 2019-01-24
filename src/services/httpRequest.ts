@@ -1,5 +1,4 @@
 declare var XDomainRequest;
-
 interface InterfaceRequestObject {
   url: string,
   body?: string,
@@ -10,7 +9,7 @@ interface InterfaceRequestObject {
 /**
  * Vanilla HTTP request. Returns a Promise.
  */
-export default function httpRequest(obj: InterfaceRequestObject): Promise<object> {
+export default function httpRequest(obj: InterfaceRequestObject): Promise<any> {
   return new Promise((resolve, reject) => {
     const method = obj.method || "GET";
     let xhr = new XMLHttpRequest();
@@ -38,7 +37,9 @@ export default function httpRequest(obj: InterfaceRequestObject): Promise<object
 
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(xhr.response);
+        resolve(
+          JSON.parse(xhr.response)
+        );
       } else {
         reject(xhr.statusText);
       }
