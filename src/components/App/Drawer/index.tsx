@@ -1,53 +1,38 @@
 import classnames from "classnames";
+import Client from "models/Client";
 import { Component, h } from "preact";
 import { isIE9OrBelow } from "services/browsers";
+import IFrame from "../IFrame";
 import "./style.scss";
 
 interface InterfaceDrawer {
+  client: Client,
   handle: string,
   isDrawerOpen: boolean,
+  iframeRef?: HTMLIFrameElement,
   chatURL: string,
   useMobileOverlay: boolean,
-  openChat(): void
+  drawerHasBeenOpened: boolean,
+  openChat(): void,
+  setIFrameRef(ref: HTMLIFrameElement): void
 }
 
-interface InterfaceState {
-  drawerHasBeenOpened: boolean
-}
-
-export default class Drawer extends Component<InterfaceDrawer, InterfaceState> {
+export default class Drawer extends Component<InterfaceDrawer> {
   isIE9OrBelow: boolean;
 
   constructor(props: InterfaceDrawer) {
     super(props);
 
-    this.state = {
-      drawerHasBeenOpened: false
-    };
-
     this.isIE9OrBelow = isIE9OrBelow();
-  }
-
-  componentWillReceiveProps(nextProps: InterfaceDrawer) {
-    const { isDrawerOpen } = this.props;
-    const { drawerHasBeenOpened } = this.state;
-
-    if (isDrawerOpen !== nextProps.isDrawerOpen && !drawerHasBeenOpened) {
-      this.setState({
-        drawerHasBeenOpened: true
-      });
-    }
   }
 
   render() {
     const {
-      handle,
       isDrawerOpen,
       openChat,
-      chatURL,
-      useMobileOverlay
+      useMobileOverlay,
+      drawerHasBeenOpened
     } = this.props;
-    const { drawerHasBeenOpened } = this.state;
 
     return (
       <div
@@ -63,13 +48,12 @@ export default class Drawer extends Component<InterfaceDrawer, InterfaceState> {
         <div
           className="ada-chaperone-drawer__mask"
           onClick={openChat}
+          role="button"
         />
         <div className="ada-chaperone-drawer__iframe-container">
           {drawerHasBeenOpened && (
-            <iframe
-              className="ada-chaperone-drawer__iframe"
-              src={chatURL}
-              title={`${handle} chat support`}
+            <IFrame
+              {...this.props}
             />
           )}
         </div>

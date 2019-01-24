@@ -22,13 +22,6 @@ $mask-color: rgba($color-black, .16);
     box-sizing: border-box;
   }
 
-  &__iframe {
-    outline: none;
-    border: 0;
-    width: 100%;
-    height: 100%;
-  }
-
   &--hidden &__iframe-container {
     transform: translate(375px, 0);
     opacity: 0;
