@@ -13,10 +13,16 @@ import App from "./components/App";
 import "./style/application.scss";
 
 declare global {
-  interface Window { adaEmbed: any; }
+  interface Window {
+    adaEmbed: any;
+    adaSettings: object;
+  }
 }
 
-function dispatchAdaEvent(type: string, data?: object) {
+/**
+ * Dispatch a custom Ada Event to be used inside the Embed Preact app
+ */
+const dispatchAdaEvent = (type: string, data?: object) => {
   const event = new CustomEvent(
     "ada-event",
     {
@@ -29,12 +35,12 @@ function dispatchAdaEvent(type: string, data?: object) {
     }
   );
   document.getElementById("ada-embed").dispatchEvent(event);
-}
+};
 
 /**
  * Render the Ada iFrame into the client's specified parentElement
  */
-function setUpFrameParent(elementOrElementReference) {
+const setUpFrameParent = (elementOrElementReference?: HTMLElement|string) => {
   let targetElement: HTMLElement;
 
   if (typeof elementOrElementReference === "string") {
@@ -48,39 +54,69 @@ function setUpFrameParent(elementOrElementReference) {
   }
 
   return targetElement;
-}
+};
 
-function adaEmbed(method: string, options?: any) {
-  switch (method) {
-    case ADA_EVENT_START:
-      const { parentElement } = options;
-      let renderElement = document.body;
+/**
+ * Ada Embed methods
+ */
+const adaEmbed = Object.freeze({
+  /**
+   * Setup Ada Embed
+   */
+  [ADA_EVENT_START]: (options: any) => {
+    const { parentElement } = options;
+    let renderElement = document.body;
 
-      if (parentElement) {
-        renderElement = setUpFrameParent(parentElement);
-      }
+    if (parentElement) {
+      renderElement = setUpFrameParent(parentElement);
+    }
 
-      render(h(App, options), renderElement);
-      break;
-    case ADA_EVENT_STOP:
-      const adaNode = document.getElementById("ada-embed");
-      adaNode.parentNode.removeChild(adaNode);
-      break;
-    case ADA_EVENT_TOGGLE:
-      dispatchAdaEvent(ADA_EVENT_TOGGLE);
-      break;
-    case ADA_EVENT_SET_META_FIELDS:
-      dispatchAdaEvent(ADA_EVENT_SET_META_FIELDS, options);
-      break;
-    case ADA_EVENT_RESET:
-      dispatchAdaEvent(ADA_EVENT_RESET);
-      break;
-    case ADA_EVENT_DELETE_HISTORY:
-      dispatchAdaEvent(ADA_EVENT_DELETE_HISTORY);
-      break;
-    default:
-      break;
+    render(h(App, options), renderElement);
+  },
+
+  /**
+   * Destroy Ada Embed
+   */
+  [ADA_EVENT_STOP]: () => {
+    const adaNode = document.getElementById("ada-embed");
+    adaNode.parentNode.removeChild(adaNode);
+  },
+
+  /**
+   * Toggle the Chat Drawer open / closed
+   */
+  [ADA_EVENT_TOGGLE]: () => {
+    dispatchAdaEvent(ADA_EVENT_TOGGLE);
+  },
+
+  /**
+   * Update the meta fields (useful for settings meta data after setup)
+   */
+  [ADA_EVENT_SET_META_FIELDS]: (options: any) => {
+    dispatchAdaEvent(ADA_EVENT_SET_META_FIELDS, options);
+  },
+
+  /**
+   * Reset Chat (delete history and refresh)
+   */
+  [ADA_EVENT_RESET]: () => {
+    dispatchAdaEvent(ADA_EVENT_RESET);
+  },
+
+  /**
+   * Delete Chat history
+   */
+  [ADA_EVENT_DELETE_HISTORY]: () => {
+    dispatchAdaEvent(ADA_EVENT_DELETE_HISTORY);
   }
-}
+});
 
 window.adaEmbed = adaEmbed;
+
+// Needs to self execute when page loads
+const embedScriptRef = document.getElementById("__ada");
+const adaSettings = Object.assign({ handle: embedScriptRef.dataset.handle }, window.adaSettings);
+
+if (embedScriptRef.dataset.lazy === undefined) {
+  adaEmbed.start(adaSettings);
+}
