@@ -6,12 +6,12 @@ import "./style.scss";
 interface InterfaceButton {
   client: Client,
   showIntroEmoji: boolean,
-  openChat(): void
+  toggleChat(): void
 }
 
 export default class Button extends Component<InterfaceButton> {
   render(props: InterfaceButton) {
-    const { openChat, client, showIntroEmoji } = props;
+    const { toggleChat, client, showIntroEmoji } = props;
 
     return (
       <div className="ada-chaperone-button-container">
@@ -19,7 +19,7 @@ export default class Button extends Component<InterfaceButton> {
           title="Open Support Chat"
           accessKey="1"
           className="ada-chaperone-button"
-          onClick={openChat}
+          onClick={toggleChat}
           style={{
             backgroundColor: client.tint
           }}

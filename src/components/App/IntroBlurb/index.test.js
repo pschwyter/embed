@@ -13,7 +13,7 @@ function setup(propsOverride = {}) {
         delay: 1000
       }
     },
-    openChat: jest.fn()
+    toggleChat: jest.fn()
   };
 
   const props = Object.assign(defaultsProps, propsOverride);
@@ -48,6 +48,6 @@ describe("<IntroBlurb />", () => {
     const messageElement = PRSWrapper.find(".ada-chaperone-intro-blurb__message");
 
     messageElement.simulate("click");
-    expect(props.openChat.mock.calls.length).toBe(1);
+    expect(props.toggleChat.mock.calls.length).toBe(1);
   });
 });
