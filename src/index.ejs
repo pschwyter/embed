@@ -10,36 +10,18 @@
 <body>
   <h1>Testing Page</h1>
   <div id="parent-element"></div>
-  <!-- <script
-    async
-    src="https://static.ada.support/embed.js"
-    onload="handleBoot()"
-  ></script> -->
-  <!-- <script
-    async
-    src="https://static.ada.support/embed.beta.js"
-    onload="handleBoot()"
-  ></script> -->
-  <script
-    async
-    src="/bundle.js"
-    onload="handleBoot()"
-  ></script>
-  <script type="text/javascript">
-    function handleBoot() {
-      adaEmbed("start", {
-        handle: "nic",
-        // parentElement: "parent-element",
-        chatterTokenCallback: (chatter) => console.log("yay this worked", chatter),
-        metaFields: {
-          name: "Joe Schmoe",
-          dateOfBirth: "1812",
-          language: "French"
-        },
-        language: "fr"
-      })
-    }
+
+  <script>
+    window.adaSettings = {
+      chatterTokenCallback: (chatter) => console.log("My chatter:", chatter)
+    };
   </script>
+  <script 
+    async 
+    id="__ada" 
+    src="/bundle.js"
+    data-handle="ada-example" 
+  ></script>
 </body>
 
 </html>
