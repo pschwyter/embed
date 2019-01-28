@@ -64,7 +64,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       iframeRef: null
     };
 
-    this.openChat = this.openChat.bind(this);
+    this.toggleChat = this.toggleChat.bind(this);
     this.isInMobile = (
       navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) !== null
     );
@@ -117,13 +117,22 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     // Ensure that event origin is the same as the Chat URL
     if (!originURL.startsWith(event.origin)) { return; }
 
-    const { liveHandoff, zendeskLiveHandoff, chatter, analytics } = event.data;
+    const {
+      liveHandoff,
+      zendeskLiveHandoff,
+      chatter,
+      analytics,
+      closeChat
+    } = event.data;
+
     const {
       liveHandoffCallback,
       showZendeskWidget,
       chatterTokenCallback,
       analyticsCallback
     } = this.props;
+
+    const { isDrawerOpen } = this.state;
 
     if (liveHandoff && liveHandoffCallback) {
       liveHandoffCallback(liveHandoff);
@@ -133,6 +142,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       chatterTokenCallback(chatter);
     } else if (analytics && analyticsCallback) {
       analyticsCallback(analytics);
+    } else if (closeChat && isDrawerOpen) {
+      this.toggleChat();
     }
   }
 
@@ -191,7 +202,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     switch (type) {
       case ADA_EVENT_TOGGLE:
-        this.openChat();
+        this.toggleChat();
         break;
       case ADA_EVENT_SET_META_FIELDS:
         postMessage(iframeRef, data, this.chatURL);
@@ -208,7 +219,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   /**
    * Open/close the Drawer component, or open a new window if in mobile
    */
-  openChat() {
+  toggleChat() {
     const { isDrawerOpen, iframeRef } = this.state;
     const nextIsDrawerOpen = !isDrawerOpen;
 
@@ -284,7 +295,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             client={client}
             iframeRef={iframeRef}
             chatURL={this.chatURL}
-            openChat={this.openChat}
+            toggleChat={this.toggleChat}
             isDrawerOpen={isDrawerOpen}
             setIFrameRef={this.setIFrameRef}
             drawerHasBeenOpened={drawerHasBeenOpened}
@@ -294,7 +305,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         {!isDrawerOpen && (
           <Button
             client={client}
-            openChat={this.openChat}
+            toggleChat={this.toggleChat}
             showIntroEmoji={
               showIntro &&
               client.intro.style.toLowerCase() === "emoji" &&
@@ -305,7 +316,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
           <IntroBlurb
             client={client}
-            openChat={this.openChat}
+            toggleChat={this.toggleChat}
             isInMobile={this.isInMobile}
           />
         )}
