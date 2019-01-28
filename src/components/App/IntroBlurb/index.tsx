@@ -6,7 +6,7 @@ import "./style.scss";
 interface InterfaceIntroBlurb {
   client: Client,
   isInMobile: boolean,
-  openChat(): void
+  toggleChat(): void
 }
 
 interface InterfaceState {
@@ -53,10 +53,10 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
    * Open chat and dismiss the intro
    */
   handleOpenChat() {
-    const { openChat } = this.props;
+    const { toggleChat } = this.props;
 
     this.dismissIntro();
-    openChat();
+    toggleChat();
   }
 
   /**

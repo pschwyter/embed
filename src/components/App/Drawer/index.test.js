@@ -14,7 +14,7 @@ function setup(propsOverride = {}) {
     chatURL: "https://nic.ca.ada.support/chat/",
     useMobileOverlay: true,
     drawerHasBeenOpened: true,
-    openChat: jest.fn(),
+    toggleChat: jest.fn(),
     setIFrameRef: jest.fn()
   };
 

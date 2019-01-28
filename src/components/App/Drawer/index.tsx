@@ -13,7 +13,7 @@ interface InterfaceDrawer {
   chatURL: string,
   useMobileOverlay: boolean,
   drawerHasBeenOpened: boolean,
-  openChat(): void,
+  toggleChat(): void,
   setIFrameRef(ref: HTMLIFrameElement): void
 }
 
@@ -29,7 +29,7 @@ export default class Drawer extends Component<InterfaceDrawer> {
   render() {
     const {
       isDrawerOpen,
-      openChat,
+      toggleChat,
       useMobileOverlay,
       drawerHasBeenOpened
     } = this.props;
@@ -47,7 +47,7 @@ export default class Drawer extends Component<InterfaceDrawer> {
       >
         <div
           className="ada-chaperone-drawer__mask"
-          onClick={openChat}
+          onClick={toggleChat}
           role="button"
         />
         <div className="ada-chaperone-drawer__iframe-container">
