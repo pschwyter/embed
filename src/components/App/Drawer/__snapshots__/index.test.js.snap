@@ -22,7 +22,7 @@ preact-render-spy (1 nodes)
       chatURL="https://nic.ca.ada.support/chat/"
       useMobileOverlay={true}
       drawerHasBeenOpened={true}
-      openChat={[Function mockConstructor]}
+      toggleChat={[Function mockConstructor]}
       setIFrameRef={[Function mockConstructor]}
     >
     </IFrame>
