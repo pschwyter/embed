@@ -2,6 +2,5 @@ export default function postMessage(iFrameRef: HTMLIFrameElement, toSend: any, c
   const adaNameSpacedObject = {
     ada: toSend
   };
-
   iFrameRef.contentWindow.postMessage(adaNameSpacedObject, chatURL);
 }
