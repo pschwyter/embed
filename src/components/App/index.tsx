@@ -32,7 +32,8 @@ interface InterfaceApp {
   liveHandoffCallback(liveHandoff: any): any,
   showZendeskWidget(zendeskLiveHandoff: any): any,
   chatterTokenCallback(chatter: string): any,
-  analyticsCallback(analytics: any): any
+  analyticsCallback(analytics: any): any,
+  adaReadyCallback(): any
 }
 
 interface InterfaceState {
@@ -41,7 +42,9 @@ interface InterfaceState {
   isDrawerOpen: boolean,
   shoudLoadChaperoneUI: boolean,
   showIntro: boolean,
-  iframeRef: HTMLIFrameElement
+  iframeRef: HTMLIFrameElement,
+  isIFrameLoaded: boolean,
+  afterIFrameLoadsTasks: CustomEvent[]
 }
 
 export default class App extends Component<InterfaceApp, InterfaceState> {
@@ -61,7 +64,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       isDrawerOpen: false,
       shoudLoadChaperoneUI: false,
       showIntro: false,
-      iframeRef: null
+      iframeRef: null,
+      isIFrameLoaded: false,
+      afterIFrameLoadsTasks: []
     };
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -70,9 +75,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     );
     this.openChatInNewWindow = !mobileOverlay && this.isInMobile;
 
+    this.setIFrameRef = this.setIFrameRef.bind(this);
     this.receiveMessage = this.receiveMessage.bind(this);
     this.handleAdaEvent = this.handleAdaEvent.bind(this);
-    this.setIFrameRef = this.setIFrameRef.bind(this);
+    this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
+    this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
 
     const urlParams = {
       handle: props.handle,
@@ -196,9 +203,19 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Event hanlder for custom Ada events
    */
   handleAdaEvent(event: CustomEvent) {
-    const { iframeRef } = this.state;
+    const { iframeRef, isIFrameLoaded, afterIFrameLoadsTasks } = this.state;
     const { detail } = event;
     const { type, data } = detail;
+
+    if (!isIFrameLoaded) {
+      afterIFrameLoadsTasks.push(event);
+
+      this.setState({
+        afterIFrameLoadsTasks
+      });
+
+      return;
+    }
 
     switch (type) {
       case ADA_EVENT_TOGGLE:
@@ -251,6 +268,24 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
+  setIFrameLoaded() {
+    const { afterIFrameLoadsTasks } = this.state;
+
+    this.setState({
+      isIFrameLoaded: true,
+      afterIFrameLoadsTasks: []
+    }, () => {
+      afterIFrameLoadsTasks.forEach((event) => {
+        this.handleAdaEvent(event);
+      });
+    });
+  }
+
+  triggerAdaReadyCallback() {
+    const { adaReadyCallback } = this.props;
+    if (adaReadyCallback) { adaReadyCallback(); }
+  }
+
   /**
    * To be rendered when user is using parentElement config
    */
@@ -261,13 +296,14 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = this.state;
 
     return (
-      <div id="ada-embed" className="ada-chaperone-app">
+      <div id="ada-embed" className="ada-chaperone-app" ref={this.triggerAdaReadyCallback}>
         <IFrame
           {...this.props}
           client={client}
           iframeRef={iframeRef}
           chatURL={this.chatURL}
           setIFrameRef={this.setIFrameRef}
+          setIFrameLoaded={this.setIFrameLoaded}
         />
       </div>
     );
@@ -287,7 +323,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = this.state;
 
     return (
-      <div id="ada-embed" className="ada-chaperone-app">
+      <div id="ada-embed" className="ada-chaperone-app" ref={this.triggerAdaReadyCallback}>
         {/* Do not render Drawer if Chat will be opened in new window */}
         {!this.openChatInNewWindow && (
           <Drawer
@@ -298,6 +334,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             toggleChat={this.toggleChat}
             isDrawerOpen={isDrawerOpen}
             setIFrameRef={this.setIFrameRef}
+            setIFrameLoaded={this.setIFrameLoaded}
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
           />

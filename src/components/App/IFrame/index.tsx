@@ -12,7 +12,8 @@ interface InterfaceIFrame {
   parentElement?: string | HTMLElement,
   styles?: string,
   metaFields?: object,
-  setIFrameRef(ref: HTMLIFrameElement): void
+  setIFrameRef(ref: HTMLIFrameElement): void,
+  setIFrameLoaded(): void
 }
 
 export default class IFrame extends Component<InterfaceIFrame> {
@@ -31,8 +32,11 @@ export default class IFrame extends Component<InterfaceIFrame> {
       greetingHandle,
       client,
       iframeRef,
-      metaFields
+      metaFields,
+      setIFrameLoaded
     } = this.props;
+
+    setIFrameLoaded();
 
     const followUpResponseId = client.intro && client.intro.response_id;
 
