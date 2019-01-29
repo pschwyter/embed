@@ -13,7 +13,10 @@
 
   <script>
     window.adaSettings = {
-      chatterTokenCallback: (chatter) => console.log("My chatter:", chatter)
+      chatterTokenCallback: (chatter) => console.log("My chatter:", chatter),
+      adaReadyCallback: () => {
+        adaEmbed.reset();
+      }
     };
   </script>
   <script 
