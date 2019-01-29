@@ -23,6 +23,9 @@ declare global {
  * Dispatch a custom Ada Event to be used inside the Embed Preact app
  */
 const dispatchAdaEvent = (type: string, data?: object) => {
+  const embedElement = document.getElementById("ada-embed");
+  if (!adaEmbed) { return; }
+
   const event = new CustomEvent(
     "ada-event",
     {
@@ -34,7 +37,7 @@ const dispatchAdaEvent = (type: string, data?: object) => {
       cancelable: true
     }
   );
-  document.getElementById("ada-embed").dispatchEvent(event);
+  embedElement.dispatchEvent(event);
 };
 
 /**

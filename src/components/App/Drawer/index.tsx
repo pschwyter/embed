@@ -14,7 +14,8 @@ interface InterfaceDrawer {
   useMobileOverlay: boolean,
   drawerHasBeenOpened: boolean,
   toggleChat(): void,
-  setIFrameRef(ref: HTMLIFrameElement): void
+  setIFrameRef(ref: HTMLIFrameElement): void,
+  setIFrameLoaded(): void
 }
 
 export default class Drawer extends Component<InterfaceDrawer> {
