@@ -28,13 +28,8 @@ $button-border-color: 1px solid rgba($color-black, .05);
   &__icon {
     width: 100% ;
     height: 100% ;
-    top: 0;
-    background-image: url("https://d124s1zbdqkqqe.cloudfront.net/Dialogue.svg");
-    background-size: 28px;
-    background-repeat: no-repeat;
-    background-position: center;
-    position: absolute;
-    z-index: 10010;
+    padding: 7px;
+    box-sizing: border-box;
 
     &--hide {
       animation-duration: 2s;
