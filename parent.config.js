@@ -1,10 +1,11 @@
 const path = require("path");
-var S3Uploader = require('webpack-s3-uploader')
+var S3Uploader = require("webpack-s3-uploader");
+const preactCliSvgLoader = require("preact-cli-svg-loader");
 require("dotenv").config();
 const { resolve } = path;
 
 
-let configSetup = (config, production, staticFile, filepath) => {
+let configSetup = (config, production, helpers, staticFile, filepath) => {
   config.node.process = true;
 
   if (production){
@@ -46,6 +47,9 @@ let configSetup = (config, production, staticFile, filepath) => {
     loaders: ["ts-loader"]
   });
 
+  // Add loader for SVGs
+  preactCliSvgLoader(config, helpers);
+
   // Directory aliases
   config.resolve.alias = Object.assign(
     {},
@@ -53,7 +57,8 @@ let configSetup = (config, production, staticFile, filepath) => {
       models: resolve(__dirname, "src/models/"),
       services: resolve(__dirname, "src/services/"),
       style: resolve(__dirname, "src/style/"),
-      constants: resolve(__dirname, "src/constants/")
+      constants: resolve(__dirname, "src/constants/"),
+      icons: resolve(__dirname, "static/icons/")
     },
     config.resolve.alias
   );
