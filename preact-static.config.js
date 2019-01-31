@@ -12,7 +12,7 @@ export default (config, env, helpers) => {
     .toString()
     .substr(0, 8);
 
-  config = configSetup(config, env.production, true, miniCommitHash)
+  config = configSetup(config, env.production, helpers, true, miniCommitHash)
 
   // This is to fix the issue where the compiled CSS classnames were given a localIdentName of
   // [local]__[hash], but this did not match the component class names

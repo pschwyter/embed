@@ -18,7 +18,14 @@
       ],
       "constants/*": [
         "src/constants/*"
+      ],
+      "icons/*": [
+        "static/icons/*"
       ]
     }
-  }
+  },
+  "include": [
+    "src/**/*",
+    "custom.d.ts"
+  ]
 }
