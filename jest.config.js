@@ -24,7 +24,8 @@ module.exports = {
     "^models(.*)$": "<rootDir>/src/models$1",
     "^services(.*)$": "<rootDir>/src/services$1",
     "^style(.*)$": "<rootDir>/src/style$1",
-    "^constants(.*)$": "<rootDir>/src/constants$1"
+    "^constants(.*)$": "<rootDir>/src/constants$1",
+    "^icons(.*)$": "<rootDir>/static/icons$1"
   },
   setupTestFrameworkScriptFile: "<rootDir>/test/setup.js",
   setupFiles: [

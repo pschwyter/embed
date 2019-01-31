@@ -23,7 +23,7 @@ preact-render-spy (1 nodes)
       class="ada-chaperone-button"
       onClick={[Function bound ]}
     >
-      <div class="ada-chaperone-button__icon"></div>
+      <undefined class="ada-chaperone-button__icon"></undefined>
     </button>
   </div>
 </div>

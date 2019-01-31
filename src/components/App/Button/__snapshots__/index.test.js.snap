@@ -10,7 +10,7 @@ preact-render-spy (1 nodes)
     class="ada-chaperone-button"
     style="background-color: #000;"
   >
-    <div class="ada-chaperone-button__icon"></div>
+    <undefined class="ada-chaperone-button__icon"></undefined>
   </button>
 </div>
 

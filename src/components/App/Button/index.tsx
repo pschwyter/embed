@@ -1,5 +1,6 @@
 import classnames from "classnames";
 import Client from "models/Client";
+import DialogueSvg from "icons/Dialogue.svg";
 import { Component, h } from "preact";
 import "./style.scss";
 
@@ -24,7 +25,7 @@ export default class Button extends Component<InterfaceButton> {
             backgroundColor: client.tint
           }}
         >
-          <div
+          <DialogueSvg
             className={
               classnames("ada-chaperone-button__icon", {
                 "ada-chaperone-button__icon--hide": showIntroEmoji
