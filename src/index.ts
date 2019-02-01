@@ -1,3 +1,9 @@
+/**
+ * Polyfill Object.assign IE 9
+ */
+
+import "core-js/modules/es6.object.assign";
+
 import {
   ADA_EVENT_STOP,
   ADA_EVENT_RESET,
@@ -118,8 +124,10 @@ window.adaEmbed = adaEmbed;
 
 // Needs to self execute when page loads
 const embedScriptRef = document.getElementById("__ada");
-const adaSettings = Object.assign({ handle: embedScriptRef.dataset.handle }, window.adaSettings);
+const dataHandle  = embedScriptRef.getAttribute("data-handle");
+const dataLazy = embedScriptRef.getAttribute("data-lazy");
+const adaSettings = Object.assign({ handle:dataHandle }, window.adaSettings);
 
-if (embedScriptRef.dataset.lazy === undefined) {
+if (dataLazy === undefined || dataLazy === null) {
   adaEmbed.start(adaSettings);
 }
