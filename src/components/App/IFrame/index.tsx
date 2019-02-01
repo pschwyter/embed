@@ -1,6 +1,7 @@
 import Client from "models/Client";
 import { Component, h } from "preact";
 import { capitalize } from "services/strings";
+import postMessage from "services/postMessage";
 import "./style.scss";
 
 interface InterfaceIFrame {
@@ -48,7 +49,7 @@ export default class IFrame extends Component<InterfaceIFrame> {
       ...(followUpResponseId ? { followUpResponseId } : {})
     };
 
-    iframeRef.contentWindow.postMessage(toSend, chatURL);
+    postMessage(iframeRef, toSend, chatURL);
   }
 
   handleSetRef(ref: HTMLIFrameElement) {
