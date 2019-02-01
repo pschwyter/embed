@@ -49,6 +49,7 @@
   "dependencies": {
     "@types/classnames": "^2.2.7",
     "classnames": "^2.2.6",
+    "es6-promise-promise": "^1.0.0",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
     "ts-loader": "^3.5",
