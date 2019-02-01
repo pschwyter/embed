@@ -121,6 +121,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    */
   receiveMessage(event: MessageEvent) {
     const originURL = this.chatURL;
+
     // Ensure that event origin is the same as the Chat URL
     if (!originURL.startsWith(event.origin)) { return; }
 
@@ -194,8 +195,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
           }
         });
       });
-    }, () => {
-      throw (Error("An error occurred while retrieving the client"));
+    }, (error) => {
+      console.warn(error);
+      throw Error("An error occurred while retrieving the client");
     });
   }
 

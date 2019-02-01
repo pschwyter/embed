@@ -5,29 +5,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Widget Template</title>
-  <script>
-    window.adaSettings = {
-      chatterTokenCallback: (chatter) => console.log("My chatter:", chatter),
-      language: "fr",
-      metaFields: {
-        yolo: 1
-      }
-      // adaReadyCallback: () => {
-      //   adaEmbed.reset();
-      // }
-    };
-  </script>
-  <script 
-    async 
-    id="__ada" 
-    src="/bundle.js"
-    data-handle="ada-example" 
-  ></script>
+  <!-- Cannot put scripts in header because they do not work in IE9 -->
 </head>
 
 <body>
   <h1>Chaperone2 testing Page</h1>
   <div id="parent-element"></div>
+
 </body>
+<script>
+  window.adaSettings = {
+    chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)}
+  };
+</script>
+<script 
+  async 
+  id="__ada" 
+  src="/bundle.js"
+  data-handle="ada-example" 
+></script>
 
 </html>
