@@ -5,18 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Widget Template</title>
-</head>
-
-<body>
-  <h1>Chaperone2 testing Page</h1>
-  <div id="parent-element"></div>
-
   <script>
     window.adaSettings = {
       chatterTokenCallback: (chatter) => console.log("My chatter:", chatter),
-      adaReadyCallback: () => {
-        adaEmbed.reset();
+      language: "fr",
+      metaFields: {
+        yolo: 1
       }
+      // adaReadyCallback: () => {
+      //   adaEmbed.reset();
+      // }
     };
   </script>
   <script 
@@ -25,6 +23,11 @@
     src="/bundle.js"
     data-handle="ada-example" 
   ></script>
+</head>
+
+<body>
+  <h1>Chaperone2 testing Page</h1>
+  <div id="parent-element"></div>
 </body>
 
 </html>

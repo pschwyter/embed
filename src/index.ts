@@ -96,7 +96,7 @@ const adaEmbed = Object.freeze({
    * Update the meta fields (useful for settings meta data after setup)
    */
   [ADA_EVENT_SET_META_FIELDS]: (options: any) => {
-    dispatchAdaEvent(ADA_EVENT_SET_META_FIELDS, options);
+    dispatchAdaEvent(ADA_EVENT_SET_META_FIELDS, { metaFields: options });
   },
 
   /**
