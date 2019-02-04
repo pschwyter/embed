@@ -14,7 +14,13 @@ preact-render-spy (1 nodes)
       role="button"
     >
     </div>
-    <div class="ada-chaperone-drawer__iframe-container"></div>
+    <div
+      class="ada-chaperone-drawer__iframe-container"
+      role="dialog"
+      aria-modal={false}
+      aria-hidden={true}
+    >
+    </div>
   </div>
   <div class="ada-chaperone-button-container">
     <button

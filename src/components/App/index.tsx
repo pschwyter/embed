@@ -13,7 +13,8 @@ import {
   ADA_EVENT_TOGGLE,
   ADA_EVENT_DELETE_HISTORY,
   ADA_EVENT_SET_META_FIELDS,
-  ADA_EVENT_FOCUS
+  ADA_EVENT_FOCUS,
+  ADA_EVENT_BLUR
 } from "constants/events";
 import "./style.scss";
 
@@ -253,10 +254,18 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       isDrawerOpen: nextIsDrawerOpen,
       drawerHasBeenOpened: true
     }, () => {
-      if (iframeRef && nextIsDrawerOpen) {
-        // To ensure the input bar is always focused in Chat when the drawer is opened
-        iframeRef.contentWindow.focus();
-        postMessage(iframeRef, ADA_EVENT_FOCUS, this.chatURL);
+      if (iframeRef) {
+        if (nextIsDrawerOpen) {
+          // To ensure the input bar is always focused in Chat when the drawer is opened
+          iframeRef.contentWindow.focus();
+          postMessage(iframeRef, ADA_EVENT_FOCUS, this.chatURL);
+        } else {
+          postMessage(iframeRef, ADA_EVENT_BLUR, this.chatURL);
+
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+          }
+        }
       }
     });
   }
@@ -294,7 +303,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   renderIFrameForParentElement() {
     const {
       client,
-      iframeRef
+      iframeRef,
+      isDrawerOpen
     } = this.state;
 
     return (
@@ -304,6 +314,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
           client={client}
           iframeRef={iframeRef}
           chatURL={this.chatURL}
+          isDrawerOpen={isDrawerOpen}
           setIFrameRef={this.setIFrameRef}
           setIFrameLoaded={this.setIFrameLoaded}
         />

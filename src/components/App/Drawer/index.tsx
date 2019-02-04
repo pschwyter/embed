@@ -51,7 +51,12 @@ export default class Drawer extends Component<InterfaceDrawer> {
           onClick={toggleChat}
           role="button"
         />
-        <div className="ada-chaperone-drawer__iframe-container">
+        <div
+          className="ada-chaperone-drawer__iframe-container"
+          role="dialog"
+          aria-modal={isDrawerOpen}
+          aria-hidden={!isDrawerOpen}
+        >
           {drawerHasBeenOpened && (
             <IFrame
               {...this.props}
