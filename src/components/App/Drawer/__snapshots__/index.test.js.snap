@@ -10,7 +10,12 @@ preact-render-spy (1 nodes)
     role="button"
   >
   </div>
-  <div class="ada-chaperone-drawer__iframe-container">
+  <div
+    class="ada-chaperone-drawer__iframe-container"
+    role="dialog"
+    aria-modal={true}
+    aria-hidden={false}
+  >
     <IFrame
       client={
         Object {

@@ -9,6 +9,7 @@ preact-render-spy (1 nodes)
   src="https://nic.ca.ada.support/chat/"
   title="Nic Support Chat"
   onLoad={[Function bound ]}
+  tabIndex={-1}
 >
 </iframe>
 

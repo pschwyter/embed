@@ -13,6 +13,7 @@ interface InterfaceIFrame {
   parentElement?: string | HTMLElement,
   styles?: string,
   metaFields?: object,
+  isDrawerOpen: boolean,
   setIFrameRef(ref: HTMLIFrameElement): void,
   setIFrameLoaded(): void
 }
@@ -61,7 +62,8 @@ export default class IFrame extends Component<InterfaceIFrame> {
   render() {
     const {
       chatURL,
-      handle
+      handle,
+      isDrawerOpen
     } = this.props;
 
     return (
@@ -72,6 +74,7 @@ export default class IFrame extends Component<InterfaceIFrame> {
         title={`${capitalize(handle)} Support Chat`}
         onLoad={this.onLoad}
         ref={this.handleSetRef}
+        tabIndex={isDrawerOpen ? 0 : -1}
       />
     );
   }
