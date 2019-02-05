@@ -32,11 +32,11 @@ describe("<App />", () => {
     }, 0);
   });
 
-  it("should set shoudLoadChaperoneUI to true if checkRollout returns true, and there is no parentElement", done => {
+  it("should set shoudLoadEmbedUI to true if checkRollout returns true, and there is no parentElement", done => {
     const { PRSWrapper } = setup();
 
     setTimeout(() => {
-      expect(PRSWrapper.state().shoudLoadChaperoneUI).toBeTruthy();
+      expect(PRSWrapper.state().shoudLoadEmbedUI).toBeTruthy();
       done();
     }, 0);
   });

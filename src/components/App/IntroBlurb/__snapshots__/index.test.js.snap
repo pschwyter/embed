@@ -3,9 +3,9 @@
 exports[`<IntroBlurb /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
-<div class="ada-chaperone-intro-blurb ada-chaperone-intro-blurb--show">
+<div class="ada-embed-intro-blurb ada-embed-intro-blurb--show">
   <p
-    class="ada-chaperone-intro-blurb__message"
+    class="ada-embed-intro-blurb__message"
     aria-live="assertive"
     role="alert"
     onClick={[Function bound ]}
@@ -14,7 +14,7 @@ preact-render-spy (1 nodes)
   >
   </p>
   <button
-    class="ada-chaperone-intro-blurb__dismiss-button"
+    class="ada-embed-intro-blurb__dismiss-button"
     title="Dismiss Intro"
     onClick={[Function bound ]}
   >

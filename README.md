@@ -1,7 +1,7 @@
-# Chaperone2
+# Embed
 Version 2 of the Ada embed script.
 
-Chaperone2 provides the same functionality as Chaperone, but with modern development tools to increase reliability, as well reduce development time.
+Embed provides the same functionality as the original Chaperone, but with modern development tools to increase reliability, as well reduce development time.
 
 Some of these tools include:
 
@@ -26,11 +26,11 @@ The `beta` branch is set as the base branch for this repo. All PRs should be mer
 
 After robust testing, only the `beta` branch should be merged directly into `master` with admin approval
 
-Chaperone2 is setup to deploy automatically on merge to the `master` branch, using CircleCI, generating 2 Chaperone2 scripts `embed.js` and `embed.[git-hash 1st 8 chars].js` at `https://static.ada.support/`
+Embed is setup to deploy automatically on merge to the `master` branch, using CircleCI, generating 2 Embed scripts `embed.js` and `embed.[git-hash 1st 8 chars].js` at `https://static.ada.support/`
 
 ## Rollback Instructions ##
 
-To rollback a version of chaperone, simply revert the master branch to the last stable commit (will require admin access)
+To rollback a version of Embed, simply revert the master branch to the last stable commit (will require admin access)
 
 #### To list the commits ####
 

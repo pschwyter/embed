@@ -39,7 +39,7 @@ describe("<Drawer />", () => {
       isDrawerOpen: false
     });
 
-    expect(PRSWrapper.find(".ada-chaperone-drawer--hidden").length).toBe(1);
+    expect(PRSWrapper.find(".ada-embed-drawer--hidden").length).toBe(1);
   });
 
   it("should use special styling when useMobileOverlay is true", () => {
@@ -47,7 +47,7 @@ describe("<Drawer />", () => {
       useMobileOverlay: true
     });
 
-    expect(PRSWrapper.find(".ada-chaperone-drawer--mobile-overlay").length).toBe(1);
+    expect(PRSWrapper.find(".ada-embed-drawer--mobile-overlay").length).toBe(1);
   });
 
   describe("iFrame container", () => {
@@ -56,8 +56,8 @@ describe("<Drawer />", () => {
         isDrawerOpen: true
       });
   
-      expect(PRSWrapper.find(".ada-chaperone-drawer__iframe-container").attr("aria-modal")).toBeTruthy();
-      expect(PRSWrapper.find(".ada-chaperone-drawer__iframe-container").attr("aria-hidden")).toBeFalsy();
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-modal")).toBeTruthy();
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-hidden")).toBeFalsy();
     });
   
     it("should show aria-modal `false` when drawer is closed, and aria-hidden should be `true`", () => {
@@ -65,14 +65,40 @@ describe("<Drawer />", () => {
         isDrawerOpen: false
       });
   
-      expect(PRSWrapper.find(".ada-chaperone-drawer__iframe-container").attr("aria-modal")).toBeFalsy();
-      expect(PRSWrapper.find(".ada-chaperone-drawer__iframe-container").attr("aria-hidden")).toBeTruthy();
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-modal")).toBeFalsy();
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-hidden")).toBeTruthy();
     });
   
     it("should have a role of dialog", () => {
       const { PRSWrapper } = setup();
   
-      expect(PRSWrapper.find(".ada-chaperone-drawer__iframe-container").attr("role")).toBe("dialog");
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("role")).toBe("dialog");
+    });
+  });
+
+  describe("iFrame container", () => {
+    it("should show aria-modal `true` when drawer is opened, and ara-hidden should be `false`", () => {
+      const { PRSWrapper } = setup({
+        isDrawerOpen: true
+      });
+  
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-modal")).toBeTruthy();
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-hidden")).toBeFalsy();
+    });
+  
+    it("should show aria-modal `false` when drawer is closed, and aria-hidden should be `true`", () => {
+      const { PRSWrapper } = setup({
+        isDrawerOpen: false
+      });
+  
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-modal")).toBeFalsy();
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("aria-hidden")).toBeTruthy();
+    });
+  
+    it("should have a role of dialog", () => {
+      const { PRSWrapper } = setup();
+  
+      expect(PRSWrapper.find(".ada-embed-drawer__iframe-container").attr("role")).toBe("dialog");
     });
   });
 });
