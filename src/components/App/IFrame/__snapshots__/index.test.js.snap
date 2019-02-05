@@ -4,8 +4,8 @@ exports[`<IFrame /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
 <iframe
-  name="ada-chaperone-iframe"
-  class="ada-chaperone-iframe"
+  name="ada-embed-iframe"
+  class="ada-embed-iframe"
   src="https://nic.ca.ada.support/chat/"
   title="Nic Support Chat"
   onLoad={[Function bound ]}

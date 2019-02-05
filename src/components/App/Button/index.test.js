@@ -34,19 +34,19 @@ describe("<Button />", () => {
       showIntroEmoji: true
     });
 
-    expect(PRSWrapper.find(".ada-chaperone-button__emoji").length).toBe(1);
-    expect(PRSWrapper.find(".ada-chaperone-button__icon--hide").length).toBe(1);
+    expect(PRSWrapper.find(".ada-embed-button__emoji").length).toBe(1);
+    expect(PRSWrapper.find(".ada-embed-button__icon--hide").length).toBe(1);
   });
 
   it("it should have the background colour set to the client tint colour", () => {
     const { PRSWrapper } = setup();
 
-    expect(PRSWrapper.find(".ada-chaperone-button").attr("style")).toEqual({"backgroundColor": "#000"});
+    expect(PRSWrapper.find(".ada-embed-button").attr("style")).toEqual({"backgroundColor": "#000"});
   });
 
   it("should have an accessKey of 1", () => {
     const { PRSWrapper } = setup();
 
-    expect(PRSWrapper.find(".ada-chaperone-button").attr("accessKey")).toEqual("1");
+    expect(PRSWrapper.find(".ada-embed-button").attr("accessKey")).toEqual("1");
   });
 });
