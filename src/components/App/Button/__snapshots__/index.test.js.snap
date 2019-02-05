@@ -3,14 +3,14 @@
 exports[`<Button /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
-<div class="ada-chaperone-button-container">
+<div class="ada-embed-button-container">
   <button
     title="Open Support Chat"
     accessKey="1"
-    class="ada-chaperone-button"
+    class="ada-embed-button"
     style="background-color: #000;"
   >
-    <undefined class="ada-chaperone-button__icon"></undefined>
+    <undefined class="ada-embed-button__icon"></undefined>
   </button>
 </div>
 

@@ -15,11 +15,11 @@ export default class Button extends Component<InterfaceButton> {
     const { toggleChat, client, showIntroEmoji } = props;
 
     return (
-      <div className="ada-chaperone-button-container">
+      <div className="ada-embed-button-container">
         <button
           title="Open Support Chat"
           accessKey="1"
-          className="ada-chaperone-button"
+          className="ada-embed-button"
           onClick={toggleChat}
           style={{
             backgroundColor: client.tint
@@ -27,8 +27,8 @@ export default class Button extends Component<InterfaceButton> {
         >
           <DialogueSvg
             className={
-              classnames("ada-chaperone-button__icon", {
-                "ada-chaperone-button__icon--hide": showIntroEmoji
+              classnames("ada-embed-button__icon", {
+                "ada-embed-button__icon--hide": showIntroEmoji
               })
             }
           />
@@ -38,8 +38,8 @@ export default class Button extends Component<InterfaceButton> {
               role="presentation"
               src={client.intro.body}
               className={
-                classnames("ada-chaperone-button__emoji", {
-                  "ada-chaperone-button__emoji--show": showIntroEmoji
+                classnames("ada-embed-button__emoji", {
+                  "ada-embed-button__emoji--show": showIntroEmoji
                 })
               }
             />

@@ -38,21 +38,21 @@ export default class Drawer extends Component<InterfaceDrawer> {
     return (
       <div
         className={classnames(
-          "ada-chaperone-drawer",
+          "ada-embed-drawer",
           {
-            "ada-chaperone-drawer--hidden": !isDrawerOpen,
-            "ada-chaperone-drawer--isIE9": this.isIE9OrBelow,
-            "ada-chaperone-drawer--mobile-overlay": useMobileOverlay
+            "ada-embed-drawer--hidden": !isDrawerOpen,
+            "ada-embed-drawer--isIE9": this.isIE9OrBelow,
+            "ada-embed-drawer--mobile-overlay": useMobileOverlay
           }
         )}
       >
         <div
-          className="ada-chaperone-drawer__mask"
+          className="ada-embed-drawer__mask"
           onClick={toggleChat}
           role="button"
         />
         <div
-          className="ada-chaperone-drawer__iframe-container"
+          className="ada-embed-drawer__iframe-container"
           role="dialog"
           aria-modal={isDrawerOpen}
           aria-hidden={!isDrawerOpen}
