@@ -41,7 +41,7 @@ interface InterfaceState {
   client: Client,
   drawerHasBeenOpened: boolean,
   isDrawerOpen: boolean,
-  shoudLoadChaperoneUI: boolean,
+  shoudLoadEmbedUI: boolean,
   showIntro: boolean,
   iframeRef: HTMLIFrameElement,
   isIFrameLoaded: boolean,
@@ -63,7 +63,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       client: null,
       drawerHasBeenOpened: false,
       isDrawerOpen: false,
-      shoudLoadChaperoneUI: false,
+      shoudLoadEmbedUI: false,
       showIntro: false,
       iframeRef: null,
       isIFrameLoaded: false,
@@ -178,12 +178,12 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         }
 
         // It should be loaded if rollout returns true, or if a parentElement is being used
-        const shoudLoadChaperoneUI = Boolean(parentElement) || checkRollout(rollout, handle);
+        const shoudLoadEmbedUI = Boolean(parentElement) || checkRollout(rollout, handle);
 
         this.setState({
-          shoudLoadChaperoneUI
+          shoudLoadEmbedUI
         }, () => {
-          if (shoudLoadChaperoneUI) {
+          if (shoudLoadEmbedUI) {
             this.initiateListeners();
 
             if (client.intro) {
@@ -308,7 +308,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = this.state;
 
     return (
-      <div id="ada-embed" className="ada-chaperone-app" ref={this.triggerAdaReadyCallback}>
+      <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
         <IFrame
           {...this.props}
           client={client}
@@ -336,7 +336,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = this.state;
 
     return (
-      <div id="ada-embed" className="ada-chaperone-app" ref={this.triggerAdaReadyCallback}>
+      <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
         {/* Do not render Drawer if Chat will be opened in new window */}
         {!this.openChatInNewWindow && (
           <Drawer
@@ -377,10 +377,10 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   render(props: InterfaceApp) {
     const { parentElement } = props;
     const {
-      shoudLoadChaperoneUI
+      shoudLoadEmbedUI
     } = this.state;
 
-    if (!shoudLoadChaperoneUI) { return (null); }
+    if (!shoudLoadEmbedUI) { return (null); }
 
     return Boolean(parentElement) ?
       this.renderIFrameForParentElement() :

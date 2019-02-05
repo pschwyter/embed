@@ -3,15 +3,15 @@
 exports[`<Drawer /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
-<div class="ada-chaperone-drawer ada-chaperone-drawer--mobile-overlay">
+<div class="ada-embed-drawer ada-embed-drawer--mobile-overlay">
   <div
-    class="ada-chaperone-drawer__mask"
+    class="ada-embed-drawer__mask"
     onClick={[Function mockConstructor]}
     role="button"
   >
   </div>
   <div
-    class="ada-chaperone-drawer__iframe-container"
+    class="ada-embed-drawer__iframe-container"
     role="dialog"
     aria-modal={true}
     aria-hidden={false}

@@ -76,16 +76,16 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
       <div
         className={
           classnames(
-            "ada-chaperone-intro-blurb",
+            "ada-embed-intro-blurb",
             {
-              "ada-chaperone-intro-blurb--hide": animateIntroOut,
-              "ada-chaperone-intro-blurb--show": animateIntroIn
+              "ada-embed-intro-blurb--hide": animateIntroOut,
+              "ada-embed-intro-blurb--show": animateIntroIn
             }
           )
         }
       >
         <p
-          className="ada-chaperone-intro-blurb__message"
+          className="ada-embed-intro-blurb__message"
           aria-live="assertive"
           role="alert"
           onClick={this.handleOpenChat}
@@ -96,8 +96,8 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
         </p>
         <button
           className={classnames(
-            "ada-chaperone-intro-blurb__dismiss-button", {
-              "ada-chaperone-intro-blurb__dismiss-button--mobile-show": isInMobile
+            "ada-embed-intro-blurb__dismiss-button", {
+              "ada-embed-intro-blurb__dismiss-button--mobile-show": isInMobile
             }
           )}
           title="Dismiss Intro"

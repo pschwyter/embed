@@ -5,31 +5,31 @@ preact-render-spy (1 nodes)
 -------
 <div
   id="ada-embed"
-  class="ada-chaperone-app"
+  class="ada-embed-app"
 >
-  <div class="ada-chaperone-drawer ada-chaperone-drawer--hidden">
+  <div class="ada-embed-drawer ada-embed-drawer--hidden">
     <div
-      class="ada-chaperone-drawer__mask"
+      class="ada-embed-drawer__mask"
       onClick={[Function bound ]}
       role="button"
     >
     </div>
     <div
-      class="ada-chaperone-drawer__iframe-container"
+      class="ada-embed-drawer__iframe-container"
       role="dialog"
       aria-modal={false}
       aria-hidden={true}
     >
     </div>
   </div>
-  <div class="ada-chaperone-button-container">
+  <div class="ada-embed-button-container">
     <button
       title="Open Support Chat"
       accessKey="1"
-      class="ada-chaperone-button"
+      class="ada-embed-button"
       onClick={[Function bound ]}
     >
-      <undefined class="ada-chaperone-button__icon"></undefined>
+      <undefined class="ada-embed-button__icon"></undefined>
     </button>
   </div>
 </div>

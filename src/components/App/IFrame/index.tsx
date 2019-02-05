@@ -68,8 +68,8 @@ export default class IFrame extends Component<InterfaceIFrame> {
 
     return (
       <iframe
-        name="ada-chaperone-iframe"
-        className="ada-chaperone-iframe"
+        name="ada-embed-iframe"
+        className="ada-embed-iframe"
         src={chatURL}
         title={`${capitalize(handle)} Support Chat`}
         onLoad={this.onLoad}

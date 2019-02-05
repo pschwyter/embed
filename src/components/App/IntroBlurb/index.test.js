@@ -37,7 +37,7 @@ describe("<IntroBlurb />", () => {
 
   it("should have a tabIndex of 0 and aria-live assertive on the blurb message", () => {
     const { PRSWrapper, props } = setup();
-    const messageElement = PRSWrapper.find(".ada-chaperone-intro-blurb__message");
+    const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__message");
 
     expect(messageElement.attr("tabIndex")).toEqual(0);
     expect(messageElement.attr("aria-live")).toEqual("assertive");
@@ -45,7 +45,7 @@ describe("<IntroBlurb />", () => {
 
   it("should open chat when clicking the blurb message", () => {
     const { PRSWrapper, props } = setup();
-    const messageElement = PRSWrapper.find(".ada-chaperone-intro-blurb__message");
+    const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__message");
 
     messageElement.simulate("click");
     expect(props.toggleChat.mock.calls.length).toBe(1);
