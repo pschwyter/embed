@@ -20,7 +20,6 @@ import "./style.scss";
 
 interface InterfaceApp {
   cluster?: string,
-  customStyles?: string,
   greetingHandle?: string,
   handle: string,
   language?: string,
