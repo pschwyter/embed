@@ -24,7 +24,7 @@ export default function constructURL(
   const newPrivateMode = privateMode ? "private=1" : undefined;
   const languageString = language ? `language=${language}` : undefined;
   const hostName = window.location.hostname;
-  const metaVariables = includeMetaData ? getMetaVariableString(metaFields) : undefined;
+  const metaVariables = includeMetaData ? getMetaFieldstring(metaFields) : undefined;
 
   const queryString = [location, newPrivateMode, languageString, metaVariables]
     .filter(item => item)
@@ -49,7 +49,9 @@ export default function constructURL(
 /**
  * Returns a "&" separated string of key value pairs
  */
-export function getMetaVariableString(metaFields: object) {
+export function getMetaFieldstring(metaFields: object) {
+  if (!metaFields) { return; }
+
   const reservedKeys = ["url", "private", "language"];
 
   const variableArray = Object.keys(metaFields)
