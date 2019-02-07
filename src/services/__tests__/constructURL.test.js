@@ -1,4 +1,4 @@
-import constructURL, { getMetaVariableString } from "services/constructURL";
+import constructURL, { getMetaFieldstring } from "services/constructURL";
 
 describe("checkRollout service", () => {
   it("should use the handle specified", () => {
@@ -64,11 +64,31 @@ describe("checkRollout service", () => {
     expect(url.match(/&/g).length).toBe(2);
     expect(url.match(/\?/g).length).toBe(1);
   });
+
+  it("should append metaFields to URL if third argument is true", () => {
+    const url = constructURL({
+      handle: "nic",
+      metaFields: {
+        test1: "yolo",
+        test2: "yodo"
+      }
+    }, false, true);
+
+    expect(url).toBe("https://nic.ada.support/chat/?test1=yolo&test2=yodo");
+  });
+
+  it("should not include metaFields if undefined", () => {
+    const url = constructURL({
+      handle: "nic"
+    }, false, true);
+
+    expect(url).toBe("https://nic.ada.support/chat/");
+  });
 });
 
-describe("getMetaVariableString function", () => {
+describe("getMetaFieldstring function", () => {
   it("should output a '&' separated string of key-value pairs", () => {
-    const dummyMetaVariables = {
+    const dummyMetaFields = {
       test1: "yolo",
       test2: 10,
       test3: "stuff"
@@ -76,11 +96,11 @@ describe("getMetaVariableString function", () => {
 
     const expected = "test1=yolo&test2=10&test3=stuff";
 
-    expect(getMetaVariableString(dummyMetaVariables)).toBe(expected);
+    expect(getMetaFieldstring(dummyMetaFields)).toBe(expected);
   });
 
   it("should ignore reserved words (language, url, private)", () => {
-    const dummyMetaVariables = {
+    const dummyMetaFields = {
       test1: "yolo",
       test2: 10,
       test3: "stuff",
@@ -89,6 +109,6 @@ describe("getMetaVariableString function", () => {
 
     const expected = "test1=yolo&test2=10&test3=stuff";
 
-    expect(getMetaVariableString(dummyMetaVariables)).toBe(expected);
+    expect(getMetaFieldstring(dummyMetaFields)).toBe(expected);
   });
 });
