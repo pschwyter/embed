@@ -11,7 +11,8 @@ interface InterfaceDrawer {
   isDrawerOpen: boolean,
   iframeRef?: HTMLIFrameElement,
   chatURL: string,
-  useMobileOverlay: boolean,
+  useMobileOverlay?: boolean,
+  hideMask?: boolean,
   drawerHasBeenOpened: boolean,
   toggleChat(): void,
   setIFrameRef(ref: HTMLIFrameElement): void,
@@ -29,8 +30,9 @@ export default class Drawer extends Component<InterfaceDrawer> {
 
   render() {
     const {
-      isDrawerOpen,
+      hideMask,
       toggleChat,
+      isDrawerOpen,
       useMobileOverlay,
       drawerHasBeenOpened
     } = this.props;
@@ -46,11 +48,13 @@ export default class Drawer extends Component<InterfaceDrawer> {
           }
         )}
       >
-        <div
-          className="ada-embed-drawer__mask"
-          onClick={toggleChat}
-          role="button"
-        />
+        {!hideMask &&
+          <div
+            className="ada-embed-drawer__mask"
+            onClick={toggleChat}
+            role="button"
+          />
+        }
         <div
           className="ada-embed-drawer__iframe-container"
           role="dialog"
