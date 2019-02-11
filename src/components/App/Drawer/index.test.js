@@ -50,6 +50,19 @@ describe("<Drawer />", () => {
     expect(PRSWrapper.find(".ada-embed-drawer--mobile-overlay").length).toBe(1);
   });
 
+  it("should hide the mask when 'hideMask' is true", () => {
+    const { PRSWrapper: PRSWrapperMask } = setup({
+      hideMask: false
+    });
+
+    const { PRSWrapper: PRSWrapperNoMask } = setup({
+      hideMask: true
+    });
+
+    expect(PRSWrapperMask.find(".ada-embed-drawer__mask").length).toBe(1);
+    expect(PRSWrapperNoMask.find(".ada-embed-drawer__mask").length).toBe(0);
+  });
+
   describe("iFrame container", () => {
     it("should show aria-modal `true` when drawer is opened, and ara-hidden should be `false`", () => {
       const { PRSWrapper } = setup({
