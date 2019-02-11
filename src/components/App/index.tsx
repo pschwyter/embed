@@ -19,21 +19,22 @@ import {
 import "./style.scss";
 
 interface InterfaceApp {
-  cluster?: string,
-  greetingHandle?: string,
   handle: string,
-  language?: string,
-  metaFields?: object,
-  mobileOverlay?: boolean,
-  parentElement?: string | HTMLElement,
-  private?: boolean,
   styles?: string,
+  cluster?: string,
+  language?: string,
+  private?: boolean,
+  metaFields?: object,
+  hideMask?: boolean,
+  mobileOverlay?: boolean,
+  greetingHandle?: string,
   useMobileOverlay?: boolean,
-  liveHandoffCallback(liveHandoff: any): any,
-  showZendeskWidget(zendeskLiveHandoff: any): any,
-  chatterTokenCallback(chatter: string): any,
+  parentElement?: string | HTMLElement,
+  adaReadyCallback(): any,
   analyticsCallback(analytics: any): any,
-  adaReadyCallback(): any
+  liveHandoffCallback(liveHandoff: any): any,
+  chatterTokenCallback(chatter: string): any,
+  showZendeskWidget(zendeskLiveHandoff: any): any
 }
 
 interface InterfaceState {
@@ -325,7 +326,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Standard config render (no parentElement)
    */
   renderStandardConfigElements() {
-    const { mobileOverlay } = this.props;
+    const { mobileOverlay, hideMask } = this.props;
     const {
       isDrawerOpen,
       drawerHasBeenOpened,
@@ -341,10 +342,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
           <Drawer
             {...this.props}
             client={client}
+            hideMask={hideMask}
             iframeRef={iframeRef}
             chatURL={this.chatURL}
-            toggleChat={this.toggleChat}
             isDrawerOpen={isDrawerOpen}
+            toggleChat={this.toggleChat}
             setIFrameRef={this.setIFrameRef}
             setIFrameLoaded={this.setIFrameLoaded}
             drawerHasBeenOpened={drawerHasBeenOpened}
