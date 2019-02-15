@@ -1,12 +1,10 @@
 import classnames from "classnames";
-import Client from "models/Client";
 import { Component, h } from "preact";
 import { isIE9OrBelow } from "services/browsers";
 import IFrame from "../IFrame";
 import "./style.scss";
 
 interface InterfaceDrawer {
-  client: Client,
   handle: string,
   isDrawerOpen: boolean,
   iframeRef?: HTMLIFrameElement,

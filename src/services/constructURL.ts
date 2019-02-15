@@ -5,9 +5,10 @@ export default function constructURL(
   props: {
     handle: string,
     cluster?: string,
-    private?: boolean,
+    privateMode?: boolean,
     language?: string,
-    metaFields?: object
+    metaFields?: object,
+    followUpResponseId?: string
   },
   isForAPI = false,
   includeMetaData = false
@@ -15,20 +16,29 @@ export default function constructURL(
   const {
     handle,
     cluster,
-    private: privateMode,
     language,
-    metaFields
+    metaFields,
+    privateMode,
+    followUpResponseId
   } = props;
+
   const clusterString = cluster ? `.${cluster}` : "";
   const location = isForAPI ? `url=${window.location.href}` : undefined;
   const newPrivateMode = privateMode ? "private=1" : undefined;
   const languageString = language ? `language=${language}` : undefined;
+  const followUpResponseIdString = followUpResponseId ?
+    `followUpResponseId=${followUpResponseId}` : undefined;
   const hostName = window.location.hostname;
   const metaVariables = includeMetaData ? getMetaFieldstring(metaFields) : undefined;
 
-  const queryString = [location, newPrivateMode, languageString, metaVariables]
-    .filter(item => item)
-    .join("&");
+  const queryString = [
+    location,
+    newPrivateMode,
+    languageString,
+    followUpResponseIdString,
+    metaVariables
+  ].filter(item => item).join("&");
+
   const questionSym = queryString.length ? "?" : "";
   const apiOrChat = isForAPI ? "api" : "chat";
 
