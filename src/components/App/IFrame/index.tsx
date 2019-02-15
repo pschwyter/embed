@@ -1,11 +1,9 @@
-import Client from "models/Client";
 import { Component, h } from "preact";
 import { capitalize } from "services/strings";
 import postMessage from "services/postMessage";
 import "./style.scss";
 
 interface InterfaceIFrame {
-  client: Client,
   greetingHandle?: string,
   handle: string,
   iframeRef?: HTMLIFrameElement,
@@ -32,7 +30,6 @@ export default class IFrame extends Component<InterfaceIFrame> {
       parentElement,
       styles,
       greetingHandle,
-      client,
       iframeRef,
       metaFields,
       setIFrameLoaded
@@ -40,14 +37,11 @@ export default class IFrame extends Component<InterfaceIFrame> {
 
     setIFrameLoaded();
 
-    const followUpResponseId = client.intro && client.intro.response_id;
-
     const toSend = {
       ...(styles ? { styles } : {}),
       ...(metaFields ? { metaFields } : {}),
       ...(greetingHandle ? { greetingHandle } : {}),
-      ...(!parentElement ? { showCloseButton: true  } : {}),
-      ...(followUpResponseId ? { followUpResponseId } : {})
+      ...(!parentElement ? { showCloseButton: true  } : {})
     };
 
     postMessage(iframeRef, toSend, chatURL);

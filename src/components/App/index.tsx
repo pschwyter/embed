@@ -82,15 +82,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
 
-    const urlParams = {
-      handle: props.handle,
-      cluster: props.cluster,
-      language: props.language,
-      private: props.private,
-      metaFields: props.metaFields
-    };
-    this.chatURL = constructURL(urlParams, false, this.openChatInNewWindow);
-    this.APIURL = constructURL(urlParams, true, false);
+    this.APIURL = constructURL(this.URLParams, true, false);
+    this.chatURL = null;
   }
 
   componentDidMount() {
@@ -156,6 +149,24 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     }
   }
 
+  get URLParams() {
+    const {
+      handle,
+      cluster,
+      language,
+      private: privateMode,
+      metaFields
+    } = this.props;
+
+    return {
+      handle,
+      cluster,
+      language,
+      privateMode,
+      metaFields
+    };
+  }
+
   /**
    * Fetch the client model and set state accordingly
    */
@@ -166,6 +177,13 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       url: this.APIURL
     }).then((response) => {
       const { client } = response;
+      const followUpResponseId = client.intro && client.intro.response_id;
+
+      this.chatURL = constructURL(
+        Object.assign(this.URLParams, { followUpResponseId }),
+        false,
+        this.openChatInNewWindow
+      );
 
       this.setState({
         client: new Client(client)
@@ -311,7 +329,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
         <IFrame
           {...this.props}
-          client={client}
           iframeRef={iframeRef}
           chatURL={this.chatURL}
           isDrawerOpen={isDrawerOpen}
@@ -341,7 +358,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         {!this.openChatInNewWindow && (
           <Drawer
             {...this.props}
-            client={client}
             hideMask={hideMask}
             iframeRef={iframeRef}
             chatURL={this.chatURL}
