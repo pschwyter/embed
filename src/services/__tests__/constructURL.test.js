@@ -1,12 +1,12 @@
 import constructURL, { getMetaFieldstring } from "services/constructURL";
 
-describe("checkRollout service", () => {
+describe("constructURL", () => {
   it("should use the handle specified", () => {
     const url = constructURL({
       handle: "nic",
       cluster: undefined,
       language: "fr",
-      private: true
+      privateMode: true
     });
 
     expect(url.includes("nic")).toBeTruthy();
@@ -17,7 +17,7 @@ describe("checkRollout service", () => {
       handle: "nic",
       cluster: "ca",
       language: "fr",
-      private: true
+      privateMode: true
     });
 
     expect(url.includes("nic.ca")).toBeTruthy();
@@ -28,7 +28,7 @@ describe("checkRollout service", () => {
       handle: "nic",
       cluster: "ca",
       language: "fr",
-      private: true
+      privateMode: true
     });
 
     expect(url.includes("private=1")).toBeTruthy();
@@ -39,7 +39,7 @@ describe("checkRollout service", () => {
       handle: "nic",
       cluster: "ca",
       language: "fr",
-      private: true
+      privateMode: true
     }, true);
 
     expect(url.includes("url=https://nic.ca.ada.support/")).toBeTruthy();
@@ -59,7 +59,7 @@ describe("checkRollout service", () => {
       handle: "nic",
       cluster: "ca",
       language: "fr",
-      private: true
+      privateMode: true
     }, true);
     expect(url.match(/&/g).length).toBe(2);
     expect(url.match(/\?/g).length).toBe(1);
@@ -83,6 +83,15 @@ describe("checkRollout service", () => {
     }, false, true);
 
     expect(url).toBe("https://nic.ada.support/chat/");
+  });
+
+  it("should add followUpResponseId to URL if provided", () => {
+    const url = constructURL({
+      handle: "nic",
+      followUpResponseId: "123"
+    }, false, true);
+
+    expect(url).toBe("https://nic.ada.support/chat/?followUpResponseId=123");
   });
 });
 
