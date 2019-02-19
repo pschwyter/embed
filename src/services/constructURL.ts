@@ -8,7 +8,8 @@ export default function constructURL(
     privateMode?: boolean,
     language?: string,
     metaFields?: object,
-    followUpResponseId?: string
+    followUpResponseId?: string,
+    greeting?: string
   },
   isForAPI = false
 ) {
@@ -18,30 +19,39 @@ export default function constructURL(
     language,
     metaFields,
     privateMode,
-    followUpResponseId
+    followUpResponseId,
+    greeting
   } = props;
 
   const clusterString = cluster ? `.${cluster}` : "";
-  const location = isForAPI ? `url=${window.location.href}` : undefined;
-  const newPrivateMode = privateMode ? "private=1" : undefined;
-  const languageString = language ? `language=${language}` : undefined;
-  const followUpResponseIdString = followUpResponseId ?
-    `followUpResponseId=${followUpResponseId}` : undefined;
   const hostName = window.location.hostname;
-  const metaVariables = isForAPI ? undefined : getMetaFieldstring(metaFields);
 
-  const queryString = [
-    location,
-    newPrivateMode,
-    languageString,
-    followUpResponseIdString,
-    metaVariables
-  ].filter(item => item).join("&");
+  let queryString = "";
+  let url = "";
+
+  if (isForAPI) {
+    // Query string for requests to API
+    queryString = `url=${window.location.href}`;
+  } else {
+    // Query string for Chat URL
+    const newPrivateMode = privateMode ? "private=1" : undefined;
+    const greetingString = greeting ? `greeting=${greeting}` : undefined;
+    const languageString = language ? `language=${language}` : undefined;
+    const metaVariables = metaFields ? getMetaFieldstring(metaFields) : undefined;
+    const followUpResponseIdString = followUpResponseId ?
+      `followUpResponseId=${followUpResponseId}` : undefined;
+
+    queryString = [
+      newPrivateMode,
+      greetingString,
+      languageString,
+      metaVariables,
+      followUpResponseIdString
+    ].filter(item => item).join("&");
+  }
 
   const questionSym = queryString.length ? "?" : "";
   const apiOrChat = isForAPI ? "api" : "chat";
-
-  let url = "";
 
   if (process.env.NODE_ENV === "development" && apiOrChat === "api") {
     url = `http://test.${hostName}:8000/${questionSym}${queryString}`;
