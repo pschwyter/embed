@@ -31,7 +31,6 @@ export default class IFrame extends Component<InterfaceIFrame> {
       styles,
       greetingHandle,
       iframeRef,
-      metaFields,
       setIFrameLoaded
     } = this.props;
 
@@ -39,7 +38,6 @@ export default class IFrame extends Component<InterfaceIFrame> {
 
     const toSend = {
       ...(styles ? { styles } : {}),
-      ...(metaFields ? { metaFields } : {}),
       ...(greetingHandle ? { greetingHandle } : {}),
       ...(!parentElement ? { showCloseButton: true  } : {})
     };
