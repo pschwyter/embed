@@ -65,14 +65,14 @@ describe("constructURL", () => {
     expect(url.match(/\?/g).length).toBe(1);
   });
 
-  it("should append metaFields to URL if third argument is true", () => {
+  it("should append metaFields to URL if not for API (second arg is false)", () => {
     const url = constructURL({
       handle: "nic",
       metaFields: {
         test1: "yolo",
         test2: "yodo"
       }
-    }, false, true);
+    }, false);
 
     expect(url).toBe("https://nic.ada.support/chat/?test1=yolo&test2=yodo");
   });
@@ -80,7 +80,7 @@ describe("constructURL", () => {
   it("should not include metaFields if undefined", () => {
     const url = constructURL({
       handle: "nic"
-    }, false, true);
+    }, false);
 
     expect(url).toBe("https://nic.ada.support/chat/");
   });
@@ -89,7 +89,7 @@ describe("constructURL", () => {
     const url = constructURL({
       handle: "nic",
       followUpResponseId: "123"
-    }, false, true);
+    }, false);
 
     expect(url).toBe("https://nic.ada.support/chat/?followUpResponseId=123");
   });

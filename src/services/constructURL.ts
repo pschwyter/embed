@@ -10,8 +10,7 @@ export default function constructURL(
     metaFields?: object,
     followUpResponseId?: string
   },
-  isForAPI = false,
-  includeMetaData = false
+  isForAPI = false
 ) {
   const {
     handle,
@@ -29,7 +28,7 @@ export default function constructURL(
   const followUpResponseIdString = followUpResponseId ?
     `followUpResponseId=${followUpResponseId}` : undefined;
   const hostName = window.location.hostname;
-  const metaVariables = includeMetaData ? getMetaFieldstring(metaFields) : undefined;
+  const metaVariables = isForAPI ? undefined : getMetaFieldstring(metaFields);
 
   const queryString = [
     location,

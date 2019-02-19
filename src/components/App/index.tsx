@@ -82,7 +82,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
 
-    this.APIURL = constructURL(this.URLParams, true, false);
+    this.APIURL = constructURL(this.URLParams, true);
     this.chatURL = null;
   }
 
@@ -181,8 +181,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
       this.chatURL = constructURL(
         Object.assign(this.URLParams, { followUpResponseId }),
-        false,
-        this.openChatInNewWindow
+        false
       );
 
       this.setState({
