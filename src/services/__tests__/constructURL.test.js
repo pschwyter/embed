@@ -37,12 +37,21 @@ describe("constructURL", () => {
   it("should set url location as a query string param if isForAPI is true", () => {
     const url = constructURL({
       handle: "nic",
+      cluster: "ca"
+    }, true);
+
+    expect(url.includes("url=https://nic.ca.ada.support/")).toBeTruthy();
+  });
+
+  it("should ommit other query parameters from the query string if isForAPI is true", () => {
+    const url = constructURL({
+      handle: "nic",
       cluster: "ca",
       language: "fr",
       privateMode: true
     }, true);
 
-    expect(url.includes("url=https://nic.ca.ada.support/")).toBeTruthy();
+    expect(url).toBe("https://nic.ca.ada.support/api/?url=https://nic.ca.ada.support/");
   });
 
   it("should set language in the query string if specified", () => {
@@ -59,20 +68,21 @@ describe("constructURL", () => {
       handle: "nic",
       cluster: "ca",
       language: "fr",
-      privateMode: true
-    }, true);
+      privateMode: true,
+      greeting: "123"
+    }, false);
     expect(url.match(/&/g).length).toBe(2);
     expect(url.match(/\?/g).length).toBe(1);
   });
 
-  it("should append metaFields to URL if third argument is true", () => {
+  it("should append metaFields to URL if not for API (second arg is false)", () => {
     const url = constructURL({
       handle: "nic",
       metaFields: {
         test1: "yolo",
         test2: "yodo"
       }
-    }, false, true);
+    }, false);
 
     expect(url).toBe("https://nic.ada.support/chat/?test1=yolo&test2=yodo");
   });
@@ -80,7 +90,7 @@ describe("constructURL", () => {
   it("should not include metaFields if undefined", () => {
     const url = constructURL({
       handle: "nic"
-    }, false, true);
+    }, false);
 
     expect(url).toBe("https://nic.ada.support/chat/");
   });
@@ -89,9 +99,18 @@ describe("constructURL", () => {
     const url = constructURL({
       handle: "nic",
       followUpResponseId: "123"
-    }, false, true);
+    }, false);
 
     expect(url).toBe("https://nic.ada.support/chat/?followUpResponseId=123");
+  });
+
+  it("should include the greeting id in the Chat URL if specified in adaSettings", () => {
+    const url = constructURL({
+      handle: "nic",
+      greeting: "123"
+    }, false);
+
+    expect(url).toBe("https://nic.ada.support/chat/?greeting=123");
   });
 });
 
