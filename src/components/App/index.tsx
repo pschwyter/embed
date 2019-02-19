@@ -24,10 +24,10 @@ interface InterfaceApp {
   cluster?: string,
   language?: string,
   private?: boolean,
-  metaFields?: object,
+  greeting?: string,
   hideMask?: boolean,
+  metaFields?: object,
   mobileOverlay?: boolean,
-  greetingHandle?: string,
   useMobileOverlay?: boolean,
   parentElement?: string | HTMLElement,
   adaReadyCallback(): any,
@@ -82,7 +82,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
 
-    this.APIURL = constructURL(this.URLParams, true, false);
+    this.APIURL = constructURL(this.URLParams, true);
     this.chatURL = null;
   }
 
@@ -154,6 +154,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       handle,
       cluster,
       language,
+      greeting,
       private: privateMode,
       metaFields
     } = this.props;
@@ -162,6 +163,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       handle,
       cluster,
       language,
+      greeting,
       privateMode,
       metaFields
     };
@@ -181,8 +183,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
       this.chatURL = constructURL(
         Object.assign(this.URLParams, { followUpResponseId }),
-        false,
-        this.openChatInNewWindow
+        false
       );
 
       this.setState({
