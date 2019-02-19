@@ -24,10 +24,10 @@ interface InterfaceApp {
   cluster?: string,
   language?: string,
   private?: boolean,
-  metaFields?: object,
+  greeting?: string,
   hideMask?: boolean,
+  metaFields?: object,
   mobileOverlay?: boolean,
-  greetingHandle?: string,
   useMobileOverlay?: boolean,
   parentElement?: string | HTMLElement,
   adaReadyCallback(): any,
@@ -154,6 +154,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       handle,
       cluster,
       language,
+      greeting,
       private: privateMode,
       metaFields
     } = this.props;
@@ -162,6 +163,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       handle,
       cluster,
       language,
+      greeting,
       privateMode,
       metaFields
     };

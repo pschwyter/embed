@@ -4,7 +4,6 @@ import postMessage from "services/postMessage";
 import "./style.scss";
 
 interface InterfaceIFrame {
-  greetingHandle?: string,
   handle: string,
   iframeRef?: HTMLIFrameElement,
   chatURL: string,
@@ -29,7 +28,6 @@ export default class IFrame extends Component<InterfaceIFrame> {
       chatURL,
       parentElement,
       styles,
-      greetingHandle,
       iframeRef,
       setIFrameLoaded
     } = this.props;
@@ -38,7 +36,6 @@ export default class IFrame extends Component<InterfaceIFrame> {
 
     const toSend = {
       ...(styles ? { styles } : {}),
-      ...(greetingHandle ? { greetingHandle } : {}),
       ...(!parentElement ? { showCloseButton: true  } : {})
     };
 
