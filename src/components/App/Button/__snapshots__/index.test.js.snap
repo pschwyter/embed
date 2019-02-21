@@ -8,7 +8,7 @@ preact-render-spy (1 nodes)
     title="Open Support Chat"
     accessKey="1"
     class="ada-embed-button"
-    style="background-color: #000;"
+    style="width: 72px; height: 72px; background-color: #3ED1FF;"
   >
     <undefined class="ada-embed-button__icon"></undefined>
   </button>

@@ -19,6 +19,7 @@ import {
 import "./style.scss";
 
 interface InterfaceApp {
+  client: Client,
   handle: string,
   styles?: string,
   cluster?: string,
