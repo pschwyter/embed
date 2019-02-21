@@ -10,6 +10,12 @@ function setup(propsOverride = {}) {
       tint: "#000",
       intro: {
         body: "http://test.com/yolo.svg"
+      },
+      chatButton: {
+        size: 72,
+        icon_path: "https://static.ada.support/images/286ca5d2-5311-467a-a5f5-5051ad710db4.svg",
+        icon_type: "default",
+        background_color: "#3ED1FF"
       }
     }
   };
@@ -38,10 +44,10 @@ describe("<Button />", () => {
     expect(PRSWrapper.find(".ada-embed-button__icon--hide").length).toBe(1);
   });
 
-  it("it should have the background colour set to the client tint colour", () => {
+  it("it should have the background colour set to the chatButton backgroundColor", () => {
     const { PRSWrapper } = setup();
 
-    expect(PRSWrapper.find(".ada-embed-button").attr("style")).toEqual({"backgroundColor": "#000"});
+    expect(PRSWrapper.find(".ada-embed-button").attr("style")["backgroundColor"]).toEqual("#3ED1FF");
   });
 
   it("should have an accessKey of 1", () => {

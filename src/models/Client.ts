@@ -16,6 +16,12 @@ export default class Client {
     duration: number,
     delay: number
   };
+  chatButton?: {
+    icon_path: string,
+    size: number,
+    background_color: string,
+    icon_type: string
+  };
 
   constructor(clientResponse: any) {
     this.chat = clientResponse.chat;
@@ -28,5 +34,6 @@ export default class Client {
     this.routingInfo = clientResponse.routing_info;
     this.tint = clientResponse.tint;
     this.intro = clientResponse.intro;
+    this.chatButton = clientResponse.chat_button;
   }
 }

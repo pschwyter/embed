@@ -1,8 +1,11 @@
 import classnames from "classnames";
 import Client from "models/Client";
 import DialogueSvg from "icons/Dialogue.svg";
+import SVG from "react-inlinesvg";
 import { Component, h } from "preact";
 import "./style.scss";
+
+const CHAT_BUTTON_PADDING_SIZE_RATIO = 6.28;
 
 interface InterfaceButton {
   client: Client,
@@ -14,6 +17,13 @@ export default class Button extends Component<InterfaceButton> {
   render(props: InterfaceButton) {
     const { toggleChat, client, showIntroEmoji } = props;
 
+    const useCustomIcon = client.chatButton.icon_type === "custom" || null;
+    const chatButtonURL = useCustomIcon ? client.chatButton.icon_path : "static/icons/Dialogue.svg";
+
+    const chatButtonIconClassname = classnames("ada-embed-button__icon", {
+      "ada-embed-button__icon--hide": showIntroEmoji
+    })
+
     return (
       <div className="ada-embed-button-container">
         <button
@@ -22,16 +32,21 @@ export default class Button extends Component<InterfaceButton> {
           className="ada-embed-button"
           onClick={toggleChat}
           style={{
-            backgroundColor: client.tint
+            width: client.chatButton.size,
+            height: client.chatButton.size,
+            backgroundColor: client.chatButton.background_color
           }}
         >
-          <DialogueSvg
-            className={
-              classnames("ada-embed-button__icon", {
-                "ada-embed-button__icon--hide": showIntroEmoji
-              })
-            }
-          />
+          { useCustomIcon ? 
+            <SVG
+              src={chatButtonURL}
+              className={chatButtonIconClassname}
+              cacheGetRequests
+            /> :
+            <DialogueSvg
+              className={chatButtonIconClassname}
+            />
+          }
           {showIntroEmoji && (
             <img
               alt=""
