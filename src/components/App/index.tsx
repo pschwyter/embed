@@ -19,6 +19,7 @@ import {
 import "./style.scss";
 
 interface InterfaceApp {
+  client: Client,
   handle: string,
   styles?: string,
   cluster?: string,
@@ -49,6 +50,10 @@ interface InterfaceState {
 }
 
 export default class App extends Component<InterfaceApp, InterfaceState> {
+  static defaultProps = {
+    mobileOverlay: true
+  };
+
   isInMobile: boolean;
   openChatInNewWindow: boolean;
   chatURL: string;
@@ -229,6 +234,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     const { detail } = event;
     const { type, data } = detail;
 
+    if (type === ADA_EVENT_TOGGLE) {
+      this.toggleChat();
+      return;
+    }
+
     if (!isIFrameLoaded) {
       afterIFrameLoadsTasks.push(event);
 
@@ -240,9 +250,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     }
 
     switch (type) {
-      case ADA_EVENT_TOGGLE:
-        this.toggleChat();
-        break;
       case ADA_EVENT_SET_META_FIELDS:
         postMessage(iframeRef, data, this.chatURL);
         break;

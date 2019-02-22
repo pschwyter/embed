@@ -22,6 +22,14 @@ preact-render-spy (1 nodes)
           "tint": "#000"
         }
       }
+      chatButton={
+        Object {
+          "background_color": "#3ED1FF",
+          "icon_path": "https://static.ada.support/images/286ca5d2-5311-467a-a5f5-5051ad710db4.svg",
+          "icon_type": "default",
+          "size": 72
+        }
+      }
       handle="nic"
       isDrawerOpen={true}
       chatURL="https://nic.ca.ada.support/chat/"

@@ -3,7 +3,10 @@
 exports[`<IntroBlurb /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
-<div class="ada-embed-intro-blurb ada-embed-intro-blurb--show">
+<div
+  class="ada-embed-intro-blurb ada-embed-intro-blurb--show"
+  style="right: 104px;"
+>
   <p
     class="ada-embed-intro-blurb__message"
     aria-live="assertive"

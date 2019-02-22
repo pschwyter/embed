@@ -7,31 +7,38 @@ preact-render-spy (1 nodes)
   id="ada-embed"
   class="ada-embed-app"
 >
-  <div class="ada-embed-drawer ada-embed-drawer--hidden">
-    <div
-      class="ada-embed-drawer__mask"
-      onClick={[Function bound ]}
-      role="button"
-    >
-    </div>
-    <div
-      class="ada-embed-drawer__iframe-container"
-      role="dialog"
-      aria-modal={false}
-      aria-hidden={true}
-    >
-    </div>
-  </div>
-  <div class="ada-embed-button-container">
-    <button
-      title="Open Support Chat"
-      accessKey="1"
-      class="ada-embed-button"
-      onClick={[Function bound ]}
-    >
-      <undefined class="ada-embed-button__icon"></undefined>
-    </button>
-  </div>
+  <Drawer
+    handle="nic"
+    mobileOverlay={true}
+    chatURL="https://nic.ada.support/chat/"
+    isDrawerOpen={false}
+    toggleChat={[Function bound ]}
+    setIFrameRef={[Function bound ]}
+    setIFrameLoaded={[Function bound ]}
+    drawerHasBeenOpened={false}
+    useMobileOverlay={false}
+  >
+  </Drawer>
+  <Button
+    client={
+      Client {
+        "chat": true,
+        "chatButton": undefined,
+        "features": undefined,
+        "intro": undefined,
+        "language": undefined,
+        "name": undefined,
+        "persistence": undefined,
+        "privacy": undefined,
+        "rollout": 1,
+        "routingInfo": undefined,
+        "tint": undefined
+      }
+    }
+    toggleChat={[Function bound ]}
+    showIntroEmoji={false}
+  >
+  </Button>
 </div>
 
 `;
