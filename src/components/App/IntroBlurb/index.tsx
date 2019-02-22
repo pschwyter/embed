@@ -3,6 +3,8 @@ import Client from "models/Client";
 import { Component, h } from "preact";
 import "./style.scss";
 
+const INTRO_BLURB_SPACING = 32;
+
 interface InterfaceIntroBlurb {
   client: Client,
   isInMobile: boolean,
@@ -83,6 +85,7 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
             }
           )
         }
+        style={{ right: client.chatButton.size + INTRO_BLURB_SPACING }}
       >
         <p
           className="ada-embed-intro-blurb__message"

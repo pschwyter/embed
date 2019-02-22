@@ -1,7 +1,7 @@
 /* eslint-env node, jest */
 
 import "jsdom-global/register";
-import { deep } from "preact-render-spy";
+import { shallow } from "preact-render-spy";
 import App from "./index";
 import IFrame from "./IFrame";
 
@@ -11,7 +11,7 @@ function setup(propsOverride = {}) {
   };
 
   const props = Object.assign(defaultsProps, propsOverride);
-  const PRSWrapper = deep(<App {...props} />);
+  const PRSWrapper = shallow(<App {...props} />);
 
   return {
     props,

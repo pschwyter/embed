@@ -11,6 +11,12 @@ function setup(propsOverride = {}) {
       intro: {
         duration: 1000,
         delay: 1000
+      },
+      chatButton: {
+        size: 72,
+        icon_path: "https://static.ada.support/images/286ca5d2-5311-467a-a5f5-5051ad710db4.svg",
+        icon_type: "default",
+        background_color: "#3ED1FF"
       }
     },
     toggleChat: jest.fn()

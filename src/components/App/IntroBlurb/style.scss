@@ -23,6 +23,14 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
     animation-fill-mode: forwards;
   }
 
+  &--large {
+    right: 88px;
+  }
+
+  &--x-large {
+    right: 104px;
+  }
+
   &:hover &__dismiss-button,
   &__dismiss-button--mobile-show {
     opacity: 1;
