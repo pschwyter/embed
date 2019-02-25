@@ -54,6 +54,24 @@ describe("constructURL", () => {
     expect(url).toBe("https://nic.ca.ada.support/api/?url=https://nic.ca.ada.support/");
   });
 
+  it("should append route to url for API", () => {
+    const url = constructURL({
+      handle: "nic",
+      route: "chatters"
+    }, true);
+
+    expect(url).toBe("https://nic.ada.support/api/chatters/?url=https://nic.ca.ada.support/");
+  });
+
+  it("should append route to url for CHAT", () => {
+    const url = constructURL({
+      handle: "nic",
+      route: "chatters"
+    }, false);
+
+    expect(url).toBe("https://nic.ada.support/chat/chatters/");
+  });
+
   it("should set language in the query string if specified", () => {
     const url = constructURL({
       handle: "nic",

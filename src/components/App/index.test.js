@@ -41,6 +41,18 @@ describe("<App />", () => {
     }, 0);
   });
 
+  it("should no longer render connector iframe if hasConnectedChat is true", done => {
+    const { PRSWrapper } = setup();
+    PRSWrapper.setState({
+      hasConnectedChat: true
+    });
+
+    setTimeout(() => {
+      expect(PRSWrapper.find(".ada-connector-iframe").length).toBe(0);
+      done();
+    }, 0);
+  });
+
   it("should position the iFrame inside parentElement if specified", done => {
     let dummyElement = document.createElement("div");
 
