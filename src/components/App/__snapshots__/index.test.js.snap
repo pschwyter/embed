@@ -37,8 +37,17 @@ preact-render-spy (1 nodes)
     }
     toggleChat={[Function bound ]}
     showIntroEmoji={false}
+    showNotification={false}
   >
   </Button>
+  <iframe
+    name="ada-embed-connector-iframe"
+    class="ada-embed-connector-iframe"
+    src="https://nic.ada.support/chat/connect/"
+    title="Ada Embed Connector"
+    style="display: none;"
+  >
+  </iframe>
 </div>
 
 `;

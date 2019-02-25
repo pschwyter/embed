@@ -55,4 +55,12 @@ describe("<Button />", () => {
 
     expect(PRSWrapper.find(".ada-embed-button").attr("accessKey")).toEqual("1");
   });
+
+  it("should show the notification icon when showNotification is set to true", () => {
+    const { PRSWrapper } = setup({
+      showNotification: true
+    });
+
+    expect(PRSWrapper.find(".ada-embed-notification").length).toBe(1);
+  });
 });

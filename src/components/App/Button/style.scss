@@ -4,61 +4,87 @@
 $button-shadow: 0 2px 4px rgba($color-black, .1);
 $button-border-color: 1px solid rgba($color-black, .05);
 
-.ada-embed-button {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+.ada-embed-button-container {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 10000;
-  cursor: pointer;
-  border: $button-border-color;
-  transition: 120ms ease;
-  box-shadow: $button-shadow;
-  visibility: visible;
-  padding: 0;
-  margin: 0;
-  min-width: initial;
-  max-width: initial;
-  min-height: initial;
-  max-height: initial;
-  overflow: hidden;
 
-  &__icon {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left:0;
-    padding: 17%;
+  .ada-embed-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     position: absolute;
-    z-index: 10010;
-    box-sizing: border-box;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+    border: $button-border-color;
+    transition: 120ms ease;
+    box-shadow: $button-shadow;
+    visibility: visible;
+    padding: 0;
+    margin: 0;
+    min-width: initial;
+    max-width: initial;
+    min-height: initial;
+    max-height: initial;
+    overflow: hidden;
 
-    // Target the inline svg
-    svg {
-      width: 100% !important;
-      height: 100% !important;
+    &__icon {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      padding: 17%;
+      position: absolute;
+      z-index: 10010;
+      box-sizing: border-box;
+
+      // Target the inline svg
+      svg {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      &--hide {
+        animation-duration: 2s;
+        animation-name: dialogue-fade;
+      }
     }
 
-    &--hide {
-      animation-duration: 2s;
-      animation-name: dialogue-fade;
+    &__emoji {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10010;
+      width: 100%;
+      height: 100%;
+
+      &--show {
+        animation-duration: 2s;
+        animation-name: emoji-bounce;
+        animation-fill-mode: forwards;
+      }
     }
   }
 
-  &__emoji {
+  .ada-embed-notification {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
     position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10010;
-    width: 100%;
-    height: 100%;
+    bottom: 31px;
+    right: -4px;
+    animation-duration: .5s;
+    animation-name: notification-fade-in;
 
-    &--show {
-      animation-duration: 2s;
-      animation-name: emoji-bounce;
-      animation-fill-mode: forwards;
+    &__circle {
+      cx: 8.5px;
+      cy: 8.5px;
+      r: 6px;
+      fill: $color-white;
+      stroke-width: 6px;
+      stroke: $color-red;
     }
   }
 }
@@ -97,6 +123,18 @@ $button-border-color: 1px solid rgba($color-black, .05);
 
   100% {
     transform: translateY(-60px);
+  }
+}
+
+@keyframes notification-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale3d(0, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
   }
 }
 
