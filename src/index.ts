@@ -22,6 +22,7 @@ declare global {
   interface Window {
     adaEmbed: any;
     adaSettings: object;
+    $zopim: any;
   }
 }
 
