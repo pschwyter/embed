@@ -4,6 +4,7 @@ import checkRollout from "services/checkRollout";
 import httpRequest from "services/httpRequest";
 import postMessage from "services/postMessage";
 import constructURL from "services/constructURL";
+import { showZendeskWidget } from "services/zendesk";
 import Button from "./Button";
 import IntroBlurb from "./IntroBlurb";
 import Drawer from "./Drawer";
@@ -35,7 +36,6 @@ interface InterfaceApp {
   analyticsCallback(analytics: any): any,
   liveHandoffCallback(liveHandoff: any): any,
   chatterTokenCallback(chatter: string): any,
-  showZendeskWidget(zendeskLiveHandoff: any): any
 }
 
 interface InterfaceState {
@@ -134,7 +134,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     const {
       liveHandoffCallback,
-      showZendeskWidget,
       chatterTokenCallback,
       analyticsCallback
     } = this.props;
@@ -143,8 +142,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     if (liveHandoff && liveHandoffCallback) {
       liveHandoffCallback(liveHandoff);
-    } else if (zendeskLiveHandoff && showZendeskWidget) {
-      showZendeskWidget(zendeskLiveHandoff);
+    } else if (zendeskLiveHandoff) {
+      showZendeskWidget(zendeskLiveHandoff, this.toggleChat);
     } else if (chatter && chatterTokenCallback) {
       chatterTokenCallback(chatter);
     } else if (analytics && analyticsCallback) {
