@@ -8,6 +8,7 @@ export default function constructURL(
     privateMode?: boolean,
     language?: string,
     metaFields?: object,
+    route?: string
     followUpResponseId?: string,
     greeting?: string
   },
@@ -18,6 +19,7 @@ export default function constructURL(
     cluster,
     language,
     metaFields,
+    route,
     privateMode,
     followUpResponseId,
     greeting
@@ -25,6 +27,7 @@ export default function constructURL(
 
   const clusterString = cluster ? `.${cluster}` : "";
   const hostName = window.location.hostname;
+  const routeString = route ? `${route}/` : "";
 
   let queryString = "";
   let url = "";
@@ -54,12 +57,13 @@ export default function constructURL(
   const apiOrChat = isForAPI ? "api" : "chat";
 
   if (process.env.NODE_ENV === "development" && apiOrChat === "api") {
-    url = `http://test.${hostName}:8000/${questionSym}${queryString}`;
+    url = `http://test.${hostName}:8000/${routeString}${questionSym}${queryString}`;
   } else if (process.env.NODE_ENV === "development" && apiOrChat === "chat") {
-    url = `http://${hostName}:8002/${questionSym}${queryString}`;
+    url = `http://${hostName}:8002/${routeString}${questionSym}${queryString}`;
   } else {
     url =
-    `https://${handle}${clusterString}.ada.support/${apiOrChat}/${questionSym}${queryString}`;
+    `https://${handle}${clusterString}.ada.support/${
+      apiOrChat}/${routeString}${questionSym}${queryString}`;
   }
 
   return url;
