@@ -46,7 +46,14 @@ interface InterfaceState {
   showIntro: boolean,
   iframeRef: HTMLIFrameElement,
   isIFrameLoaded: boolean,
-  afterIFrameLoadsTasks: CustomEvent[]
+  afterIFrameLoadsTasks: CustomEvent[],
+  chatter: string,
+  unreadMessages: number,
+  hasConnectedChat: boolean
+}
+
+interface UnreadMessage {
+  amount: number
 }
 
 export default class App extends Component<InterfaceApp, InterfaceState> {
@@ -58,11 +65,12 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   openChatInNewWindow: boolean;
   chatURL: string;
   APIURL: string;
+  connectorURL: string;
 
   constructor(props: InterfaceApp) {
     super(props);
 
-    const { mobileOverlay } = props;
+    const { mobileOverlay, handle } = props;
 
     this.state = {
       client: null,
@@ -72,7 +80,10 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       showIntro: false,
       iframeRef: null,
       isIFrameLoaded: false,
-      afterIFrameLoadsTasks: []
+      afterIFrameLoadsTasks: [],
+      chatter: null,
+      unreadMessages: 0,
+      hasConnectedChat: false
     };
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -86,6 +97,12 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.handleAdaEvent = this.handleAdaEvent.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
+
+    const route = "connect";
+    this.connectorURL = constructURL(
+      { handle, route },
+      false
+    );
 
     this.APIURL = constructURL(this.URLParams, true);
     this.chatURL = null;
@@ -129,7 +146,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       zendeskLiveHandoff,
       chatter,
       analytics,
-      closeChat
+      closeChat,
+      chatterIds,
+      newMessages
     } = event.data;
 
     const {
@@ -146,10 +165,31 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       showZendeskWidget(zendeskLiveHandoff, this.toggleChat);
     } else if (chatter && chatterTokenCallback) {
       chatterTokenCallback(chatter);
+      this.setState({ chatter });
     } else if (analytics && analyticsCallback) {
       analyticsCallback(analytics);
     } else if (closeChat && isDrawerOpen) {
       this.toggleChat();
+    } else if (chatterIds) {
+      this.fetchChatterAndSetup(chatterIds);
+    } else if (newMessages) {
+      this.handleNewMessages(newMessages);
+    }
+  }
+
+  /**
+   * Fetch chatter token from local/session storage via the connector's postMessage
+   * and store the appropriate ID
+   */
+  fetchChatterAndSetup(chatterIds: string) {
+    const {
+      client
+    } = this.state;
+    const persistence = client.persistence === "normal" ? "local" : client.persistence;
+    if (chatterIds[persistence]) {
+      this.setState({
+        chatter: chatterIds[persistence]
+      }, () => this.fetchUnread());
     }
   }
 
@@ -225,6 +265,29 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
+  fetchUnread() {
+    const { chatter } = this.state;
+    const route = `chatters/${chatter}/notification_status`;
+    const url = constructURL(
+      Object.assign(this.URLParams, { route }),
+      true
+    );
+    httpRequest({
+      url
+    }).then((response) => {
+      // Set unread amount, connected to connector on chat
+      // and open chat if in (active/pending) live state
+      this.setState({
+        unreadMessages: response.unread_amount,
+        hasConnectedChat: true,
+        drawerHasBeenOpened: response.is_live_state
+      });
+    }, (error) => {
+      console.warn(error);
+      throw Error("An error occurred while retrieving the client");
+    });
+  }
+
   /**
    * Event hanlder for custom Ada events
    */
@@ -262,11 +325,47 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   /**
+   * Handles incoming messages from Chat
+   */
+  handleNewMessages(messages: UnreadMessage) {
+    const { unreadMessages } = this.state;
+
+    this.setState({
+      unreadMessages: unreadMessages + messages.amount
+    });
+  }
+
+  /**
+   * Handles clearing unread messages on both Embed and API
+   */
+  handleClearUnreadMessages() {
+    const { chatter } = this.state;
+    this.setState({
+      unreadMessages: 0
+    });
+
+    if (!chatter) return;
+    // Send request to API to clear unread messages
+    const route = `chatters/${chatter}/live_chat_unread_amount`;
+    const url = constructURL(
+      Object.assign(this.URLParams, { route }),
+      true
+    );
+    httpRequest({
+      url,
+      method: "DELETE"
+    });
+  }
+
+  /**
    * Open/close the Drawer component, or open a new window if in mobile
    */
   toggleChat() {
     const { isDrawerOpen, iframeRef } = this.state;
     const nextIsDrawerOpen = !isDrawerOpen;
+
+    // Clear unread messages
+    this.handleClearUnreadMessages();
 
     // Open Chat in a new window if mobile
     if (this.openChatInNewWindow) {
@@ -356,7 +455,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       drawerHasBeenOpened,
       client,
       showIntro,
-      iframeRef
+      iframeRef,
+      unreadMessages,
+      hasConnectedChat
     } = this.state;
 
     return (
@@ -385,6 +486,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
               client.intro.style.toLowerCase() === "emoji" &&
               !drawerHasBeenOpened
             }
+            showNotification={unreadMessages > 0}
           />
         )}
         {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
@@ -392,6 +494,19 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             client={client}
             toggleChat={this.toggleChat}
             isInMobile={this.isInMobile}
+          />
+        )}
+        {/* This iFrame is here to connect with /chat/connect/ and pull the chatter's ID from
+            both local and session storage through postMessage. Once the message is received
+            hasConnectedChat will be set to true and the iFrame will no longer be rendered.
+            For more info @Kiwi or @Nic*/}
+        {!hasConnectedChat && (
+          <iframe
+            name="ada-embed-connector-iframe"
+            className="ada-embed-connector-iframe"
+            src={this.connectorURL}
+            title="Ada Embed Connector"
+            style="display: none;"
           />
         )}
       </div>
