@@ -88,7 +88,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     this.toggleChat = this.toggleChat.bind(this);
     this.isInMobile = (
-      navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) !== null
+      navigator.userAgent.match(/(iPhone)|(iPod)|(android)|(webOS)/i) !== null
     );
     this.openChatInNewWindow = !mobileOverlay && this.isInMobile;
 
