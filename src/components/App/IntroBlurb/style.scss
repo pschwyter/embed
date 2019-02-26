@@ -10,6 +10,7 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
   bottom: 24px;
   opacity: 0;
   max-width: 224px;
+  z-index: 10000;
 
   &--show {
     animation-name: messageBlowup;
@@ -61,7 +62,6 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
   }
 
   &__message {
-    z-index: 10000;
     margin-bottom: 0;
     border: 0;
     border-radius: 12px;
