@@ -40,6 +40,18 @@
   id="__ada" 
   src="/bundle.js"
   data-handle="ada-example" 
+  data-lazy
+  onload="handleOnLoad()"
 ></script>
+
+<script>
+  function handleOnLoad() {
+    adaEmbed.start({
+      handle: "ada-example",
+      chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)}
+    });
+    // adaEmbed.deleteHistory();
+  }
+</script>
 
 </html>

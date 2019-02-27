@@ -110,6 +110,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
   componentDidMount() {
     this.fetchClientAndSetup();
+    this.initiateAdaEventListener();
   }
 
   componentWillUnmount() {
@@ -117,11 +118,17 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   /**
-   * Bind the event listeners to global scope
+   * Bind the message event listener to global scope
    */
-  initiateListeners() {
-    document.addEventListener("ada-event", this.handleAdaEvent, false);
+  initiateMessageListener() {
     window.addEventListener("message", this.receiveMessage, false);
+  }
+
+  /**
+   * Bind the ada event listener to global scope
+   */
+  initiateAdaEventListener() {
+    document.addEventListener("ada-event", this.handleAdaEvent, false);
   }
 
   /**
@@ -139,7 +146,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     const originURL = this.chatURL;
 
     // Ensure that event origin is the same as the Chat URL
-    if (!originURL.startsWith(event.origin)) { return; }
+    if (originURL && !originURL.startsWith(event.origin)) { return; }
 
     const {
       liveHandoff,
@@ -247,7 +254,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
           shoudLoadEmbedUI
         }, () => {
           if (shoudLoadEmbedUI) {
-            this.initiateListeners();
+            this.initiateMessageListener();
 
             if (client.intro) {
               setTimeout(() => {
@@ -266,7 +273,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   fetchUnread() {
-    const { chatter } = this.state;
+    const { chatter, drawerHasBeenOpened } = this.state;
     const route = `chatters/${chatter}/notification_status`;
     const url = constructURL(
       Object.assign(this.URLParams, { route }),
@@ -280,7 +287,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       this.setState({
         unreadMessages: response.unread_amount,
         hasConnectedChat: true,
-        drawerHasBeenOpened: response.is_live_state
+        drawerHasBeenOpened: drawerHasBeenOpened || response.is_live_state
       });
     }, (error) => {
       console.warn(error);
@@ -432,16 +439,14 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = this.state;
 
     return (
-      <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
-        <IFrame
-          {...this.props}
-          iframeRef={iframeRef}
-          chatURL={this.chatURL}
-          isDrawerOpen={isDrawerOpen}
-          setIFrameRef={this.setIFrameRef}
-          setIFrameLoaded={this.setIFrameLoaded}
-        />
-      </div>
+      <IFrame
+        {...this.props}
+        iframeRef={iframeRef}
+        chatURL={this.chatURL}
+        isDrawerOpen={isDrawerOpen}
+        setIFrameRef={this.setIFrameRef}
+        setIFrameLoaded={this.setIFrameLoaded}
+      />
     );
   }
 
@@ -461,7 +466,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = this.state;
 
     return (
-      <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
+      <div>
         {/* Do not render Drawer if Chat will be opened in new window */}
         {!this.openChatInNewWindow && (
           <Drawer
@@ -513,16 +518,28 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     );
   }
 
-  render(props: InterfaceApp) {
-    const { parentElement } = props;
+  get elementToRender() {
+    const { parentElement } = this.props;
     const {
       shoudLoadEmbedUI
     } = this.state;
 
-    if (!shoudLoadEmbedUI) { return (null); }
+    if (!shoudLoadEmbedUI) {
+      return (null);
+    }
 
-    return Boolean(parentElement) ?
-      this.renderIFrameForParentElement() :
-      this.renderStandardConfigElements();
+    if (parentElement) {
+      return this.renderIFrameForParentElement();
+    }
+
+    return this.renderStandardConfigElements();
+  }
+
+  render() {
+    return (
+      <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
+        {this.elementToRender}
+      </div>
+    );
   }
 }
