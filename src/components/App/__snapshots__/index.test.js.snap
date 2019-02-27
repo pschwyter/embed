@@ -7,47 +7,49 @@ preact-render-spy (1 nodes)
   id="ada-embed"
   class="ada-embed-app"
 >
-  <Drawer
-    handle="nic"
-    mobileOverlay={true}
-    chatURL="https://nic.ada.support/chat/"
-    isDrawerOpen={false}
-    toggleChat={[Function bound ]}
-    setIFrameRef={[Function bound ]}
-    setIFrameLoaded={[Function bound ]}
-    drawerHasBeenOpened={false}
-    useMobileOverlay={false}
-  >
-  </Drawer>
-  <Button
-    client={
-      Client {
-        "chat": true,
-        "chatButton": undefined,
-        "features": undefined,
-        "intro": undefined,
-        "language": undefined,
-        "name": undefined,
-        "persistence": undefined,
-        "privacy": undefined,
-        "rollout": 1,
-        "routingInfo": undefined,
-        "tint": undefined
+  <div>
+    <Drawer
+      handle="nic"
+      mobileOverlay={true}
+      chatURL="https://nic.ada.support/chat/"
+      isDrawerOpen={false}
+      toggleChat={[Function bound ]}
+      setIFrameRef={[Function bound ]}
+      setIFrameLoaded={[Function bound ]}
+      drawerHasBeenOpened={false}
+      useMobileOverlay={false}
+    >
+    </Drawer>
+    <Button
+      client={
+        Client {
+          "chat": true,
+          "chatButton": undefined,
+          "features": undefined,
+          "intro": undefined,
+          "language": undefined,
+          "name": undefined,
+          "persistence": undefined,
+          "privacy": undefined,
+          "rollout": 1,
+          "routingInfo": undefined,
+          "tint": undefined
+        }
       }
-    }
-    toggleChat={[Function bound ]}
-    showIntroEmoji={false}
-    showNotification={false}
-  >
-  </Button>
-  <iframe
-    name="ada-embed-connector-iframe"
-    class="ada-embed-connector-iframe"
-    src="https://nic.ada.support/chat/connect/"
-    title="Ada Embed Connector"
-    style="display: none;"
-  >
-  </iframe>
+      toggleChat={[Function bound ]}
+      showIntroEmoji={false}
+      showNotification={false}
+    >
+    </Button>
+    <iframe
+      name="ada-embed-connector-iframe"
+      class="ada-embed-connector-iframe"
+      src="https://nic.ada.support/chat/connect/"
+      title="Ada Embed Connector"
+      style="display: none;"
+    >
+    </iframe>
+  </div>
 </div>
 
 `;
