@@ -29,7 +29,7 @@ export default class Button extends Component<InterfaceButton> {
 
     const chatButtonIconClassname = classnames("ada-embed-button__icon", {
       "ada-embed-button__icon--hide": showIntroEmoji
-    })
+    });
 
     return (
       <div className="ada-embed-button-container">
