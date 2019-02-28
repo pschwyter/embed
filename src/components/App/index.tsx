@@ -482,6 +482,13 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             useMobileOverlay={mobileOverlay && this.isInMobile}
           />
         )}
+         {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
+          <IntroBlurb
+            client={client}
+            toggleChat={this.toggleChat}
+            isInMobile={this.isInMobile}
+          />
+        )}
         {!isDrawerOpen && (
           <Button
             client={client}
@@ -492,13 +499,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
               !drawerHasBeenOpened
             }
             showNotification={unreadMessages > 0}
-          />
-        )}
-        {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
-          <IntroBlurb
-            client={client}
-            toggleChat={this.toggleChat}
-            isInMobile={this.isInMobile}
           />
         )}
         {/* This iFrame is here to connect with /chat/connect/ and pull the chatter's ID from
