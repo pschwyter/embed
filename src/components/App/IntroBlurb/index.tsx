@@ -87,6 +87,15 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
         }
         style={{ right: client.chatButton.size + INTRO_BLURB_SPACING }}
       >
+        <button
+          className={classnames(
+            "ada-embed-intro-blurb__dismiss-button", {
+              "ada-embed-intro-blurb__dismiss-button--mobile-show": isInMobile
+            }
+          )}
+          title="Dismiss Intro"
+          onClick={this.dismissIntro}
+        />
         <p
           className="ada-embed-intro-blurb__message"
           aria-live="assertive"
@@ -97,15 +106,6 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
         >
           {client.intro.body}
         </p>
-        <button
-          className={classnames(
-            "ada-embed-intro-blurb__dismiss-button", {
-              "ada-embed-intro-blurb__dismiss-button--mobile-show": isInMobile
-            }
-          )}
-          title="Dismiss Intro"
-          onClick={this.dismissIntro}
-        />
       </div>
     );
   }

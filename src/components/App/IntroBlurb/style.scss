@@ -34,8 +34,10 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
 
   &:hover &__dismiss-button,
   &__dismiss-button--mobile-show {
-    opacity: 1;
+    opacity: 1 !important;
     pointer-events: all;
+    margin: 0 13px;
+    left: -13px;
   }
 
   &__dismiss-button {
@@ -77,6 +79,8 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
     font-size: 16px;
     resize: none;
     word-break: break-word;
+    text-align: left;
+    min-width: 44px;
   }
 }
 
