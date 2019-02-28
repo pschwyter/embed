@@ -7,6 +7,12 @@ preact-render-spy (1 nodes)
   class="ada-embed-intro-blurb ada-embed-intro-blurb--show"
   style="right: 104px;"
 >
+  <button
+    class="ada-embed-intro-blurb__dismiss-button"
+    title="Dismiss Intro"
+    onClick={[Function bound ]}
+  >
+  </button>
   <p
     class="ada-embed-intro-blurb__message"
     aria-live="assertive"
@@ -16,12 +22,6 @@ preact-render-spy (1 nodes)
     tabIndex={0}
   >
   </p>
-  <button
-    class="ada-embed-intro-blurb__dismiss-button"
-    title="Dismiss Intro"
-    onClick={[Function bound ]}
-  >
-  </button>
 </div>
 
 `;
