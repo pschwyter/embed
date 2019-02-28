@@ -49,6 +49,13 @@ describe("<IntroBlurb />", () => {
     expect(messageElement.attr("aria-live")).toEqual("assertive");
   });
 
+  it("should have role alert on the blurb message", () => {
+    const { PRSWrapper, props } = setup();
+    const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__message");
+
+    expect(messageElement.attr("role")).toEqual("alert");
+  })
+
   it("should open chat when clicking the blurb message", () => {
     const { PRSWrapper, props } = setup();
     const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__message");
