@@ -1,5 +1,5 @@
 ---
-var_1: &default_docker_image node:11
+var_1: &default_docker_image node:11.10
 var_2: &aws_docker_image mesosphere/aws-cli
 version: 2.1
 
