@@ -273,7 +273,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   fetchUnread() {
-    const { chatter, drawerHasBeenOpened } = this.state;
+    const { chatter } = this.state;
     const route = `chatters/${chatter}/notification_status`;
     const url = constructURL(
       Object.assign(this.URLParams, { route }),
@@ -282,6 +282,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     httpRequest({
       url
     }).then((response) => {
+      const { drawerHasBeenOpened } = this.state;
       // Set unread amount, connected to connector on chat
       // and open chat if in (active/pending) live state
       this.setState({
