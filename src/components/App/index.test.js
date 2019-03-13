@@ -65,4 +65,24 @@ describe("<App />", () => {
       done();
     }, 0);
   });
+
+  it("should apply a class of 'ada-embed-app--inside-parent' when a parentElement is specified", done => {
+    const { PRSWrapper } = setup({
+      parentElement: "parent-element"
+    });
+
+    setTimeout(() => {
+      expect(PRSWrapper.find(".ada-embed-app--inside-parent").length).toBe(1);
+      done();
+    }, 0);
+  });
+
+  it("should not have the class 'ada-embed-app--inside-parent' when no parentElement specified", done => {
+    const { PRSWrapper } = setup();
+
+    setTimeout(() => {
+      expect(PRSWrapper.find(".ada-embed-app--inside-parent").length).toBe(0);
+      done();
+    }, 0);
+  });
 });
