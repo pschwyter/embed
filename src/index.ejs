@@ -8,9 +8,9 @@
   <!-- Cannot put scripts in header because they do not work in IE9 -->
 </head>
 
-<body>
+<body style="height: 100vh;">
   <h1>Ada Embed Testing Page</h1>
-  <div id="parent-element"></div>
+  <div id="parent-element" style="height: 500px;"></div>
   <button onclick="adaEmbed.toggle()">Toggle</button>
 </body>
 <script>
@@ -37,6 +37,7 @@
   function handleOnLoad() {
     adaEmbed.start({
       handle: "ada-example",
+      // parentElement: "parent-element",
       chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)}
     });
     // adaEmbed.deleteHistory();
