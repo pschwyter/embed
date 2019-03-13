@@ -5,6 +5,7 @@ import httpRequest from "services/httpRequest";
 import postMessage from "services/postMessage";
 import constructURL from "services/constructURL";
 import { showZendeskWidget } from "services/zendesk";
+import classnames from "classnames";
 import Button from "./Button";
 import IntroBlurb from "./IntroBlurb";
 import Drawer from "./Drawer";
@@ -537,8 +538,18 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   render() {
+    const { parentElement } = this.props;
+
     return (
-      <div id="ada-embed" className="ada-embed-app" ref={this.triggerAdaReadyCallback}>
+      <div
+        id="ada-embed"
+        className={classnames("ada-embed-app",
+          {
+            "ada-embed-app--inside-parent": parentElement
+          }
+        )}
+        ref={this.triggerAdaReadyCallback}
+      >
         {this.elementToRender}
       </div>
     );
