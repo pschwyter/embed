@@ -5,6 +5,7 @@ import httpRequest from "services/httpRequest";
 import postMessage from "services/postMessage";
 import constructURL from "services/constructURL";
 import { showZendeskWidget } from "services/zendesk";
+import { trackException } from "services/errorTracker";
 import classnames from "classnames";
 import Button from "./Button";
 import IntroBlurb from "./IntroBlurb";
@@ -268,6 +269,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         });
       });
     }, (error) => {
+      trackException(error);
       console.warn(error);
       throw Error("An error occurred while retrieving the client");
     });
@@ -292,6 +294,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         drawerHasBeenOpened: drawerHasBeenOpened || response.is_live_state
       });
     }, (error) => {
+      trackException(error);
       console.warn(error);
       throw Error("An error occurred while retrieving the client");
     });
