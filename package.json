@@ -47,6 +47,7 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
+    "@sentry/browser": "4.6.4",
     "@types/classnames": "^2.2.7",
     "classnames": "^2.2.6",
     "es6-promise-promise": "^1.0.0",
