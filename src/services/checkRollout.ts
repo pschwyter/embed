@@ -1,12 +1,9 @@
-import { trackException } from "services/errorTracker";
-
 export function storeRollout(handle: string, group: string, lastProb) {
   try {
     window.localStorage.setItem(`${handle}_ada_chap_rollout_group`, group);
     window.localStorage.setItem(`${handle}_ada_chap_rollout_last_prob`, lastProb);
   } catch (e) {
     // Failed to set to localStorage
-    trackException(e);
     return null;
   }
 }
@@ -27,7 +24,6 @@ export function readRollout(handle: string) {
     return rollout;
   } catch (e) {
     // Failed to read localStorage
-    trackException(e);
     return rollout;
   }
 }
