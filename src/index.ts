@@ -14,6 +14,7 @@ import {
 } from "constants/events";
 import { h, render } from "preact";
 import App from "./components/App";
+import * as Sentry from "@sentry/browser";
 
 // Import global styles
 import "./style/application.scss";
@@ -25,6 +26,13 @@ declare global {
     $zopim: any;
   }
 }
+
+// Needs to self execute when page loads
+const embedScriptRef = document.getElementById("__ada");
+const dataHandle  = embedScriptRef.getAttribute("data-handle");
+const dataLazy = embedScriptRef.getAttribute("data-lazy");
+const source = embedScriptRef.getAttribute("src");
+const adaSettings = Object.assign({ handle:dataHandle }, window.adaSettings);
 
 /**
  * Dispatch a custom Ada Event to be used inside the Embed Preact app
@@ -74,6 +82,12 @@ const adaEmbed = Object.freeze({
    * Setup Ada Embed
    */
   [ADA_EVENT_START]: (options: any) => {
+    // initialize sentry
+    if (process.env.SENTRY_DSN) {
+      Sentry.init({ dsn: process.env.SENTRY_DSN });
+      Sentry.configureScope(scope => scope.setTag("source", source));
+    }
+
     const { parentElement } = options;
     let renderElement = document.body;
 
@@ -122,12 +136,6 @@ const adaEmbed = Object.freeze({
 });
 
 window.adaEmbed = adaEmbed;
-
-// Needs to self execute when page loads
-const embedScriptRef = document.getElementById("__ada");
-const dataHandle  = embedScriptRef.getAttribute("data-handle");
-const dataLazy = embedScriptRef.getAttribute("data-lazy");
-const adaSettings = Object.assign({ handle:dataHandle }, window.adaSettings);
 
 if (dataLazy === undefined || dataLazy === null) {
   adaEmbed.start(adaSettings);
