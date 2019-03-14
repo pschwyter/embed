@@ -1,6 +1,7 @@
 const path = require("path");
 var S3Uploader = require("webpack-s3-uploader");
 const preactCliSvgLoader = require("preact-cli-svg-loader");
+const webpack = require("webpack");
 require("dotenv").config();
 const { resolve } = path;
 
@@ -38,6 +39,12 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
       },
     }));
   }
+
+  config.plugins.push(new webpack.EnvironmentPlugin([
+      "SENTRY_DSN"
+    ])
+  );
+
   config.resolve.alias["preact-cli-entrypoint"] = resolve(process.cwd(), "src", "index");
 
   // Add loader for TypeScript
