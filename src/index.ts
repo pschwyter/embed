@@ -84,7 +84,10 @@ const adaEmbed = Object.freeze({
   [ADA_EVENT_START]: (options: any) => {
     // initialize sentry
     if (process.env.SENTRY_DSN) {
-      Sentry.init({ dsn: process.env.SENTRY_DSN });
+      Sentry.init({ 
+        dsn: process.env.SENTRY_DSN,
+        whitelistUrls: [/static\.ada\.support\/embed/]
+      });
       Sentry.configureScope(scope => scope.setTag("source", source));
     }
 
