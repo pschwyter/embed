@@ -78,7 +78,7 @@ export function getMetaFieldstring(metaFields: object) {
   const reservedKeys = ["url", "private", "language"];
 
   const variableArray = Object.keys(metaFields)
-    .filter(key => !reservedKeys.includes(key))
+    .filter(key => reservedKeys.indexOf(key) === -1)
     .map((key) => {
       return `${key}=${metaFields[key]}`;
     });

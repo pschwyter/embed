@@ -1,47 +1,32 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Widget Template</title>
-  <!-- Cannot put scripts in header because they do not work in IE9 -->
-</head>
-
-<body style="height: 100vh;">
-  <h1>Ada Embed Testing Page</h1>
-  <div id="parent-element" style="height: 500px;"></div>
-  <button onclick="adaEmbed.toggle()">Toggle</button>
-</body>
-<script>
-  window.adaSettings = {
-    chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)},
-    hideMask: true,
-    greeting: "5c59aaabd8269e0339979014",
-    metaFields: {
-      testVal: "yolo",
-      testVal2: "yodo"
-    }
-  };
-</script>
-<script 
-  async 
-  id="__ada" 
-  src="/bundle.js"
-  data-handle="ada-example" 
-  data-lazy
-  onload="handleOnLoad()"
-></script>
-
-<script>
-  function handleOnLoad() {
-    adaEmbed.start({
-      handle: "ada-example",
-      // parentElement: "parent-element",
-      chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)}
-    });
-    // adaEmbed.deleteHistory();
-  }
-</script>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      window.adaSettings = {
+        chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)},
+        hideMask: true,
+        greeting: "5c59aaabd8269e0339979014",
+        metaFields: {
+          testVal: "yolo",
+          testVal2: "yodo"
+        }
+      };
+    </script>
+    
+    <!-- IE9 will only render if the placed before the closing body tag -->
+    <script 
+      async 
+      id="__ada" 
+      src="/bundle.js"
+      data-handle="ada-example" 
+    ></script>
+    <title>Widget Template</title>
+  </head>
+  <body style="height: 100vh;">
+    <h1>Ada Embed Testing Page</h1>
+    <div id="parent-element" style="height: 500px;"></div>
+    <button onclick="adaEmbed.toggle()">Toggle</button>
+  </body>
 </html>
