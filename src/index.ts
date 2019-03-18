@@ -130,5 +130,13 @@ const dataLazy = embedScriptRef.getAttribute("data-lazy");
 const adaSettings = Object.assign({ handle:dataHandle }, window.adaSettings);
 
 if (dataLazy === undefined || dataLazy === null) {
-  adaEmbed.start(adaSettings);
+  if (/comp|inter|loaded/.test(document.readyState)) {
+    // Start embed if the DOM has loaded
+    adaEmbed.start(adaSettings);
+  } else {
+    // If DOM has not loaded, create an event listener to start embed when it has loaded
+    document.addEventListener("DOMContentLoaded", () => {
+      adaEmbed.start(adaSettings);
+    });
+  }
 }
