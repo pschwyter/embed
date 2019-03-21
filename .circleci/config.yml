@@ -76,6 +76,23 @@ jobs:
       - chaperone2-deploy:
           to: "-beta"
 
+  hotfix-deploy:
+    docker:
+      - image: *default_docker_image
+    steps:
+      - chaperone2-yarn:
+          cmd: "install"
+      - chaperone2-deploy:
+          to: "-hotfix"
+
+  hotfix-cloudfront-invalidate:
+    docker:
+      - image: *aws_docker_image
+    steps:
+      - run:
+          name: Invalidate HotFix
+          command: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /embed.hotfix.js /embed.hotfix.js.map
+
   cloudfront-invalidate:
     docker:
       - image: *aws_docker_image
@@ -95,6 +112,22 @@ workflows:
   chaperone-workflow:
     jobs:
       - build-test
+
+      - hotfix-deploy:
+          filters:
+            branches:
+              only: hotfix
+          requires:
+            - build-test
+
+      - hotfix-cloudfront-invalidate:
+          filters:
+            branches:
+              only: hotfix
+          requires:
+            - build-test
+            - hotfix-deploy
+
       - beta-deploy:
           filters:
             branches:
