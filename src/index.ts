@@ -27,10 +27,15 @@ declare global {
 }
 
 /**
+ * Returns the ada-embed element if Embed has started
+ */
+const getEmbedElement = () => document.getElementById("ada-embed");
+
+/**
  * Dispatch a custom Ada Event to be used inside the Embed Preact app
  */
 const dispatchAdaEvent = (type: string, data?: object) => {
-  const embedElement = document.getElementById("ada-embed");
+  const embedElement = getEmbedElement();
   if (!adaEmbed) { return; }
 
   const event = new CustomEvent(
@@ -75,21 +80,32 @@ const adaEmbed = Object.freeze({
    */
   [ADA_EVENT_START]: (options: any) => {
     const { parentElement } = options;
+    const adaNode = getEmbedElement();
+
     let renderElement = document.body;
 
     if (parentElement) {
       renderElement = setUpFrameParent(parentElement);
     }
 
-    render(h(App, options), renderElement);
+    if (adaNode) {
+      throw Error("Ada Embed has already been rendered.");
+    } else {
+      render(h(App, options), renderElement);
+    }
   },
 
   /**
    * Destroy Ada Embed
    */
   [ADA_EVENT_STOP]: () => {
-    const adaNode = document.getElementById("ada-embed");
-    adaNode.parentNode.removeChild(adaNode);
+    const adaNode = getEmbedElement();
+
+    if (adaNode) {
+      adaNode.parentNode.removeChild(adaNode);
+    } else {
+      throw Error("An instance Ada Embed was not found.");
+    }
   },
 
   /**
