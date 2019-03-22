@@ -12,7 +12,7 @@ export default (config, env, helpers) => {
   
   let { index } = helpers.getPluginsByName(config, 'CommonsChunkPlugin')[0]
   config.plugins.splice(index, 1)
-  console.log(1111, config.plugins)
+  console.log(1111, env.production, config.plugins)
 
   config = configSetup(config, env.production, helpers, false, null)
 
