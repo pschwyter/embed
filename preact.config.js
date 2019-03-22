@@ -14,6 +14,9 @@ export default (config, env, helpers) => {
   // let { index } = helpers.getPluginsByName(config, 'LoaderOptionsPlugin')[0]
   // index && config.plugins.splice(index, 1)
   // console.log(1111, env.production, config.plugins)
+  
+  config = configSetup(config, env.production, helpers, false, null)
+
   config.plugins.push(
     new CspHtmlWebpackPlugin({
       'base-uri': "'self'",
@@ -34,7 +37,12 @@ export default (config, env, helpers) => {
     })
   )
 
-  config = configSetup(config, env.production, helpers, false, null)
+  let { plugin: htmlPlugin } = helpers.getPluginsByName(config, "HtmlWebpackPlugin")[0];
+  htmlPlugin.options.minify = false;
+
+  // sehwp.options.disable = true;
+
+  console.log(1111, env.production, config.plugins)
 
   // This is to fix the issue where the compiled CSS classnames were given a localIdentName of
   // [local]__[hash], but this did not match the component class names
