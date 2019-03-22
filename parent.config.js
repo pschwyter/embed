@@ -40,6 +40,11 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
   }
   config.resolve.alias["preact-cli-entrypoint"] = resolve(process.cwd(), "src", "index");
 
+  let { index } = helpers.getPluginsByName(config, 'ExtractTextPlugin')[0]
+  config.plugins.splice(index, 1)
+
+  console.log(1111, config.plugins);
+
   // Add loader for TypeScript
   config.module.loaders.push({
     test: /\.tsx?$/,
