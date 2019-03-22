@@ -10,6 +10,19 @@ export default (config, env, helpers) => {
 
   config = configSetup(config, env.production, helpers, false, "hotfix")
 
+  let { plugin: htmlPlugin } = helpers.getPluginsByName(config, "HtmlWebpackPlugin")[0];
+  htmlPlugin.options.minify = {
+    collapseWhitespace: false,
+    removeComments: false,
+    removeRedundantAttributes: false,
+    removeScriptTypeAttributes: false,
+    removeStyleLinkTypeAttributes: false,
+    useShortDoctype: false
+  };
+  htmlPlugin.options.cache = false;
+  htmlPlugin.options.hash = true;
+  htmlPlugin.options.inject = false;
+
   // This is to fix the issue where the compiled CSS classnames were given a localIdentName of
   // [local]__[hash], but this did not match the component class names
   const { loader: cssLoader } = helpers.getLoadersByName(config, "css-loader")[0];

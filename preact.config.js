@@ -30,12 +30,6 @@ export default (config, env, helpers) => {
     })
   )
 
-  let { plugin: htmlPlugin } = helpers.getPluginsByName(config, "HtmlWebpackPlugin")[0];
-  htmlPlugin.options.minify = false;
-  htmlPlugin.options.cache = false;
-  htmlPlugin.options.hash = true;
-  htmlPlugin.options.inject = false;
-
   console.log(1111, env.production, config.plugins)
 
   // This is to fix the issue where the compiled CSS classnames were given a localIdentName of
