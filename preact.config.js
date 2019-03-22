@@ -8,13 +8,6 @@ export default (config, env, helpers) => {
   let { plugin: etp } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   etp.options.disable = true;
   
-  // let { plugin: sehwp } = helpers.getPluginsByName(config, "ScriptExtHtmlWebpackPlugin")[0];
-  // sehwp.options.disable = true;
-  
-  // let { index } = helpers.getPluginsByName(config, 'LoaderOptionsPlugin')[0]
-  // index && config.plugins.splice(index, 1)
-  // console.log(1111, env.production, config.plugins)
-  
   config = configSetup(config, env.production, helpers, false, null)
 
   config.plugins.push(
@@ -39,8 +32,9 @@ export default (config, env, helpers) => {
 
   let { plugin: htmlPlugin } = helpers.getPluginsByName(config, "HtmlWebpackPlugin")[0];
   htmlPlugin.options.minify = false;
-
-  // sehwp.options.disable = true;
+  htmlPlugin.options.cache = false;
+  htmlPlugin.options.hash = true;
+  htmlPlugin.options.inject = false;
 
   console.log(1111, env.production, config.plugins)
 
