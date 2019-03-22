@@ -10,7 +10,7 @@ export default (config, env, helpers) => {
   // let { plugin: sehwp } = helpers.getPluginsByName(config, "ScriptExtHtmlWebpackPlugin")[0];
   // sehwp.options.disable = true;
   
-  let { index } = helpers.getPluginsByName(config, 'ScriptExtHtmlWebpackPlugin')[0]
+  let { index } = helpers.getPluginsByName(config, 'CommonsChunkPlugin')[0]
   config.plugins.splice(index, 1)
   console.log(1111, config.plugins)
 
