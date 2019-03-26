@@ -1,5 +1,4 @@
 const path = require("path");
-const StyleExtHtmlWebpackPlugin = require("style-ext-html-webpack-plugin");
 var S3Uploader = require("webpack-s3-uploader");
 const StyleExtHtmlWebpackPlugin = require("style-ext-html-webpack-plugin");
 const preactCliSvgLoader = require("preact-cli-svg-loader");
@@ -24,8 +23,6 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
       libraryTarget : "umd",
       filename: filename,
     };
-
-    config.plugins.push(new StyleExtHtmlWebpackPlugin());
 
     config.plugins.push(new StyleExtHtmlWebpackPlugin());
 
