@@ -43,7 +43,7 @@ describe("constructURL", () => {
     expect(url.includes("url=https://nic.ca.ada.support/")).toBeTruthy();
   });
 
-  it("should ommit other query parameters from the query string if isForAPI is true", () => {
+  it("should ommit other query parameters, except language, from the query string if isForAPI is true", () => {
     const url = constructURL({
       handle: "nic",
       cluster: "ca",
@@ -51,7 +51,7 @@ describe("constructURL", () => {
       privateMode: true
     }, true);
 
-    expect(url).toBe("https://nic.ca.ada.support/api/?url=https://nic.ca.ada.support/");
+    expect(url).toBe("https://nic.ca.ada.support/api/?url=https://nic.ca.ada.support/&language=fr");
   });
 
   it("should append route to url for API", () => {

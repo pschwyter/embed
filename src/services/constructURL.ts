@@ -1,3 +1,5 @@
+import { getBrowserLanguage } from "./translation";
+
 /**
  * Generate the Chat / API URL
  */
@@ -31,10 +33,12 @@ export default function constructURL(
 
   let queryString = "";
   let url = "";
+  const userLanguage = language || getBrowserLanguage();
 
   if (isForAPI) {
     // Query string for requests to API
     queryString = `url=${window.location.href}`;
+    queryString = userLanguage ? `${queryString}&language=${userLanguage}` : queryString;
   } else {
     // Query string for Chat URL
     const newPrivateMode = privateMode ? "private=1" : undefined;
