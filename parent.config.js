@@ -30,7 +30,7 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
 
     // S3 Upload
     config.plugins.push(new S3Uploader({
-      include: /.*\.(js)/,
+      include: /.*\.(js|css)/,
       exclude: /.*\.(png|json|icon|txt)/,
       s3Options: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
