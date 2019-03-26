@@ -24,7 +24,9 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
       filename: filename,
     };
 
-    config.plugins.push(new StyleExtHtmlWebpackPlugin());
+    config.plugins.push(new StyleExtHtmlWebpackPlugin({
+      position: "head-bottom"
+    }));
 
     // S3 Upload
     config.plugins.push(new S3Uploader({
