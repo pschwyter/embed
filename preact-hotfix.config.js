@@ -4,8 +4,8 @@ import configSetup from "./parent.config"
 export default (config, env, helpers) => {
   delete config.entry.polyfills;
 
-  let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
-  plugin.options.disable = true;
+  // let { plugin } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
+  // plugin.options.disable = true;
 
   config = configSetup(config, env.production, helpers, false, "hotfix")
 
