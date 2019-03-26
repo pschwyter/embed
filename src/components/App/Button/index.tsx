@@ -20,19 +20,31 @@ interface InterfaceButton {
 }
 
 export default class Button extends Component<InterfaceButton> {
+  state = {
+    customIconHasLoaded: false
+  };
+
+  setCustomIconHasLoaded = () => {
+    this.setState({ customIconHasLoaded: true });
+  }
+
   render(props: InterfaceButton) {
+    const { customIconHasLoaded } = this.state;
     const { toggleChat, client, showIntroEmoji, showNotification } = props;
 
     const useCustomIcon = client.chatButton.icon_type === "custom" || null;
     const chatButtonURL = useCustomIcon ? client.chatButton.icon_path : "static/icons/Dialogue.svg";
     const buttonSize = client.chatButton.size;
 
+    const adaEmbedButtonContainerClassName = classnames("ada-embed-button-container", {
+      "ada-embed-button-container--loading": useCustomIcon && !customIconHasLoaded
+    });
     const chatButtonIconClassname = classnames("ada-embed-button__icon", {
       "ada-embed-button__icon--hide": showIntroEmoji
     });
 
     return (
-      <div className="ada-embed-button-container">
+      <div className={adaEmbedButtonContainerClassName}>
         <button
           title="Open Support Chat"
           accessKey="1"
@@ -48,7 +60,8 @@ export default class Button extends Component<InterfaceButton> {
             <SVG
               src={chatButtonURL}
               className={chatButtonIconClassname}
-              cacheGetRequests
+              onLoad={this.setCustomIconHasLoaded}
+              cacheGetRequests={true}
             /> :
             <DialogueSvg
               className={chatButtonIconClassname}
