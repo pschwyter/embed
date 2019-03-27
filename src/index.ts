@@ -1,8 +1,12 @@
 /**
- * Polyfill Object.assign IE 9
+ * Polyfills
  */
 
+// Polyfill Object.assign IE 9
 import "core-js/modules/es6.object.assign";
+
+// Custom Events Polyfill
+import "services/customEventPolyfill";
 
 import {
   ADA_EVENT_STOP,
@@ -18,12 +22,15 @@ import App from "./components/App";
 // Import global styles
 import "./style/application.scss";
 
+interface InterfacePrototype { prototype: any; }
+
 declare global {
   interface Window {
     adaEmbed: any;
     adaSettings: object;
     $zopim: any;
-    __webpack_nonce__: any;
+    Event: Event & InterfacePrototype;
+    CustomEvent: any;
   }
 }
 
