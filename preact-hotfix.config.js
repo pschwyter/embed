@@ -22,7 +22,22 @@ export default (config, env, helpers) => {
   cssLoaders.forEach(loader => {
     loader.rule.loader = [
       "style-loader",
-      "css-loader"
+      {
+        loader: "css-loader",
+        options: {
+          modules: true,
+          localIdentName: "[local]__[hash:base64:5]",
+          importLoaders: 1,
+          sourceMap: false
+        }
+      }, {
+        loader: "postcss-loader",
+        options: {
+          ident: "postcss",
+          sourceMap: true,
+          plugins: () => [require("autoprefixer")]
+        }
+      }
     ];
   });
 };

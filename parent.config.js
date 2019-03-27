@@ -1,6 +1,5 @@
 const path = require("path");
 var S3Uploader = require("webpack-s3-uploader");
-const StyleExtHtmlWebpackPlugin = require("style-ext-html-webpack-plugin");
 const preactCliSvgLoader = require("preact-cli-svg-loader");
 require("dotenv").config();
 const { resolve } = path;
@@ -23,12 +22,6 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
       libraryTarget : "umd",
       filename: filename,
     };
-
-    // config.plugins.push(new StyleExtHtmlWebpackPlugin({
-    //   position: "head-bottom"
-    // }));
-
-    // console.log(config.plugins);
 
     // S3 Upload
     config.plugins.push(new S3Uploader({
