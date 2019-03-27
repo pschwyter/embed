@@ -27,8 +27,6 @@ declare global {
   }
 }
 
-window.__webpack_nonce__ = 'c29tZSBjb29sIHN0cmluZyB3aWxsIHBvcCB1cCAxMjM=';
-
 /**
  * Returns the ada-embed element if Embed has started
  */

@@ -6,12 +6,12 @@ export default (config, env, helpers) => {
 
   // let { plugin: etp } = helpers.getPluginsByName(config, "ExtractTextPlugin")[0];
   // etp.options.disable = true;
-  
+
   config = configSetup(config, env.production, helpers, false, null)
 
   // [local]__[hash], but this did not match the component class names
   const { loader: cssLoader } = helpers.getLoadersByName(config, "css-loader")[0];
-  cssLoader.options.localIdentName = "[local]";
+  // cssLoader.options.localIdentName = "[local]";
   cssLoader.options.sourceMap = false;
 
   const { loader: postCSSLoader } = helpers.getLoadersByName(config, "postcss-loader")[0];
