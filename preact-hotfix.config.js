@@ -24,7 +24,7 @@ export default (config, env, helpers) => {
 
   cssLoaders.forEach(loader => {
     loader.rule.loader = [
-      "style-loader/url",
+      "style-loader",
       "css-loader"
     ];
   });
