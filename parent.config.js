@@ -13,9 +13,9 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
 
     const CACHE_CONTROL_MAX_AGE_SECONDS = 48 * 60 * 60; // 48 hours
 
-    const filename = filepath ? `embed.${filepath}.js` : 'embed.js'
+    const filename = filepath ? `embed.${filepath}.js` : 'embed.js';
 
-    const cacheControl = staticFile ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache"
+    const cacheControl = staticFile ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache";
 
     console.log(`Deploying filename: ${filename}`);
 
@@ -24,23 +24,8 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
       filename: filename,
     };
 
-    // config.plugins.push(new StyleExtHtmlWebpackPlugin({
-    //   position: "head-bottom"
-    // }));
-
-    // S3 Upload
-    config.plugins.push(new S3Uploader({
-      include: /.*\.(js|css)/,
-      exclude: /.*\.(png|json|icon|txt)/,
-      s3Options: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: process.env.AWS_DEFAULT_REGION,
-      },
-      s3UploadOptions: {
-        Bucket: process.env.AWS_BUCKET,
-        CacheControl: cacheControl
-      },
+    config.plugins.push(new StyleExtHtmlWebpackPlugin({
+      position: "head-bottom"
     }));
   }
   config.resolve.alias["preact-cli-entrypoint"] = resolve(process.cwd(), "src", "index");
