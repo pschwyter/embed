@@ -23,8 +23,11 @@ declare global {
     adaEmbed: any;
     adaSettings: object;
     $zopim: any;
+    __webpack_nonce__: any;
   }
 }
+
+window.__webpack_nonce__ = 'c29tZSBjb29sIHN0cmluZyB3aWxsIHBvcCB1cCAxMjM=';
 
 /**
  * Returns the ada-embed element if Embed has started
