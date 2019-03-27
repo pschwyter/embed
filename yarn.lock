@@ -8118,7 +8118,7 @@ preact-cli@^2.2.1:
     which "^1.2.14"
     yargs "^8.0.1"
 
-preact-compat@^3.14.3, preact-compat@^3.17.0:
+preact-compat@^3.14.3, preact-compat@^3.18.4:
   version "3.18.4"
   resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.18.4.tgz#fbe76ddd30356c68e3ccde608107104946f2cf8d"
   integrity sha512-aR5CvCIDerE2Y201ERVkWQdTAQKhKGNYujEk4tbyfQDInFTrnCCa3KCeGtULZrwy0PNRBjdQa2/Za7qv7ALNFg==
@@ -8179,7 +8179,7 @@ preact-widget-scripts@^0.6.0:
     babel-preset-env "^1.6.1"
     babel-preset-stage-1 "^6.24.1"
 
-preact@^8.1.0, preact@^8.2.5:
+preact@^8.1.0, preact@^8.4.2:
   version "8.4.2"
   resolved "https://registry.yarnpkg.com/preact/-/preact-8.4.2.tgz#1263b974a17d1ea80b66590e41ef786ced5d6a23"
   integrity sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==
