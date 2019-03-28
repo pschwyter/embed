@@ -17,7 +17,7 @@ export default (config, env, helpers) => {
       {
         loader: "css-loader",
         options: {
-          localIdentName: '[local]',
+          localIdentName: '[local]__[hash:base64:5]',
           importLoaders: 1,
           sourceMap: false
         }
