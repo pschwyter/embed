@@ -1,5 +1,6 @@
 require("dotenv").config();
 import configSetup from "./parent.config"
+const autoprefixer = require("autoprefixer");
 const childProc = require('child_process');
 
 export default (config, env, helpers) => {
@@ -26,7 +27,17 @@ export default (config, env, helpers) => {
   cssLoaders.forEach(loader => {
     loader.rule.loader = [
       "style-loader",
-      "css-loader"
+      {
+        loader: "css-loader"
+      },
+      {
+        loader: "postcss-loader",
+        options: {
+          ident: "postcss",
+          sourceMap: true,
+          plugins: () => autoprefixer()
+        }
+      }
     ];
   });
 };
