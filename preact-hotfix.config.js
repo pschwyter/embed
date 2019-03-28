@@ -28,7 +28,13 @@ export default (config, env, helpers) => {
     loader.rule.loader = [
       "style-loader",
       {
-        loader: "css-loader"
+        loader: "css-loader",
+        options: {
+          modules: true,
+          localIdentName: '[local]__[hash:base64:5]',
+          importLoaders: 1,
+          sourceMap: true
+        }
       },
       {
         loader: "postcss-loader",
