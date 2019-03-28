@@ -30,9 +30,9 @@ export default (config, env, helpers) => {
       {
         loader: "css-loader",
         options: {
-          localIdentName: '[local]__[hash:base64:5]',
-          importLoaders: 1,
-          sourceMap: true
+          // localIdentName: '[local]__[hash:base64:5]',
+          // importLoaders: 1,
+          // sourceMap: true
         }
       },
       {
