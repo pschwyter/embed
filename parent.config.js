@@ -12,16 +12,16 @@ let configSetup = (config, production, helpers, staticFile, filepath) => {
 
     const CACHE_CONTROL_MAX_AGE_SECONDS = 48 * 60 * 60; // 48 hours
 
-    const filename = filepath ? `embed.${filepath}.js` : 'embed.js'
+    const filename = filepath ? `embed.${filepath}.js` : 'embed.js';
 
-    const cacheControl = staticFile ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache"
+    const cacheControl = staticFile ? `max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}` : "no-cache";
 
     console.log(`Deploying filename: ${filename}`);
 
     config.output = {
       libraryTarget : "umd",
       filename: filename,
-    }
+    };
 
     // S3 Upload
     config.plugins.push(new S3Uploader({
