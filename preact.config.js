@@ -5,7 +5,7 @@ const autoprefixer = require("autoprefixer");
 export default (config, env, helpers) => {
   delete config.entry.polyfills;
 
-  config = configSetup(config, env.production, helpers, false, "hotfix")
+  config = configSetup(config, env.production, helpers, false, null);
 
   const cssLoaders = helpers.getLoaders(config).filter(loader => {
     return loader.rule.test.toString() === `/\\.(css|less|s[ac]ss|styl)$/`.toString()
