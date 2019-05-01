@@ -6,11 +6,15 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
 
 .ada-embed-intro-blurb {
   position: fixed;
-  right: 76px;
-  bottom: 24px;
   opacity: 0;
   max-width: 224px;
   z-index: 10000;
+
+  &--not-draggable {
+    position: fixed;
+    right: 76px;
+    bottom: 24px;
+  }
 
   &--show {
     animation-name: messageBlowup;

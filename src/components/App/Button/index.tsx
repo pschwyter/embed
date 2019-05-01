@@ -16,6 +16,7 @@ interface InterfaceButton {
   client: Client,
   showIntroEmoji: boolean,
   showNotification: boolean,
+  isDraggable: boolean,
   toggleChat(): void
 }
 
@@ -30,14 +31,19 @@ export default class Button extends Component<InterfaceButton> {
 
   render(props: InterfaceButton) {
     const { customIconHasLoaded } = this.state;
-    const { toggleChat, client, showIntroEmoji, showNotification } = props;
+    const {
+      toggleChat, client, showIntroEmoji,
+      showNotification, isDraggable
+    } = props;
+
 
     const useCustomIcon = client.chatButton.icon_type === "custom" || null;
     const chatButtonURL = useCustomIcon ? client.chatButton.icon_path : "static/icons/Dialogue.svg";
     const buttonSize = client.chatButton.size;
 
     const adaEmbedButtonContainerClassName = classnames("ada-embed-button-container", {
-      "ada-embed-button-container--loading": useCustomIcon && !customIconHasLoaded
+      "ada-embed-button-container--loading": useCustomIcon && !customIconHasLoaded,
+      "ada-embed-button-container--not-draggable": !isDraggable
     });
     const chatButtonIconClassname = classnames("ada-embed-button__icon", {
       "ada-embed-button__icon--hide": showIntroEmoji

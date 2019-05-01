@@ -63,4 +63,16 @@ describe("<IntroBlurb />", () => {
     messageElement.simulate("click");
     expect(props.toggleChat.mock.calls.length).toBe(1);
   });
+
+  it("should not have class properties if isDraggable is true", () => {
+    const { PRSWrapper } = setup({isDraggable: true, dragPosition: {x: 10, y: 10}});
+
+    expect(PRSWrapper.find(".ada-embed-intro-blurb--not-draggablee").length).toBe(0);
+  });
+
+  it("when draggable custom styling should change right and bottom properties", () => {
+    const { PRSWrapper } = setup({isDraggable: true, dragPosition: {x: 10, y: 10}});
+
+    expect(PRSWrapper.find(".ada-embed-intro-blurb").attr("style")).toEqual({"bottom": 10, "right": 90});
+  });
 });

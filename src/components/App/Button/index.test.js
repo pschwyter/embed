@@ -63,4 +63,10 @@ describe("<Button />", () => {
 
     expect(PRSWrapper.find(".ada-embed-notification").length).toBe(1);
   });
+
+  it("should not have class properties if isDraggable is true", () => {
+    const { PRSWrapper } = setup({isDraggable: true});
+
+    expect(PRSWrapper.find(".ada-embed-button-container--not-draggable").length).toBe(0);
+  });
 });

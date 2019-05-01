@@ -4,7 +4,7 @@ exports[`<IntroBlurb /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
 <div
-  class="ada-embed-intro-blurb ada-embed-intro-blurb--show"
+  class="ada-embed-intro-blurb ada-embed-intro-blurb--show ada-embed-intro-blurb--not-draggable"
   style="right: 104px;"
 >
   <button
