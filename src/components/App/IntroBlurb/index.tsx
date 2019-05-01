@@ -4,10 +4,13 @@ import { Component, h } from "preact";
 import "./style.scss";
 
 const INTRO_BLURB_SPACING = 32;
+const INTRO_BLURB_PADDING = 8;
 
 interface InterfaceIntroBlurb {
   client: Client,
   isInMobile: boolean,
+  isDraggable: boolean,
+  dragPosition?: { x: number, y: number },
   toggleChat(): void
 }
 
@@ -71,8 +74,15 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
   }
 
   render(props: InterfaceIntroBlurb) {
-    const { client, isInMobile } = props;
+    const { client, isInMobile, isDraggable, dragPosition } = props;
     const { animateIntroIn, animateIntroOut } = this.state;
+
+    const customStyle = isDraggable ?
+    {
+      right: dragPosition.x + client.chatButton.size + INTRO_BLURB_PADDING,
+      bottom: dragPosition.y
+    }
+    : { right: client.chatButton.size + INTRO_BLURB_SPACING };
 
     return (
       <div
@@ -81,11 +91,12 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
             "ada-embed-intro-blurb",
             {
               "ada-embed-intro-blurb--hide": animateIntroOut,
-              "ada-embed-intro-blurb--show": animateIntroIn
+              "ada-embed-intro-blurb--show": animateIntroIn,
+              "ada-embed-intro-blurb--not-draggable": !isDraggable
             }
           )
         }
-        style={{ right: client.chatButton.size + INTRO_BLURB_SPACING }}
+        style={customStyle}
       >
         <button
           className={classnames(
