@@ -71,7 +71,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   constructor(props: InterfaceApp) {
     super(props);
 
-    const { mobileOverlay, handle } = props;
+    const { mobileOverlay, handle, cluster } = props;
 
     this.state = {
       client: null,
@@ -101,7 +101,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     const route = "connect";
     this.connectorURL = constructURL(
-      { handle, route },
+      { handle, cluster, route },
       false
     );
 
