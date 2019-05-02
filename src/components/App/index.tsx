@@ -5,6 +5,7 @@ import httpRequest from "services/httpRequest";
 import postMessage from "services/postMessage";
 import constructURL from "services/constructURL";
 import { showZendeskWidget } from "services/zendesk";
+import { draggability as Draggability } from "./Draggable";
 import classnames from "classnames";
 import Button from "./Button";
 import IntroBlurb from "./IntroBlurb";
@@ -18,6 +19,9 @@ import {
   ADA_EVENT_FOCUS,
   ADA_EVENT_BLUR
 } from "constants/events";
+import {
+  DEFAULT_BUTTON_POSITION
+} from "constants/configuration";
 import "./style.scss";
 
 interface InterfaceApp {
@@ -33,6 +37,7 @@ interface InterfaceApp {
   mobileOverlay?: boolean,
   useMobileOverlay?: boolean,
   parentElement?: string | HTMLElement,
+  dragAndDrop?: boolean,
   adaReadyCallback(): any,
   analyticsCallback(analytics: any): any,
   liveHandoffCallback(liveHandoff: any): any,
@@ -50,7 +55,8 @@ interface InterfaceState {
   afterIFrameLoadsTasks: CustomEvent[],
   chatter: string,
   unreadMessages: number,
-  hasConnectedChat: boolean
+  hasConnectedChat: boolean,
+  buttonPosition: {x: number, y: number}
 }
 
 interface UnreadMessage {
@@ -71,7 +77,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   constructor(props: InterfaceApp) {
     super(props);
 
-    const { mobileOverlay, handle } = props;
+    const { mobileOverlay, handle, cluster } = props;
 
     this.state = {
       client: null,
@@ -84,7 +90,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       afterIFrameLoadsTasks: [],
       chatter: null,
       unreadMessages: 0,
-      hasConnectedChat: false
+      hasConnectedChat: false,
+      buttonPosition: DEFAULT_BUTTON_POSITION
     };
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -98,10 +105,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.handleAdaEvent = this.handleAdaEvent.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
+    this.updateButtonPosition = this.updateButtonPosition.bind(this);
 
     const route = "connect";
     this.connectorURL = constructURL(
-      { handle, route },
+      { handle, cluster, route },
       false
     );
 
@@ -366,6 +374,12 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
+  updateButtonPosition(x: number, y: number){
+    this.setState({
+      buttonPosition: { x, y }
+    });
+  }
+
   /**
    * Open/close the Drawer component, or open a new window if in mobile
    */
@@ -456,7 +470,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Standard config render (no parentElement)
    */
   renderStandardConfigElements() {
-    const { mobileOverlay, hideMask } = this.props;
+    const { mobileOverlay, hideMask, dragAndDrop } = this.props;
     const {
       isDrawerOpen,
       drawerHasBeenOpened,
@@ -464,7 +478,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       showIntro,
       iframeRef,
       unreadMessages,
-      hasConnectedChat
+      hasConnectedChat,
+      buttonPosition
     } = this.state;
 
     return (
@@ -484,14 +499,21 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             useMobileOverlay={mobileOverlay && this.isInMobile}
           />
         )}
+        <Draggability
+          x={buttonPosition.x}
+          y={buttonPosition.y}
+          updatePosition={this.updateButtonPosition}
+          isDraggable={dragAndDrop}
+        >
          {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
           <IntroBlurb
             client={client}
             toggleChat={this.toggleChat}
             isInMobile={this.isInMobile}
+            isDraggable={dragAndDrop}
           />
         )}
-        {!isDrawerOpen && (
+        {(!isDrawerOpen || dragAndDrop) && (
           <Button
             client={client}
             toggleChat={this.toggleChat}
@@ -501,8 +523,10 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
               !drawerHasBeenOpened
             }
             showNotification={unreadMessages > 0}
+            isDraggable={dragAndDrop}
           />
         )}
+        </Draggability>
         {/* This iFrame is here to connect with /chat/connect/ and pull the chatter's ID from
             both local and session storage through postMessage. Once the message is received
             hasConnectedChat will be set to true and the iFrame will no longer be rendered.

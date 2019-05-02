@@ -20,27 +20,33 @@ preact-render-spy (1 nodes)
       useMobileOverlay={false}
     >
     </Drawer>
-    <Button
-      client={
-        Client {
-          "chat": true,
-          "chatButton": undefined,
-          "features": undefined,
-          "intro": undefined,
-          "language": undefined,
-          "name": undefined,
-          "persistence": undefined,
-          "privacy": undefined,
-          "rollout": 1,
-          "routingInfo": undefined,
-          "tint": undefined
-        }
-      }
-      toggleChat={[Function bound ]}
-      showIntroEmoji={false}
-      showNotification={false}
+    <UnnamedComponent0
+      x={24}
+      y={24}
+      updatePosition={[Function bound ]}
     >
-    </Button>
+      <Button
+        client={
+          Client {
+            "chat": true,
+            "chatButton": undefined,
+            "features": undefined,
+            "intro": undefined,
+            "language": undefined,
+            "name": undefined,
+            "persistence": undefined,
+            "privacy": undefined,
+            "rollout": 1,
+            "routingInfo": undefined,
+            "tint": undefined
+          }
+        }
+        toggleChat={[Function bound ]}
+        showIntroEmoji={false}
+        showNotification={false}
+      >
+      </Button>
+    </UnnamedComponent0>
     <iframe
       name="ada-embed-connector-iframe"
       class="ada-embed-connector-iframe"

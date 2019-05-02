@@ -5,10 +5,13 @@ $button-shadow: 0 2px 4px rgba($color-black, .1);
 $button-border-color: 1px solid rgba($color-black, .05);
 
 .ada-embed-button-container {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 10000;
+
+  &--not-draggable {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 10000;
+  }
 
   // Hide the chat button while loading (only being used for custom icons)
   &--loading {

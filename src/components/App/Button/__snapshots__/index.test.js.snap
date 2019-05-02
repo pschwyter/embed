@@ -3,7 +3,7 @@
 exports[`<Button /> should match snapshot 1`] = `
 preact-render-spy (1 nodes)
 -------
-<div class="ada-embed-button-container">
+<div class="ada-embed-button-container ada-embed-button-container--not-draggable">
   <button
     title="Open Support Chat"
     accessKey="1"
