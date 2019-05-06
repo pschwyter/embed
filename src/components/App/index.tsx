@@ -56,7 +56,10 @@ interface InterfaceState {
   chatter: string,
   unreadMessages: number,
   hasConnectedChat: boolean,
-  buttonPosition: {x: number, y: number}
+  buttonPosition: {x: number, y: number},
+
+  // Indicates whether intro has been shown (for web interactions analytics)
+  introShown: boolean
 }
 
 interface UnreadMessage {
@@ -91,7 +94,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       chatter: null,
       unreadMessages: 0,
       hasConnectedChat: false,
-      buttonPosition: DEFAULT_BUTTON_POSITION
+      buttonPosition: DEFAULT_BUTTON_POSITION,
+      introShown: false
     };
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -103,6 +107,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.setIFrameRef = this.setIFrameRef.bind(this);
     this.receiveMessage = this.receiveMessage.bind(this);
     this.handleAdaEvent = this.handleAdaEvent.bind(this);
+    this.handleIntroShown = this.handleIntroShown.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
     this.updateButtonPosition = this.updateButtonPosition.bind(this);
@@ -374,6 +379,14 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
+  /**
+   */
+  handleIntroShown() {
+    this.setState({
+      introShown: true
+    });
+  }
+
   updateButtonPosition(x: number, y: number){
     this.setState({
       buttonPosition: { x, y }
@@ -449,9 +462,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    */
   renderIFrameForParentElement() {
     const {
-      client,
       iframeRef,
-      isDrawerOpen
+      isDrawerOpen,
+      introShown
     } = this.state;
 
     return (
@@ -462,6 +475,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         isDrawerOpen={isDrawerOpen}
         setIFrameRef={this.setIFrameRef}
         setIFrameLoaded={this.setIFrameLoaded}
+        introShown={introShown}
       />
     );
   }
@@ -479,7 +493,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       iframeRef,
       unreadMessages,
       hasConnectedChat,
-      buttonPosition
+      buttonPosition,
+      introShown
     } = this.state;
 
     return (
@@ -497,6 +512,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             setIFrameLoaded={this.setIFrameLoaded}
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
+            introShown={introShown}
           />
         )}
         <Draggability
@@ -511,6 +527,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             toggleChat={this.toggleChat}
             isInMobile={this.isInMobile}
             isDraggable={dragAndDrop}
+            onShow={this.handleIntroShown}
           />
         )}
         {(!isDrawerOpen || dragAndDrop) && (

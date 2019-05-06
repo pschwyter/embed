@@ -12,6 +12,7 @@ interface InterfaceDrawer {
   useMobileOverlay?: boolean,
   hideMask?: boolean,
   drawerHasBeenOpened: boolean,
+  introShown: boolean,
   toggleChat(): void,
   setIFrameRef(ref: HTMLIFrameElement): void,
   setIFrameLoaded(): void

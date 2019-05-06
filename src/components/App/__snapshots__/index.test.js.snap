@@ -18,6 +18,7 @@ preact-render-spy (1 nodes)
       setIFrameLoaded={[Function bound ]}
       drawerHasBeenOpened={false}
       useMobileOverlay={false}
+      introShown={false}
     >
     </Drawer>
     <UnnamedComponent0

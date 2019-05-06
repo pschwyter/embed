@@ -11,7 +11,8 @@ interface InterfaceIntroBlurb {
   isInMobile: boolean,
   isDraggable: boolean,
   dragPosition?: { x: number, y: number },
-  toggleChat(): void
+  toggleChat(): void,
+  onShow(): void
 }
 
 interface InterfaceState {
@@ -34,7 +35,7 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
   }
 
   componentDidMount() {
-    const { client } = this.props;
+    const { client, onShow } = this.props;
 
     this.setState({
       animateIntroIn: true
@@ -43,6 +44,8 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
     setTimeout(() => {
       this.dismissIntro();
     }, (client.intro.duration + client.intro.delay) * 1000);
+
+    onShow();
   }
 
   /**
