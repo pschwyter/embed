@@ -19,7 +19,8 @@ function setup(propsOverride = {}) {
         background_color: "#3ED1FF"
       }
     },
-    toggleChat: jest.fn()
+    toggleChat: jest.fn(),
+    onShow: jest.fn()
   };
 
   const props = Object.assign(defaultsProps, propsOverride);
