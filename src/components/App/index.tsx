@@ -76,6 +76,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   chatURL: string;
   APIURL: string;
   connectorURL: string;
+  documentBodyOverflowStyle: string;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -120,6 +121,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     this.APIURL = constructURL(this.URLParams, true);
     this.chatURL = null;
+    this.documentBodyOverflowStyle = "";
   }
 
   componentDidMount() {
@@ -393,6 +395,18 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
+  // Lock the document body from scrolling. If we don't do this,
+  // there are SERIOUS issues on iOS.
+  lockDocumentBodyFromScrolling() {
+    // Keep track of the previous overflow style
+    this.documentBodyOverflowStyle = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+  }
+
+  unlockDocumentBodyFromScrolling() {
+    document.body.style.overflow = this.documentBodyOverflowStyle;
+  }
+
   /**
    * Open/close the Drawer component, or open a new window if in mobile
    */
@@ -408,6 +422,14 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       window.open(this.chatURL);
 
       return;
+    }
+
+    if (nextIsDrawerOpen) {
+      // Lock document.body from scrolling
+      this.lockDocumentBodyFromScrolling()
+    } else {
+      // Unlock body from scrolling
+      this.unlockDocumentBodyFromScrolling()
     }
 
     this.setState({
