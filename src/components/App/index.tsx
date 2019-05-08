@@ -1,6 +1,5 @@
 import Client from "models/Client";
 import { Component, h, render } from "preact";
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import checkRollout from "services/checkRollout";
 import httpRequest from "services/httpRequest";
 import postMessage from "services/postMessage";
@@ -77,6 +76,13 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   chatURL: string;
   APIURL: string;
   connectorURL: string;
+  adaModalElement: HTMLDivElement;
+  documentBodyOverflow: string;
+  documentBodyPosition: string;
+  documentBodyTop: string;
+  documentBodyBottom: string;
+  documentBodyLeft: string;
+  documentBodyRight: string;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -112,6 +118,13 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
     this.updateButtonPosition = this.updateButtonPosition.bind(this);
+
+    this.documentBodyOverflow = window.document.body.style.overflow;
+    this.documentBodyPosition = window.document.body.style.position;
+    this.documentBodyTop = window.document.body.style.top;
+    this.documentBodyBottom = window.document.body.style.bottom;
+    this.documentBodyLeft = window.document.body.style.left;
+    this.documentBodyRight = window.document.body.style.right;
 
     const route = "connect";
     this.connectorURL = constructURL(
@@ -394,14 +407,29 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
-  // Lock the document body from scrolling. If we don't do this,
-  // there are SERIOUS issues on iOS.
+  /**
+   * Lock the document body from scrolling. If we don't do this,
+   * there are SERIOUS issues on iOS.
+   */
   lockDocumentBodyFromScrolling() {
-    disableBodyScroll(this.elementToRender);
+    window.document.body.style.overflow = "hidden";
+    window.document.body.style.position = "fixed";
+    window.document.body.style.top = "0";
+    window.document.body.style.bottom = "0";
+    window.document.body.style.left = "0";
+    window.document.body.style.right = "0";
   }
 
+  /**
+   * Set back intial values from client document body
+   */
   unlockDocumentBodyFromScrolling() {
-    clearAllBodyScrollLocks();
+    window.document.body.style.overflow = this.documentBodyOverflow;
+    window.document.body.style.position = this.documentBodyPosition;
+    window.document.body.style.top = this.documentBodyTop;
+    window.document.body.style.bottom = this.documentBodyBottom;
+    window.document.body.style.left = this.documentBodyLeft;
+    window.document.body.style.right = this.documentBodyRight;
   }
 
   /**
@@ -425,10 +453,10 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     if (this.isInMobile) {
       if (nextIsDrawerOpen) {
         // Lock document.body from scrolling
-        this.lockDocumentBodyFromScrolling()
+        this.lockDocumentBodyFromScrolling();
       } else {
         // Unlock body from scrolling
-        this.unlockDocumentBodyFromScrolling()
+        this.unlockDocumentBodyFromScrolling();
       }
     }
 
