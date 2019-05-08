@@ -424,12 +424,15 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       return;
     }
 
-    if (nextIsDrawerOpen) {
-      // Lock document.body from scrolling
-      this.lockDocumentBodyFromScrolling()
-    } else {
-      // Unlock body from scrolling
-      this.unlockDocumentBodyFromScrolling()
+    // Lock body from scrolling on mobile
+    if (this.isInMobile) {
+      if (nextIsDrawerOpen) {
+        // Lock document.body from scrolling
+        this.lockDocumentBodyFromScrolling()
+      } else {
+        // Unlock body from scrolling
+        this.unlockDocumentBodyFromScrolling()
+      }
     }
 
     this.setState({
