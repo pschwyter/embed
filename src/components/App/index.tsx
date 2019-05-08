@@ -56,7 +56,10 @@ interface InterfaceState {
   chatter: string,
   unreadMessages: number,
   hasConnectedChat: boolean,
-  buttonPosition: {x: number, y: number}
+  buttonPosition: {x: number, y: number},
+
+  // Indicates whether intro has been shown (for web interactions analytics)
+  introShown: boolean
 }
 
 interface UnreadMessage {
@@ -73,6 +76,13 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   chatURL: string;
   APIURL: string;
   connectorURL: string;
+  adaModalElement: HTMLDivElement;
+  documentBodyOverflow: string;
+  documentBodyPosition: string;
+  documentBodyTop: string;
+  documentBodyBottom: string;
+  documentBodyLeft: string;
+  documentBodyRight: string;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -91,7 +101,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       chatter: null,
       unreadMessages: 0,
       hasConnectedChat: false,
-      buttonPosition: DEFAULT_BUTTON_POSITION
+      buttonPosition: DEFAULT_BUTTON_POSITION,
+      introShown: false
     };
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -103,9 +114,17 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     this.setIFrameRef = this.setIFrameRef.bind(this);
     this.receiveMessage = this.receiveMessage.bind(this);
     this.handleAdaEvent = this.handleAdaEvent.bind(this);
+    this.handleIntroShown = this.handleIntroShown.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
     this.updateButtonPosition = this.updateButtonPosition.bind(this);
+
+    this.documentBodyOverflow = window.document.body.style.overflow;
+    this.documentBodyPosition = window.document.body.style.position;
+    this.documentBodyTop = window.document.body.style.top;
+    this.documentBodyBottom = window.document.body.style.bottom;
+    this.documentBodyLeft = window.document.body.style.left;
+    this.documentBodyRight = window.document.body.style.right;
 
     const route = "connect";
     this.connectorURL = constructURL(
@@ -381,6 +400,39 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   /**
+   */
+  handleIntroShown() {
+    this.setState({
+      introShown: true
+    });
+  }
+
+  /**
+   * Lock the document body from scrolling. If we don't do this,
+   * there are SERIOUS issues on iOS.
+   */
+  lockDocumentBodyFromScrolling() {
+    window.document.body.style.overflow = "hidden";
+    window.document.body.style.position = "fixed";
+    window.document.body.style.top = "0";
+    window.document.body.style.bottom = "0";
+    window.document.body.style.left = "0";
+    window.document.body.style.right = "0";
+  }
+
+  /**
+   * Set back intial values from client document body
+   */
+  unlockDocumentBodyFromScrolling() {
+    window.document.body.style.overflow = this.documentBodyOverflow;
+    window.document.body.style.position = this.documentBodyPosition;
+    window.document.body.style.top = this.documentBodyTop;
+    window.document.body.style.bottom = this.documentBodyBottom;
+    window.document.body.style.left = this.documentBodyLeft;
+    window.document.body.style.right = this.documentBodyRight;
+  }
+
+  /**
    * Open/close the Drawer component, or open a new window if in mobile
    */
   toggleChat() {
@@ -395,6 +447,17 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       window.open(this.chatURL);
 
       return;
+    }
+
+    // Lock body from scrolling on mobile
+    if (this.isInMobile) {
+      if (nextIsDrawerOpen) {
+        // Lock document.body from scrolling
+        this.lockDocumentBodyFromScrolling();
+      } else {
+        // Unlock body from scrolling
+        this.unlockDocumentBodyFromScrolling();
+      }
     }
 
     this.setState({
@@ -449,9 +512,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    */
   renderIFrameForParentElement() {
     const {
-      client,
       iframeRef,
-      isDrawerOpen
+      isDrawerOpen,
+      introShown
     } = this.state;
 
     return (
@@ -462,6 +525,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         isDrawerOpen={isDrawerOpen}
         setIFrameRef={this.setIFrameRef}
         setIFrameLoaded={this.setIFrameLoaded}
+        introShown={introShown}
       />
     );
   }
@@ -479,7 +543,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       iframeRef,
       unreadMessages,
       hasConnectedChat,
-      buttonPosition
+      buttonPosition,
+      introShown
     } = this.state;
 
     return (
@@ -497,6 +562,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             setIFrameLoaded={this.setIFrameLoaded}
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
+            introShown={introShown}
           />
         )}
         <Draggability
@@ -511,6 +577,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
             toggleChat={this.toggleChat}
             isInMobile={this.isInMobile}
             isDraggable={dragAndDrop}
+            onShow={this.handleIntroShown}
           />
         )}
         {(!isDrawerOpen || dragAndDrop) && (

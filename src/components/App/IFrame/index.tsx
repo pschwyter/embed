@@ -11,6 +11,7 @@ interface InterfaceIFrame {
   styles?: string,
   metaFields?: object,
   isDrawerOpen: boolean,
+  introShown: boolean,
   setIFrameRef(ref: HTMLIFrameElement): void,
   setIFrameLoaded(): void
 }
@@ -29,14 +30,21 @@ export default class IFrame extends Component<InterfaceIFrame> {
       parentElement,
       styles,
       iframeRef,
-      setIFrameLoaded
+      setIFrameLoaded,
+      introShown
     } = this.props;
 
     setIFrameLoaded();
 
     const toSend = {
       ...(styles ? { styles } : {}),
-      ...(!parentElement ? { showCloseButton: true  } : {})
+      ...(!parentElement ? { showCloseButton: true  } : {}),
+
+      // Web interactions analytics data:
+      // Indicates whether intro was shown to user
+      introShown,
+      // URL of the page where chat button was clicked
+      url: window.location.href
     };
 
     postMessage(iframeRef, toSend, chatURL);
