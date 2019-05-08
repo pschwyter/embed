@@ -1,5 +1,6 @@
 import Client from "models/Client";
 import { Component, h, render } from "preact";
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import checkRollout from "services/checkRollout";
 import httpRequest from "services/httpRequest";
 import postMessage from "services/postMessage";
@@ -76,7 +77,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   chatURL: string;
   APIURL: string;
   connectorURL: string;
-  documentBodyOverflowStyle: string;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -121,7 +121,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     this.APIURL = constructURL(this.URLParams, true);
     this.chatURL = null;
-    this.documentBodyOverflowStyle = "";
   }
 
   componentDidMount() {
@@ -398,13 +397,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   // Lock the document body from scrolling. If we don't do this,
   // there are SERIOUS issues on iOS.
   lockDocumentBodyFromScrolling() {
-    // Keep track of the previous overflow style
-    this.documentBodyOverflowStyle = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    disableBodyScroll(this.elementToRender);
   }
 
   unlockDocumentBodyFromScrolling() {
-    document.body.style.overflow = this.documentBodyOverflowStyle;
+    clearAllBodyScrollLocks();
   }
 
   /**
