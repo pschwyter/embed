@@ -393,17 +393,17 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
+  updateButtonPosition(x: number, y: number){
+    this.setState({
+      buttonPosition: { x, y }
+    });
+  }
+
   /**
    */
   handleIntroShown() {
     this.setState({
       introShown: true
-    });
-  }
-
-  updateButtonPosition(x: number, y: number){
-    this.setState({
-      buttonPosition: { x, y }
     });
   }
 
