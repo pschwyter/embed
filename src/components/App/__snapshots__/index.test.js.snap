@@ -11,7 +11,7 @@ preact-render-spy (1 nodes)
     <Drawer
       handle="nic"
       mobileOverlay={true}
-      chatURL="https://nic.ada.support/chat/"
+      chatURL="https://nic.ada.support/chat/?initialURL=about:blank"
       isDrawerOpen={false}
       toggleChat={[Function bound ]}
       setIFrameRef={[Function bound ]}
