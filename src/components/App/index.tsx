@@ -73,7 +73,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
   isInMobile: boolean;
   openChatInNewWindow: boolean;
-  chatURL: string;
   APIURL: string;
   connectorURL: string;
   adaModalElement: HTMLDivElement;
@@ -133,7 +132,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     );
 
     this.APIURL = constructURL(this.URLParams, true);
-    this.chatURL = null;
   }
 
   componentDidMount() {
@@ -228,6 +226,25 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     }
   }
 
+  /**
+   * @returns {String|null}
+   */
+  get chatURL() {
+    const {
+      /** @type Client */
+      client
+    } = this.state;
+
+    if (!client) {
+      return null;
+    }
+
+    return constructURL({
+      ...this.URLParams,
+      followUpResponseId: client.intro && client.intro.response_id
+    }, false);
+  }
+
   get URLParams() {
     const {
       handle,
@@ -238,13 +255,17 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       metaFields
     } = this.props;
 
+    const { introShown } = this.state;
+
     return {
       handle,
       cluster,
       language,
       greeting,
       privateMode,
-      metaFields
+      introShown,
+      metaFields,
+      initialURL: window.location.href
     };
   }
 
@@ -258,12 +279,6 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       url: this.APIURL
     }).then((response) => {
       const { client } = response;
-      const followUpResponseId = client.intro && client.intro.response_id;
-
-      this.chatURL = constructURL(
-        Object.assign(this.URLParams, { followUpResponseId }),
-        false
-      );
 
       this.setState({
         client: new Client(client)
