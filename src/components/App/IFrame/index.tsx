@@ -44,7 +44,7 @@ export default class IFrame extends Component<InterfaceIFrame> {
       // Indicates whether intro was shown to user
       introShown,
       // URL of the page where chat button was clicked
-      url: window.location.href
+      initialURL: window.location.href
     };
 
     postMessage(iframeRef, toSend, chatURL);
