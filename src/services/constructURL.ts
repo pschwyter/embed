@@ -9,6 +9,8 @@ export default function constructURL(
     cluster?: string,
     privateMode?: boolean,
     language?: string,
+    introShown?: boolean,
+    initialURL?: string,
     metaFields?: object,
     route?: string
     followUpResponseId?: string,
@@ -20,6 +22,8 @@ export default function constructURL(
     handle,
     cluster,
     language,
+    introShown,
+    initialURL,
     metaFields,
     route,
     privateMode,
@@ -44,6 +48,8 @@ export default function constructURL(
     const newPrivateMode = privateMode ? "private=1" : undefined;
     const greetingString = greeting ? `greeting=${greeting}` : undefined;
     const languageString = language ? `language=${language}` : undefined;
+    const introShownString = introShown ? "introShown" : undefined;
+    const initialURLString = initialURL ? `initialURL=${initialURL}` : undefined;
     const metaVariables = metaFields ? getMetaFieldstring(metaFields) : undefined;
     const followUpResponseIdString = followUpResponseId ?
       `followUpResponseId=${followUpResponseId}` : undefined;
@@ -53,7 +59,9 @@ export default function constructURL(
       greetingString,
       languageString,
       metaVariables,
-      followUpResponseIdString
+      followUpResponseIdString,
+      introShownString,
+      initialURLString
     ].filter(item => item).join("&");
   }
 
