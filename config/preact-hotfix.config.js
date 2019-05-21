@@ -1,3 +1,6 @@
+/*
+  Config file for CicleCI deploy for hotfixes
+*/
 require("dotenv").config();
 import configSetup from "./parent.config"
 const autoprefixer = require("autoprefixer");
@@ -5,7 +8,7 @@ const autoprefixer = require("autoprefixer");
 export default (config, env, helpers) => {
   delete config.entry.polyfills;
 
-  config = configSetup(config, env.production, helpers, false, "beta");
+  config = configSetup(config, env.production, helpers, false, "hotfix")
 
   const cssLoaders = helpers.getLoaders(config).filter(loader => {
     return loader.rule.test.toString() === `/\\.(css|less|s[ac]ss|styl)$/`.toString()
