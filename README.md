@@ -21,8 +21,19 @@ Webpack is also used under the hood and can be modified via the `preact.config.j
 ## Setup
 To get started, simply run `yarn && yarn start`. This will start a local development server at `http://localhost:8080/`. To make use of `tslint` and `sasslint`, you will need to install the `TypeScript TSLint Plugin` and `Sass Lint` extensions in the text editor of your choice.
 
+### Testing ###
+To test changes for this repo, run this command locally `yarn deploy-test`. This pushes local changes to a hosted staging site with the current git commit hash
+
+An example of the link: `https://embed-testing.svc.ada.support/<1st-10-digits-of-commit-hash>.html`. (Note: will overwrite any previous deploys with the same git commit hash).
+
+The url for this testing page is printed out on the console after a successful compilation step.
+
+This link should be viewed on other devices to confirm correctness of all changes before attempting to merge into `beta`.
+
+The testing page is password protected, auth credentials can be found on this [Notion page here](https://www.notion.so/adasupport/Test-page-Credentials-e3979427fca64bcd83232da3159768f5)
+
 ## Beta branch and Deployment ###
-The `beta` branch is set as the base branch for this repo. All PRs should be merged into the `beta` branch 1st, this deploys a beta embed script for testing `embed.beta.js`  at `https://static.ada.support/` for testing.
+The `beta` branch is set as the base branch for this repo. All PRs should be merged into the `beta` branch 1st, this deploys a beta embed script for testing `embed.beta.js`  at `https://static.ada.support/`.
 
 After robust testing, only the `beta` branch should be merged directly into `master` with admin approval
 
