@@ -5,6 +5,7 @@
 - [ ] PR description present and accurate
 - [ ] PR is linked to a Jira card has `impact` field filled in
 - [ ] Unit tests cover code changes
+- [ ] Changes have been tested on staging `embed-testing.svc.ada.support` site
 - [ ] Changes have gone through design review if required
 - [ ] Deployment plan and/or bridge code description is included in PR if required
 - [ ] Changes are CATO/WCAG compliant and support IE9+
