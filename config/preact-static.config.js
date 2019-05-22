@@ -1,3 +1,6 @@
+/*
+  Config file for CicleCI deploy for versioned Embed
+*/
 require("dotenv").config();
 import configSetup from "./parent.config"
 const childProc = require('child_process');

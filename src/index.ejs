@@ -17,11 +17,11 @@
     </script>
 
     <!-- IE9 will only render if the placed before the closing body tag -->
-    <script 
-      async 
-      id="__ada" 
-      src="/bundle.js"
-      data-handle="ada-example" 
+    <script
+      async
+      id="__ada"
+      src="<%= htmlWebpackPlugin.options.scriptName || '/bundle.js' %>"
+      data-handle="ada-example"
     ></script>
     <title>Widget Template</title>
   </head>
