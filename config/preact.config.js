@@ -1,3 +1,6 @@
+/*
+  Config file for CicleCI deploy for versionless Embed
+*/
 require("dotenv").config();
 import configSetup from "./parent.config"
 const autoprefixer = require("autoprefixer");
