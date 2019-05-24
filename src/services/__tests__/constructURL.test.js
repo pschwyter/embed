@@ -157,4 +157,13 @@ describe("getMetaFieldstring function", () => {
 
     expect(getMetaFieldstring(dummyMetaFields)).toBe(expected);
   });
+
+  it("should should resolve to dev domain", () => {
+    let url = constructURL({
+      domain: "ada-dev",
+      handle: "nic"
+    }, false);
+
+    expect(url).toContain("nic.ada-dev.support");
+  });
 });

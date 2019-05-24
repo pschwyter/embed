@@ -28,6 +28,13 @@ An example of the link: `https://embed-testing.svc.ada.support/<1st-10-digits-of
 
 The url for this testing page is printed out on the console after a successful compilation step.
 
+To point the staged embed to a specific bot add the following to the `<script>` tag in `index.ejs`:
+
+```
+data-handle="<bot name>"
+data-domain="<Ada domain ie. ada-dev or ada-stage>"
+```
+
 This link should be viewed on other devices to confirm correctness of all changes before attempting to merge into `beta`.
 
 The testing page is password protected, auth credentials can be found on this [Notion page here](https://www.notion.so/adasupport/Test-page-Credentials-e3979427fca64bcd83232da3159768f5)
