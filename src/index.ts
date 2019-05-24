@@ -151,7 +151,8 @@ window.adaEmbed = adaEmbed;
 const embedScriptRef = document.getElementById("__ada");
 const dataHandle  = embedScriptRef.getAttribute("data-handle");
 const dataLazy = embedScriptRef.getAttribute("data-lazy");
-const adaSettings = Object.assign({ handle:dataHandle }, window.adaSettings);
+const dataDomain = embedScriptRef.getAttribute("data-domain");
+const adaSettings = Object.assign({ handle: dataHandle, domain: dataDomain }, window.adaSettings);
 
 if (dataLazy === undefined || dataLazy === null) {
   if (/comp|inter|loaded/.test(document.readyState)) {
