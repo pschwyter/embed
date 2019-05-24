@@ -29,6 +29,7 @@ interface InterfaceApp {
   handle: string,
   styles?: string,
   cluster?: string,
+  domain?: string,
   language?: string,
   private?: boolean,
   greeting?: string,
@@ -86,7 +87,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   constructor(props: InterfaceApp) {
     super(props);
 
-    const { mobileOverlay, handle, cluster } = props;
+    const { mobileOverlay, handle, cluster, domain } = props;
 
     this.state = {
       client: null,
@@ -127,7 +128,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     const route = "connect";
     this.connectorURL = constructURL(
-      { handle, cluster, route },
+      { handle, cluster, route, domain  },
       false
     );
 
@@ -250,6 +251,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       handle,
       cluster,
       language,
+      domain,
       greeting,
       private: privateMode,
       metaFields
@@ -262,6 +264,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       cluster,
       language,
       greeting,
+      domain,
       privateMode,
       introShown,
       metaFields,
