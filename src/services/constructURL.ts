@@ -1,5 +1,6 @@
 import { getBrowserLanguage } from "./translation";
 
+const DEFAULT_ADA_DOMAIN = "ada";
 /**
  * Generate the Chat / API URL
  */
@@ -7,6 +8,7 @@ export default function constructURL(
   props: {
     handle: string,
     cluster?: string,
+    domain?: string,
     privateMode?: boolean,
     language?: string,
     introShown?: boolean,
@@ -21,6 +23,7 @@ export default function constructURL(
   const {
     handle,
     cluster,
+    domain,
     language,
     introShown,
     initialURL,
@@ -34,6 +37,7 @@ export default function constructURL(
   const clusterString = cluster ? `.${cluster}` : "";
   const hostName = window.location.hostname;
   const routeString = route ? `${route}/` : "";
+  const envString = domain ? `${domain}` : DEFAULT_ADA_DOMAIN;
 
   let queryString = "";
   let url = "";
@@ -74,7 +78,7 @@ export default function constructURL(
     url = `http://${hostName}:8002/${routeString}${questionSym}${queryString}`;
   } else {
     url =
-    `https://${handle}${clusterString}.ada.support/${
+    `https://${handle}${clusterString}.${envString}.support/${
       apiOrChat}/${routeString}${questionSym}${queryString}`;
   }
 
