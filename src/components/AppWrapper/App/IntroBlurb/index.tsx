@@ -109,6 +109,7 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
           )}
           title="Dismiss Intro"
           onClick={this.dismissIntro}
+          tabIndex={animateIntroOut ? -1 : 0}
         />
         <p
           className="ada-embed-intro-blurb__message"
@@ -116,7 +117,7 @@ export default class IntroBlurb extends Component<InterfaceIntroBlurb, Interface
           role="alert"
           onClick={this.handleOpenChat}
           onKeyPress={this.handleKeyPress}
-          tabIndex={0}
+          tabIndex={animateIntroOut ? -1 : 0}
         >
           {client.intro.body}
         </p>
