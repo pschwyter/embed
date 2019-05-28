@@ -21,6 +21,9 @@
       ],
       "icons/*": [
         "static/icons/*"
+      ],
+      "components/*": [
+        "src/components/*"
       ]
     }
   },

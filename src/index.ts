@@ -17,7 +17,7 @@ import {
   ADA_EVENT_SET_META_FIELDS
 } from "constants/events";
 import { h, render } from "preact";
-import App from "./components/App";
+import AppWrapper from "./components/AppWrapper";
 
 // Import global styles
 import "./style/application.scss";
@@ -32,6 +32,66 @@ declare global {
     Event: Event & InterfacePrototype;
     CustomEvent: any;
   }
+}
+
+/**
+ * Intial inputs passed in by client during instantiation
+ */
+export interface InterfaceStartOptions {
+  // The bot handle
+  handle: string,
+
+  // Custom styles to be passed to Chat
+  styles?: string,
+
+  // Used to specify a custom domain (eg. ada-dev)
+  domain?: string,
+
+  // Production cluster (Eg. att, ca)
+  cluster?: string,
+
+  // Language to be passed to Chat
+  language?: string,
+
+  // Programtically puts Chat into private mode
+  private?: boolean,
+
+  // A custom greeting id to be passed to Chat
+  greeting?: string,
+
+  // Toggles the Drawer mask on and off
+  hideMask?: boolean,
+
+  // Chatter meta data
+  metaFields?: object,
+
+  // If true Chat button can be drag and dropped
+  dragAndDrop?: boolean,
+
+  // If true will overlay Chat on top of site content on mobile
+  mobileOverlay?: boolean,
+
+  // A parentElement for Chat to be rendered into instead of the default Drawer
+  parentElement?: string | HTMLElement,
+
+  // Callback triggered when embed loaded (specifically, when #ada-embed element is rendered)
+  adaReadyCallback?(): any,
+
+  // Triggered when "analytics" postMessage event received
+  analyticsCallback?(analytics: any): any,
+
+  // Triggered when "liveHandoff" postMessage event received
+  liveHandoffCallback?(liveHandoff: any): any,
+
+  // Triggered when "chatter" postMessage event received
+  chatterTokenCallback?(chatter: string): any
+}
+
+interface InterfaceResetOptions {
+  language?: string,
+  greeting?: string,
+  metaFields?: object,
+  resetChatHistory?: boolean
 }
 
 /**
@@ -86,7 +146,7 @@ const adaEmbed = Object.freeze({
   /**
    * Setup Ada Embed
    */
-  [ADA_EVENT_START]: (options: any) => {
+  [ADA_EVENT_START]: (options: InterfaceStartOptions) => {
     const { parentElement } = options;
     const adaNode = getEmbedElement();
 
@@ -99,7 +159,7 @@ const adaEmbed = Object.freeze({
     if (adaNode) {
       throw Error("Ada Embed has already been rendered.");
     } else {
-      render(h(App, options), renderElement);
+      render(h(AppWrapper, options), renderElement);
     }
   },
 
@@ -126,15 +186,15 @@ const adaEmbed = Object.freeze({
   /**
    * Update the meta fields (useful for settings meta data after setup)
    */
-  [ADA_EVENT_SET_META_FIELDS]: (options: any) => {
+  [ADA_EVENT_SET_META_FIELDS]: (options: object) => {
     dispatchAdaEvent(ADA_EVENT_SET_META_FIELDS, { metaFields: options });
   },
 
   /**
    * Reset Chat (delete history and refresh)
    */
-  [ADA_EVENT_RESET]: () => {
-    dispatchAdaEvent(ADA_EVENT_RESET);
+  [ADA_EVENT_RESET]: (options: InterfaceResetOptions) => {
+    dispatchAdaEvent(ADA_EVENT_RESET, options);
   },
 
   /**

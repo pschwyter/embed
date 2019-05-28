@@ -19,59 +19,18 @@ import {
   ADA_EVENT_FOCUS,
   ADA_EVENT_BLUR
 } from "constants/events";
-import {
-  DEFAULT_BUTTON_POSITION
-} from "constants/configuration";
+import { InterfaceState as AppWrapperInterfaceState } from "components/AppWrapper";
 import "./style.scss";
-
-interface InterfaceApp {
-  client: Client,
-  handle: string,
-  styles?: string,
-  cluster?: string,
-  domain?: string,
-  language?: string,
-  private?: boolean,
-  greeting?: string,
-  hideMask?: boolean,
-  metaFields?: object,
-  mobileOverlay?: boolean,
-  useMobileOverlay?: boolean,
-  parentElement?: string | HTMLElement,
-  dragAndDrop?: boolean,
-  adaReadyCallback(): any,
-  analyticsCallback(analytics: any): any,
-  liveHandoffCallback(liveHandoff: any): any,
-  chatterTokenCallback(chatter: string): any,
-}
-
-interface InterfaceState {
-  client: Client,
-  drawerHasBeenOpened: boolean,
-  isDrawerOpen: boolean,
-  shoudLoadEmbedUI: boolean,
-  showIntro: boolean,
-  iframeRef: HTMLIFrameElement,
-  isIFrameLoaded: boolean,
-  afterIFrameLoadsTasks: CustomEvent[],
-  chatter: string,
-  unreadMessages: number,
-  hasConnectedChat: boolean,
-  buttonPosition: {x: number, y: number},
-
-  // Indicates whether intro has been shown (for web interactions analytics)
-  introShown: boolean
-}
 
 interface UnreadMessage {
   amount: number
 }
 
-export default class App extends Component<InterfaceApp, InterfaceState> {
-  static defaultProps = {
-    mobileOverlay: true
-  };
+interface InterfaceApp extends AppWrapperInterfaceState {
+  setAppState(hash: object, callback?: () => void): void
+}
 
+export default class App extends Component<InterfaceApp> {
   isInMobile: boolean;
   openChatInNewWindow: boolean;
   APIURL: string;
@@ -87,23 +46,12 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   constructor(props: InterfaceApp) {
     super(props);
 
-    const { mobileOverlay, handle, cluster, domain } = props;
-
-    this.state = {
-      client: null,
-      drawerHasBeenOpened: false,
-      isDrawerOpen: false,
-      shoudLoadEmbedUI: false,
-      showIntro: false,
-      iframeRef: null,
-      isIFrameLoaded: false,
-      afterIFrameLoadsTasks: [],
-      chatter: null,
-      unreadMessages: 0,
-      hasConnectedChat: false,
-      buttonPosition: DEFAULT_BUTTON_POSITION,
-      introShown: false
-    };
+    const {
+      mobileOverlay,
+      handle,
+      cluster,
+      domain
+    } = props;
 
     this.toggleChat = this.toggleChat.bind(this);
     this.isInMobile = (
@@ -128,7 +76,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
     const route = "connect";
     this.connectorURL = constructURL(
-      { handle, cluster, route, domain  },
+      { handle, cluster, route, domain },
       false
     );
 
@@ -186,12 +134,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     } = event.data;
 
     const {
+      isDrawerOpen,
       liveHandoffCallback,
       chatterTokenCallback,
       analyticsCallback
     } = this.props;
-
-    const { isDrawerOpen } = this.state;
 
     if (liveHandoff && liveHandoffCallback) {
       liveHandoffCallback(liveHandoff);
@@ -199,7 +146,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       showZendeskWidget(zendeskLiveHandoff, this.toggleChat);
     } else if (chatter && chatterTokenCallback) {
       chatterTokenCallback(chatter);
-      this.setState({ chatter });
+      this.props.setAppState({ chatter });
     } else if (analytics && analyticsCallback) {
       analyticsCallback(analytics);
     } else if (closeChat && isDrawerOpen) {
@@ -218,10 +165,10 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   fetchChatterAndSetup(chatterIds: string) {
     const {
       client
-    } = this.state;
+    } = this.props;
     const persistence = client.persistence === "normal" ? "local" : client.persistence;
     if (chatterIds[persistence]) {
-      this.setState({
+      this.props.setAppState({
         chatter: chatterIds[persistence]
       }, () => this.fetchUnread());
     }
@@ -230,11 +177,11 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   /**
    * @returns {String|null}
    */
-  get chatURL() {
+  get chatURL(): string | null {
     const {
       /** @type Client */
       client
-    } = this.state;
+    } = this.props;
 
     if (!client) {
       return null;
@@ -253,17 +200,18 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       language,
       domain,
       greeting,
-      private: privateMode,
+      privateMode,
       metaFields
     } = this.props;
 
-    const { introShown } = this.state;
+    const { introShown, resetChatHistory } = this.props;
 
     return {
       handle,
       cluster,
       language,
       greeting,
+      resetChatHistory,
       domain,
       privateMode,
       introShown,
@@ -283,7 +231,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     }).then((response) => {
       const { client } = response;
 
-      this.setState({
+      this.props.setAppState({
         client: new Client(client)
       }, () => {
         const { rollout, chat: chatIsOn } = client;
@@ -296,7 +244,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
         // It should be loaded if rollout returns true, or if a parentElement is being used
         const shoudLoadEmbedUI = Boolean(parentElement) || checkRollout(rollout, handle);
 
-        this.setState({
+        this.props.setAppState({
           shoudLoadEmbedUI
         }, () => {
           if (shoudLoadEmbedUI) {
@@ -304,7 +252,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
 
             if (client.intro) {
               setTimeout(() => {
-                this.setState({
+                this.props.setAppState({
                   showIntro: true
                 });
               }, client.intro.delay * 1000);
@@ -319,7 +267,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   }
 
   fetchUnread() {
-    const { chatter } = this.state;
+    const { chatter } = this.props;
     const route = `chatters/${chatter}/notification_status`;
     const url = constructURL(
       Object.assign(this.URLParams, { route }),
@@ -328,10 +276,10 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     httpRequest({
       url
     }).then((response) => {
-      const { drawerHasBeenOpened } = this.state;
+      const { drawerHasBeenOpened } = this.props;
       // Set unread amount, connected to connector on chat
       // and open chat if in (active/pending) live state
-      this.setState({
+      this.props.setAppState({
         unreadMessages: response.unread_amount,
         hasConnectedChat: true,
         drawerHasBeenOpened: drawerHasBeenOpened || response.is_live_state
@@ -346,7 +294,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Event hanlder for custom Ada events
    */
   handleAdaEvent(event: CustomEvent) {
-    const { iframeRef, isIFrameLoaded, afterIFrameLoadsTasks } = this.state;
+    const { iframeRef, isIFrameLoaded, afterIFrameLoadsTasks } = this.props;
     const { detail } = event;
     const { type, data } = detail;
 
@@ -355,10 +303,38 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       return;
     }
 
+    if (type === ADA_EVENT_RESET) {
+      const {
+        resetChatHistory = true,
+        metaFields = {},
+        language = "",
+        greeting = ""
+      } = data || {};
+
+      /**
+       * In order to reset Chat we need to remove the IFrame component and re-render it.
+       * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
+       * We can simulatenously set new values for language, greeting, and metaFields.
+       */
+      this.props.setAppState({
+        language,
+        greeting,
+        metaFields,
+        resetChatHistory,
+        forceIFrameReRender: false
+      }, () => {
+        this.props.setAppState({
+          forceIFrameReRender: true
+        });
+      });
+
+      return;
+    }
+
     if (!isIFrameLoaded) {
       afterIFrameLoadsTasks.push(event);
 
-      this.setState({
+      this.props.setAppState({
         afterIFrameLoadsTasks
       });
 
@@ -369,9 +345,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       case ADA_EVENT_SET_META_FIELDS:
         postMessage(iframeRef, data, this.chatURL);
         break;
-      case ADA_EVENT_RESET:
-        postMessage(iframeRef, ADA_EVENT_RESET, this.chatURL);
-        break;
+
       case ADA_EVENT_DELETE_HISTORY:
         postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
         break;
@@ -382,9 +356,9 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Handles incoming messages from Chat
    */
   handleNewMessages(messages: UnreadMessage) {
-    const { unreadMessages } = this.state;
+    const { unreadMessages } = this.props;
 
-    this.setState({
+    this.props.setAppState({
       unreadMessages: unreadMessages + messages.amount
     });
   }
@@ -393,8 +367,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Handles clearing unread messages on both Embed and API
    */
   handleClearUnreadMessages() {
-    const { chatter } = this.state;
-    this.setState({
+    const { chatter } = this.props;
+    this.props.setAppState({
       unreadMessages: 0
     });
 
@@ -411,8 +385,8 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
     });
   }
 
-  updateButtonPosition(x: number, y: number){
-    this.setState({
+  updateButtonPosition(x: number, y: number) {
+    this.props.setAppState({
       buttonPosition: { x, y }
     });
   }
@@ -420,7 +394,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   /**
    */
   handleIntroShown() {
-    this.setState({
+    this.props.setAppState({
       introShown: true
     });
   }
@@ -454,7 +428,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Open/close the Drawer component, or open a new window if in mobile
    */
   toggleChat() {
-    const { isDrawerOpen, iframeRef } = this.state;
+    const { isDrawerOpen, iframeRef } = this.props;
     const nextIsDrawerOpen = !isDrawerOpen;
 
     // Clear unread messages
@@ -478,7 +452,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       }
     }
 
-    this.setState({
+    this.props.setAppState({
       isDrawerOpen: nextIsDrawerOpen,
       drawerHasBeenOpened: true
     }, () => {
@@ -502,15 +476,15 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
    * Set the iFrame ref on the parent
    */
   setIFrameRef(ref: HTMLIFrameElement) {
-    this.setState({
+    this.props.setAppState({
       iframeRef: ref
     });
   }
 
   setIFrameLoaded() {
-    const { afterIFrameLoadsTasks } = this.state;
+    const { afterIFrameLoadsTasks } = this.props;
 
-    this.setState({
+    this.props.setAppState({
       isIFrameLoaded: true,
       afterIFrameLoadsTasks: []
     }, () => {
@@ -533,7 +507,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       iframeRef,
       isDrawerOpen,
       introShown
-    } = this.state;
+    } = this.props;
 
     return (
       <IFrame
@@ -563,7 +537,7 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
       hasConnectedChat,
       buttonPosition,
       introShown
-    } = this.state;
+    } = this.props;
 
     return (
       <div>
@@ -632,11 +606,12 @@ export default class App extends Component<InterfaceApp, InterfaceState> {
   get elementToRender() {
     const { parentElement } = this.props;
     const {
-      shoudLoadEmbedUI
-    } = this.state;
+      shoudLoadEmbedUI,
+      forceIFrameReRender
+    } = this.props;
 
-    if (!shoudLoadEmbedUI) {
-      return (null);
+    if (!shoudLoadEmbedUI || !forceIFrameReRender) {
+      return null;
     }
 
     if (parentElement) {
