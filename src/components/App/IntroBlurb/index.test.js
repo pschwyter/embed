@@ -42,19 +42,20 @@ describe("<IntroBlurb />", () => {
     }, 0);
   });
 
-  it("should have a tabIndex of 0 and aria-live assertive on the blurb message", () => {
-    const { PRSWrapper, props } = setup();
-    const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__message");
+  it("should have a tabIndex of -1 if the blurb dismiss button is not visible", () => {
+    const { PRSWrapper } = setup();
+    PRSWrapper.setState({animateIntroOut: true})
+    const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__dismiss-button");
 
-    expect(messageElement.attr("tabIndex")).toEqual(0);
-    expect(messageElement.attr("aria-live")).toEqual("assertive");
+    expect(messageElement.attr("tabIndex")).toEqual(-1);
   });
 
-  it("should have role alert on the blurb message", () => {
-    const { PRSWrapper, props } = setup();
+  it("should have role alert and aria-live assertive on the blurb message", () => {
+    const { PRSWrapper } = setup();
     const messageElement = PRSWrapper.find(".ada-embed-intro-blurb__message");
 
     expect(messageElement.attr("role")).toEqual("alert");
+    expect(messageElement.attr("aria-live")).toEqual("assertive");
   })
 
   it("should open chat when clicking the blurb message", () => {
