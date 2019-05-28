@@ -11,6 +11,7 @@ preact-render-spy (1 nodes)
     class="ada-embed-intro-blurb__dismiss-button"
     title="Dismiss Intro"
     onClick={[Function bound ]}
+    tabIndex={0}
   >
   </button>
   <p
