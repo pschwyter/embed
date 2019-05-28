@@ -16,7 +16,8 @@ export default function constructURL(
     metaFields?: object,
     route?: string
     followUpResponseId?: string,
-    greeting?: string
+    greeting?: string,
+    resetChatHistory?: boolean
   },
   isForAPI = false
 ) {
@@ -31,7 +32,8 @@ export default function constructURL(
     route,
     privateMode,
     followUpResponseId,
-    greeting
+    greeting,
+    resetChatHistory
   } = props;
 
   const clusterString = cluster ? `.${cluster}` : "";
@@ -50,6 +52,7 @@ export default function constructURL(
   } else {
     // Query string for Chat URL
     const newPrivateMode = privateMode ? "private=1" : undefined;
+    const resetMode = resetChatHistory ? "reset=1" : undefined;
     const greetingString = greeting ? `greeting=${greeting}` : undefined;
     const languageString = language ? `language=${language}` : undefined;
     const introShownString = introShown ? "introShown" : undefined;
@@ -59,6 +62,7 @@ export default function constructURL(
       `followUpResponseId=${followUpResponseId}` : undefined;
 
     queryString = [
+      resetMode,
       newPrivateMode,
       greetingString,
       languageString,
