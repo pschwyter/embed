@@ -7,7 +7,8 @@ import IFrame from "./IFrame";
 
 function setup(propsOverride = {}) {
   const defaultsProps = {
-    handle: "nic"
+    handle: "nic",
+    setAppState: jest.fn()
   };
 
   const props = Object.assign(defaultsProps, propsOverride);
@@ -32,18 +33,8 @@ describe("<App />", () => {
     }, 0);
   });
 
-  it("should set shoudLoadEmbedUI to true if checkRollout returns true, and there is no parentElement", done => {
-    const { PRSWrapper } = setup();
-
-    setTimeout(() => {
-      expect(PRSWrapper.state().shoudLoadEmbedUI).toBeTruthy();
-      done();
-    }, 0);
-  });
-
   it("should no longer render connector iframe if hasConnectedChat is true", done => {
-    const { PRSWrapper } = setup();
-    PRSWrapper.setState({
+    const { PRSWrapper } = setup({
       hasConnectedChat: true
     });
 
@@ -57,7 +48,9 @@ describe("<App />", () => {
     let dummyElement = document.createElement("div");
 
     const { PRSWrapper } = setup({
-      parentElement: dummyElement
+      parentElement: dummyElement,
+      shoudLoadEmbedUI: true,
+      forceIFrameReRender: true
     });
 
     setTimeout(() => {
