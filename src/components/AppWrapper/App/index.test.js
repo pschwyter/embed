@@ -8,7 +8,8 @@ import IFrame from "./IFrame";
 function setup(propsOverride = {}) {
   const defaultsProps = {
     handle: "nic",
-    setAppState: jest.fn()
+    setAppState: jest.fn(),
+    adaReadyCallback: jest.fn()
   };
 
   const props = Object.assign(defaultsProps, propsOverride);
@@ -77,5 +78,12 @@ describe("<App />", () => {
       expect(PRSWrapper.find(".ada-embed-app--inside-parent").length).toBe(0);
       done();
     }, 0);
+  });
+
+  it("should trigger adaReadyCallback on componentDidMount", () => {
+    const { props } = setup();
+    const adaReadyCallbackSpy = jest.spyOn(props, "adaReadyCallback");
+
+    expect(adaReadyCallbackSpy).toHaveBeenCalled();
   });
 });
