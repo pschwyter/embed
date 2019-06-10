@@ -64,7 +64,6 @@ export default class App extends Component<InterfaceApp> {
     this.handleAdaEvent = this.handleAdaEvent.bind(this);
     this.handleIntroShown = this.handleIntroShown.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
-    this.triggerAdaReadyCallback = this.triggerAdaReadyCallback.bind(this);
     this.updateButtonPosition = this.updateButtonPosition.bind(this);
 
     this.documentBodyOverflow = window.document.body.style.overflow;
@@ -86,6 +85,7 @@ export default class App extends Component<InterfaceApp> {
   componentDidMount() {
     this.fetchClientAndSetup();
     this.initiateAdaEventListener();
+    this.triggerAdaReadyCallback();
   }
 
   componentWillUnmount() {
@@ -632,7 +632,6 @@ export default class App extends Component<InterfaceApp> {
             "ada-embed-app--inside-parent": parentElement
           }
         )}
-        ref={this.triggerAdaReadyCallback}
       >
         {this.elementToRender}
       </div>
