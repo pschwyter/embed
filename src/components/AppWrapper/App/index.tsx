@@ -42,6 +42,7 @@ export default class App extends Component<InterfaceApp> {
   documentBodyBottom: string;
   documentBodyLeft: string;
   documentBodyRight: string;
+  documentBodyScrollTop: number;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -404,6 +405,10 @@ export default class App extends Component<InterfaceApp> {
    * there are SERIOUS issues on iOS.
    */
   lockDocumentBodyFromScrolling() {
+
+    // save current page position so we can scroll back there when chat closes
+    this.documentBodyScrollTop = window.pageYOffset;
+
     window.document.body.style.overflow = "hidden";
     window.document.body.style.position = "fixed";
     window.document.body.style.top = "0";
@@ -422,6 +427,9 @@ export default class App extends Component<InterfaceApp> {
     window.document.body.style.bottom = this.documentBodyBottom;
     window.document.body.style.left = this.documentBodyLeft;
     window.document.body.style.right = this.documentBodyRight;
+
+    // scroll the page back to where it was before chat opened
+    document.documentElement.scrollTop = document.body.scrollTop = this.documentBodyScrollTop;
   }
 
   /**
