@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-      window.adaSettings = {
-        chatterTokenCallback: function(chatter){ console.log("My chatter:", chatter)},
-        // hideMask: true,
-        dragAndDrop: true,
-        greeting: "5cec2ef3b1a02c67a5aa85aa",
-        language: "fr",
-        metaFields: {
-          testVal: "yolo",
-          testVal2: "yodo",
-          testVal3: "sdfds"
-        },
-        // styles: "*{font-size: 14px !important;}#message-input{background-color: white; border: 1px solid #c1c1c1;}",
-        chatterTokenCallback(chatter) { console.log(chatter)}
-        // parentElement: "parent-element"
-      };
-    </script>
 
-    <!-- IE9 will only render if the placed before the closing body tag -->
-    <script
-      async
-      id="__ada"
-      src="<%= htmlWebpackPlugin.options.scriptName || '/bundle.js' %>"
-      data-handle="nic"
-    ></script>
-    <title>Widget Template</title>
-  </head>
-  <body style="height: 100vh;">
-    <h1>Ada Embed Testing Page!</h1>
-    <div id="parent-element" style="height: 500px;"></div>
-    <button onclick="adaEmbed.toggle()">Toggle</button>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    window.adaSettings = {
+      chatterTokenCallback: function (chatter) { console.log("My chatter:", chatter) },
+      hideMask: true,
+      // dragAndDrop: true,
+      // greeting: "5cec2ef3b1a02c67a5aa85aa",
+      // language: "fr",
+      metaFields: {
+        testVal: "yolo",
+        testVal2: "yodo",
+        testVal3: "sdfds"
+      },
+      // styles: "*{font-size: 14px !important;}#message-input{background-color: white; border: 1px solid #c1c1c1;}",
+      // chatterTokenCallback(chatter) { console.log(chatter) }
+      // parentElement: "parent-element"
+    };
+  </script>
+
+  <!-- IE9 will only render if the placed before the closing body tag -->
+  <script async id="__ada" src="<%= htmlWebpackPlugin.options.scriptName || '/bundle.js' %>" data-handle="nic"></script>
+  <title>Widget Template</title>
+</head>
+
+<body style="height: 100vh;">
+  <h1>Ada Embed Testing Page!</h1>
+  <div id="parent-element" style="height: 500px;"></div>
+  <button onclick="adaEmbed.toggle()">Toggle</button>
+  <button onclick="adaEmbed.reset()">Reset</button>
+  <button onclick="adaEmbed.deleteHistory()">Delete History</button>
+</body>
+
 </html>
