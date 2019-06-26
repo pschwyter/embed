@@ -415,9 +415,6 @@ export default class App extends Component<InterfaceApp> {
     window.document.body.style.bottom = "0";
     window.document.body.style.left = "0";
     window.document.body.style.right = "0";
-
-    // scroll the page back to where it was before chat opened
-    window.scrollTo(0, this.pageYOffset);
   }
 
   /**
@@ -430,6 +427,9 @@ export default class App extends Component<InterfaceApp> {
     window.document.body.style.bottom = this.documentBodyBottom;
     window.document.body.style.left = this.documentBodyLeft;
     window.document.body.style.right = this.documentBodyRight;
+
+    // scroll the page back to where it was before chat opened
+    window.scrollTo(0, this.pageYOffset);
   }
 
   /**
