@@ -17,7 +17,10 @@ export default function constructURL(
     route?: string
     followUpResponseId?: string,
     greeting?: string,
-    resetChatHistory?: boolean
+    resetChatHistory?: boolean,
+    chatterToken?: string,
+    chatterCreated?: string,
+    chatterZDSession?: string
   },
   isForAPI = false
 ) {
@@ -33,7 +36,10 @@ export default function constructURL(
     privateMode,
     followUpResponseId,
     greeting,
-    resetChatHistory
+    resetChatHistory,
+    chatterToken,
+    chatterCreated,
+    chatterZDSession
   } = props;
 
   const clusterString = cluster ? `.${cluster}` : "";
@@ -58,6 +64,9 @@ export default function constructURL(
     const introShownString = introShown ? "introShown" : undefined;
     const initialURLString = initialURL ? `initialURL=${initialURL}` : undefined;
     const metaVariables = metaFields ? getMetaFieldstring(metaFields) : undefined;
+    const chatterTokenString = chatterToken ? `chatterToken=${chatterToken}` : undefined;
+    const chatterCreatedString = chatterCreated ? `created=${chatterCreated}` : undefined;
+    const chatterZDSessionString = chatterZDSession ? `zdSession=${chatterZDSession}` : undefined;
     const followUpResponseIdString = followUpResponseId ?
       `followUpResponseId=${followUpResponseId}` : undefined;
 
@@ -69,7 +78,10 @@ export default function constructURL(
       metaVariables,
       followUpResponseIdString,
       introShownString,
-      initialURLString
+      initialURLString,
+      chatterTokenString,
+      chatterCreatedString,
+      chatterZDSessionString
     ].filter(item => item).join("&");
   }
 
@@ -82,7 +94,7 @@ export default function constructURL(
     url = `http://${hostName}:8002/${routeString}${questionSym}${queryString}`;
   } else {
     url =
-    `https://${handle}${clusterString}.${envString}.support/${
+      `https://${handle}${clusterString}.${envString}.support/${
       apiOrChat}/${routeString}${questionSym}${queryString}`;
   }
 
