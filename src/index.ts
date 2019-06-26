@@ -13,6 +13,8 @@ import {
   ADA_EVENT_RESET,
   ADA_EVENT_START,
   ADA_EVENT_TOGGLE,
+  ADA_EVENT_GET_INFO,
+  ADA_EVENT_GIVE_INFO,
   ADA_EVENT_DELETE_HISTORY,
   ADA_EVENT_SET_META_FIELDS
 } from "constants/events";
@@ -95,6 +97,11 @@ interface InterfaceResetOptions {
 }
 
 /**
+ * Represents the status of the Embed app, as returned by ADA_EVENT_GIVE_INFO event
+ */
+let statusObject = {};
+
+/**
  * Returns the ada-embed element if Embed has started
  */
 const getEmbedElement = () => document.getElementById("ada-embed");
@@ -117,6 +124,14 @@ const dispatchAdaEvent = (type: string, data?: object) => {
       cancelable: true
     }
   );
+
+  if (!embedElement) {
+    throw Error(
+      "Actions cannot be called until Embed has been instantiated. " +
+      "Try running `adaEmbed.start({...})`."
+    );
+  }
+
   embedElement.dispatchEvent(event);
 };
 
@@ -159,6 +174,9 @@ const adaEmbed = Object.freeze({
     if (adaNode) {
       throw Error("Ada Embed has already been rendered.");
     } else {
+      // Add event listener
+      document.addEventListener("ada-event-outward", handleEventFromPreactApp, false);
+
       render(h(AppWrapper, options), renderElement);
     }
   },
@@ -170,6 +188,9 @@ const adaEmbed = Object.freeze({
     const adaNode = getEmbedElement();
 
     if (adaNode) {
+      // Remove event listener
+      document.removeEventListener("ada-event-outward", handleEventFromPreactApp, false);
+
       adaNode.parentNode.removeChild(adaNode);
     } else {
       throw Error("An instance Ada Embed was not found.");
@@ -202,8 +223,28 @@ const adaEmbed = Object.freeze({
    */
   [ADA_EVENT_DELETE_HISTORY]: () => {
     dispatchAdaEvent(ADA_EVENT_DELETE_HISTORY);
+  },
+
+  /**
+   * Get Embed status
+   */
+  [ADA_EVENT_GET_INFO]: () => {
+    dispatchAdaEvent(ADA_EVENT_GET_INFO);
+    return statusObject;
   }
 });
+
+/**
+ * Handle Custom Events coming from the Preact application
+ */
+function handleEventFromPreactApp(event: CustomEvent) {
+  const { detail } = event;
+  const { type, data } = detail;
+
+  if (type === ADA_EVENT_GIVE_INFO) {
+    statusObject = data;
+  }
+}
 
 window.adaEmbed = adaEmbed;
 
