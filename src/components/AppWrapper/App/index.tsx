@@ -23,6 +23,8 @@ import {
 } from "constants/events";
 import { InterfaceState as AppWrapperInterfaceState } from "components/AppWrapper";
 import "./style.scss";
+import { store, retrieve, removeStore } from "services/store";
+import { CHATTER_TOKEN, CHATTER_CREATED, CHATTER_ZD_SESSION } from "constants/store";
 
 interface UnreadMessage {
   amount: number
@@ -45,6 +47,9 @@ export default class App extends Component<InterfaceApp> {
   documentBodyBottom: string;
   documentBodyLeft: string;
   documentBodyRight: string;
+  chatterToken: string;
+  chatterCreated: string;
+  chatterZDSession: string;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -53,7 +58,8 @@ export default class App extends Component<InterfaceApp> {
       mobileOverlay,
       handle,
       cluster,
-      domain
+      domain,
+      client
     } = props;
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -122,6 +128,7 @@ export default class App extends Component<InterfaceApp> {
    */
   receiveMessage(event: MessageEvent) {
     const originURL = this.chatURL;
+    const { client } = this.props;
 
     // Ensure that event origin is the same as the Chat URL
     if (originURL && !originURL.startsWith(event.origin)) { return; }
@@ -133,7 +140,9 @@ export default class App extends Component<InterfaceApp> {
       analytics,
       closeChat,
       chatterIds,
-      newMessages
+      newMessages,
+      created,
+      zdSession
     } = event.data;
 
     const {
@@ -147,9 +156,12 @@ export default class App extends Component<InterfaceApp> {
       liveHandoffCallback(liveHandoff);
     } else if (zendeskLiveHandoff) {
       showZendeskWidget(zendeskLiveHandoff, this.toggleChat);
-    } else if (chatter && chatterTokenCallback) {
-      chatterTokenCallback(chatter);
-      this.props.setAppState({ chatter });
+    } else if (chatter) {
+      store(client, CHATTER_TOKEN, chatter);
+      if (chatterTokenCallback) {
+        chatterTokenCallback(chatter);
+        this.props.setAppState({ chatter });
+      }
     } else if (analytics && analyticsCallback) {
       analyticsCallback(analytics);
     } else if (closeChat && isDrawerOpen) {
@@ -158,6 +170,12 @@ export default class App extends Component<InterfaceApp> {
       this.fetchChatterAndSetup(chatterIds);
     } else if (newMessages) {
       this.handleNewMessages(newMessages);
+    } else if (zdSession) {
+      store(client, CHATTER_ZD_SESSION, zdSession);
+    }
+
+    if (created) {
+      store(client, CHATTER_CREATED, created);
     }
   }
 
@@ -190,8 +208,15 @@ export default class App extends Component<InterfaceApp> {
       return null;
     }
 
+    const chatterToken = this.chatterToken;
+    const chatterCreated = this.chatterCreated;
+    const chatterZDSession = this.chatterZDSession;
+
     return constructURL({
       ...this.URLParams,
+      chatterToken,
+      chatterCreated,
+      chatterZDSession,
       followUpResponseId: client.intro && client.intro.response_id
     }, false);
   }
@@ -244,6 +269,11 @@ export default class App extends Component<InterfaceApp> {
           return;
         }
 
+        // Load Chatter info from storage
+        this.chatterToken = retrieve(client, CHATTER_TOKEN);
+        this.chatterCreated = retrieve(client, CHATTER_CREATED);
+        this.chatterZDSession = retrieve(client, CHATTER_ZD_SESSION);
+
         // It should be loaded if rollout returns true, or if a parentElement is being used
         const shoudLoadEmbedUI = Boolean(parentElement) || checkRollout(rollout, handle);
 
@@ -293,6 +323,18 @@ export default class App extends Component<InterfaceApp> {
     });
   }
 
+  clearChatterInfo() {
+    const { client } = this.props;
+
+    this.chatterToken = null;
+    this.chatterCreated = null;
+    this.chatterZDSession = null;
+    // Remove Chatter token and created from storage
+    removeStore(client, CHATTER_TOKEN);
+    removeStore(client, CHATTER_CREATED);
+    removeStore(client, CHATTER_ZD_SESSION);
+  }
+
   /**
    * Event hanlder for custom Ada events
    */
@@ -323,6 +365,8 @@ export default class App extends Component<InterfaceApp> {
             return;
 
           case ADA_EVENT_DELETE_HISTORY:
+            // Remove the stored chatter info
+            this.clearChatterInfo();
             postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
             return;
         }
@@ -340,6 +384,9 @@ export default class App extends Component<InterfaceApp> {
             language = "",
             greeting = ""
           } = data || {};
+
+          // Remove the stored chatter info
+          this.clearChatterInfo();
 
           /**
            * In order to reset Chat we need to remove the IFrame component and re-render it.
@@ -590,28 +637,28 @@ export default class App extends Component<InterfaceApp> {
           updatePosition={this.updateButtonPosition}
           isDraggable={dragAndDrop}
         >
-         {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
-          <IntroBlurb
-            client={client}
-            toggleChat={this.toggleChat}
-            isInMobile={this.isInMobile}
-            isDraggable={dragAndDrop}
-            onShow={this.handleIntroShown}
-          />
-        )}
-        {(!isDrawerOpen || dragAndDrop) && (
-          <Button
-            client={client}
-            toggleChat={this.toggleChat}
-            showIntroEmoji={
-              showIntro &&
-              client.intro.style.toLowerCase() === "emoji" &&
-              !drawerHasBeenOpened
-            }
-            showNotification={unreadMessages > 0}
-            isDraggable={dragAndDrop}
-          />
-        )}
+          {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
+            <IntroBlurb
+              client={client}
+              toggleChat={this.toggleChat}
+              isInMobile={this.isInMobile}
+              isDraggable={dragAndDrop}
+              onShow={this.handleIntroShown}
+            />
+          )}
+          {(!isDrawerOpen || dragAndDrop) && (
+            <Button
+              client={client}
+              toggleChat={this.toggleChat}
+              showIntroEmoji={
+                showIntro &&
+                client.intro.style.toLowerCase() === "emoji" &&
+                !drawerHasBeenOpened
+              }
+              showNotification={unreadMessages > 0}
+              isDraggable={dragAndDrop}
+            />
+          )}
         </Draggability>
         {/* This iFrame is here to connect with /chat/connect/ and pull the chatter's ID from
             both local and session storage through postMessage. Once the message is received
