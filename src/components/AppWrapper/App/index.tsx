@@ -12,12 +12,14 @@ import IntroBlurb from "./IntroBlurb";
 import Drawer from "./Drawer";
 import IFrame from "./IFrame";
 import {
+  ADA_EVENT_BLUR,
+  ADA_EVENT_FOCUS,
   ADA_EVENT_RESET,
   ADA_EVENT_TOGGLE,
+  ADA_EVENT_GET_INFO,
+  ADA_EVENT_GIVE_INFO,
   ADA_EVENT_DELETE_HISTORY,
-  ADA_EVENT_SET_META_FIELDS,
-  ADA_EVENT_FOCUS,
-  ADA_EVENT_BLUR
+  ADA_EVENT_SET_META_FIELDS
 } from "constants/events";
 import { InterfaceState as AppWrapperInterfaceState } from "components/AppWrapper";
 import "./style.scss";
@@ -36,6 +38,7 @@ export default class App extends Component<InterfaceApp> {
   APIURL: string;
   connectorURL: string;
   adaModalElement: HTMLDivElement;
+  appRef: HTMLDivElement;
   documentBodyOverflow: string;
   documentBodyPosition: string;
   documentBodyTop: string;
@@ -294,61 +297,85 @@ export default class App extends Component<InterfaceApp> {
    * Event hanlder for custom Ada events
    */
   handleAdaEvent(event: CustomEvent) {
-    const { iframeRef, isIFrameLoaded, afterIFrameLoadsTasks } = this.props;
+    const {
+      chatter,
+      iframeRef,
+      isDrawerOpen,
+      isIFrameLoaded,
+      afterIFrameLoadsTasks
+    } = this.props;
     const { detail } = event;
     const { type, data } = detail;
+    const eventRequiresIFrame =
+      [ADA_EVENT_SET_META_FIELDS, ADA_EVENT_DELETE_HISTORY].includes(type);
 
-    if (type === ADA_EVENT_TOGGLE) {
-      this.toggleChat();
-      return;
-    }
+    if (eventRequiresIFrame) {
+      if (!isIFrameLoaded) {
+        afterIFrameLoadsTasks.push(event);
 
-    if (type === ADA_EVENT_RESET) {
-      const {
-        resetChatHistory = true,
-        metaFields = {},
-        language = "",
-        greeting = ""
-      } = data || {};
-
-      /**
-       * In order to reset Chat we need to remove the IFrame component and re-render it.
-       * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
-       * We can simulatenously set new values for language, greeting, and metaFields.
-       */
-      this.props.setAppState({
-        language,
-        greeting,
-        metaFields,
-        resetChatHistory,
-        forceIFrameReRender: false
-      }, () => {
         this.props.setAppState({
-          forceIFrameReRender: true
+          afterIFrameLoadsTasks
         });
-      });
+      } else {
+        switch (type) {
+          case ADA_EVENT_SET_META_FIELDS:
+            postMessage(iframeRef, data, this.chatURL);
+            return;
 
-      return;
-    }
+          case ADA_EVENT_DELETE_HISTORY:
+            postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
+            return;
+        }
+      }
+    } else {
+      switch (type) {
+        case ADA_EVENT_TOGGLE:
+          this.toggleChat();
+          return;
 
-    if (!isIFrameLoaded) {
-      afterIFrameLoadsTasks.push(event);
+        case ADA_EVENT_RESET:
+          const {
+            resetChatHistory = true,
+            metaFields = {},
+            language = "",
+            greeting = ""
+          } = data || {};
 
-      this.props.setAppState({
-        afterIFrameLoadsTasks
-      });
+          /**
+           * In order to reset Chat we need to remove the IFrame component and re-render it.
+           * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
+           * We can simulatenously set new values for language, greeting, and metaFields.
+           */
+          this.props.setAppState({
+            language,
+            greeting,
+            metaFields,
+            resetChatHistory,
+            forceIFrameReRender: false
+          }, () => {
+            this.props.setAppState({
+              forceIFrameReRender: true
+            });
+          });
+          return;
 
-      return;
-    }
-
-    switch (type) {
-      case ADA_EVENT_SET_META_FIELDS:
-        postMessage(iframeRef, data, this.chatURL);
-        break;
-
-      case ADA_EVENT_DELETE_HISTORY:
-        postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
-        break;
+        case ADA_EVENT_GET_INFO:
+          const outwardEvent = new CustomEvent(
+            "ada-event-outward",
+            {
+              detail: {
+                type: ADA_EVENT_GIVE_INFO,
+                data: {
+                  isDrawerOpen
+                }
+              },
+              bubbles: true,
+              cancelable: true
+            }
+          );
+          this.appRef.dispatchEvent(outwardEvent);
+          return;
+      }
     }
   }
 
@@ -632,6 +659,7 @@ export default class App extends Component<InterfaceApp> {
             "ada-embed-app--inside-parent": parentElement
           }
         )}
+        ref={elem => this.appRef = elem}
       >
         {this.elementToRender}
       </div>
