@@ -66,6 +66,7 @@ export default class App extends Component<InterfaceApp> {
     this.handleIntroShown = this.handleIntroShown.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.updateButtonPosition = this.updateButtonPosition.bind(this);
+    this.lockDocumentBodyFromScrolling = this.lockDocumentBodyFromScrolling.bind(this);
 
     this.documentBodyOverflow = window.document.body.style.overflow;
     this.documentBodyPosition = window.document.body.style.position;
@@ -86,21 +87,11 @@ export default class App extends Component<InterfaceApp> {
   componentDidMount() {
     this.fetchClientAndSetup();
     this.initiateAdaEventListener();
-
-    const drawerElement = document.getElementsByClassName("ada-embed-drawer")[0];
-    drawerElement.addEventListener("animationend", () => {
-      console.log("animation end");
-    }, false);
-
     this.triggerAdaReadyCallback();
   }
 
   componentWillUnmount() {
     this.removeListeners();
-    const drawerElement = document.getElementsByClassName("ada-embed-drawer")[0];
-    drawerElement.removeEventListener("animationend", () => {
-      console.log("animation end");
-    }, false);
   }
 
   /**
@@ -415,6 +406,12 @@ export default class App extends Component<InterfaceApp> {
    * there are SERIOUS issues on iOS.
    */
   lockDocumentBodyFromScrolling() {
+    const { isDrawerOpen } = this.props;
+    const nextIsDrawerOpen = !isDrawerOpen;
+
+    if (!this.isInMobile || nextIsDrawerOpen) {
+      return;
+    }
 
     // save current page position so we can scroll back there
     this.pageYOffset = window.pageYOffset;
@@ -459,12 +456,10 @@ export default class App extends Component<InterfaceApp> {
       return;
     }
 
-    // Lock body from scrolling on mobile
+    // Unlock body from scrolling on mobile
+    // locking happens in an event listener in the Drawer component
     if (this.isInMobile) {
-      if (nextIsDrawerOpen) {
-        // Lock document.body from scrolling
-        this.lockDocumentBodyFromScrolling();
-      } else {
+      if (!nextIsDrawerOpen) {
         // Unlock body from scrolling
         this.unlockDocumentBodyFromScrolling();
       }
@@ -573,6 +568,7 @@ export default class App extends Component<InterfaceApp> {
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
             introShown={introShown}
+            transitionEndCallback={this.lockDocumentBodyFromScrolling}
           />
         )}
         <Draggability
