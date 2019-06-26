@@ -15,16 +15,26 @@ interface InterfaceDrawer {
   introShown: boolean,
   toggleChat(): void,
   setIFrameRef(ref: HTMLIFrameElement): void,
-  setIFrameLoaded(): void
+  setIFrameLoaded(): void,
+  transitionEndCallback(): void
 }
 
 export default class Drawer extends Component<InterfaceDrawer> {
   isIE9OrBelow: boolean;
+  drawerRef: any;
 
   constructor(props: InterfaceDrawer) {
     super(props);
 
     this.isIE9OrBelow = isIE9OrBelow();
+  }
+
+  componentDidMount() {
+    this.drawerRef.addEventListener("transitionend", this.props.transitionEndCallback, false);
+  }
+
+  componentWillUnmount() {
+    this.drawerRef.removeEventListener("transitionend", this.props.transitionEndCallback, false);
   }
 
   render() {
@@ -46,6 +56,7 @@ export default class Drawer extends Component<InterfaceDrawer> {
             "ada-embed-drawer--mobile-overlay": useMobileOverlay
           }
         )}
+        ref={c => this.drawerRef = c}
       >
         {!hideMask &&
           <div
