@@ -86,11 +86,21 @@ export default class App extends Component<InterfaceApp> {
   componentDidMount() {
     this.fetchClientAndSetup();
     this.initiateAdaEventListener();
+
+    const drawerElement = document.getElementsByClassName("ada-embed-drawer")[0];
+    drawerElement.addEventListener("animationend", () => {
+      console.log("animation end");
+    }, false);
+
     this.triggerAdaReadyCallback();
   }
 
   componentWillUnmount() {
     this.removeListeners();
+    const drawerElement = document.getElementsByClassName("ada-embed-drawer")[0];
+    drawerElement.removeEventListener("animationend", () => {
+      console.log("animation end");
+    }, false);
   }
 
   /**
