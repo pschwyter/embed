@@ -16,7 +16,7 @@ interface InterfaceDrawer {
   toggleChat(): void,
   setIFrameRef(ref: HTMLIFrameElement): void,
   setIFrameLoaded(): void,
-  transitionEndCallback(): void
+  transitionEndHandler(): void
 }
 
 export default class Drawer extends Component<InterfaceDrawer> {
@@ -30,11 +30,15 @@ export default class Drawer extends Component<InterfaceDrawer> {
   }
 
   componentDidMount() {
-    this.drawerRef.addEventListener("transitionend", this.props.transitionEndCallback, false);
+    const { transitionEndHandler } = this.props;
+
+    this.drawerRef.addEventListener("transitionend", transitionEndHandler, false);
   }
 
   componentWillUnmount() {
-    this.drawerRef.removeEventListener("transitionend", this.props.transitionEndCallback, false);
+    const { transitionEndHandler } = this.props;
+
+    this.drawerRef.removeEventListener("transitionend", transitionEndHandler, false);
   }
 
   render() {
