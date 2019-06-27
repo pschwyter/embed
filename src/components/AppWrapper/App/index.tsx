@@ -568,7 +568,7 @@ export default class App extends Component<InterfaceApp> {
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
             introShown={introShown}
-            transitionEndCallback={this.lockDocumentBodyFromScrolling}
+            transitionEndHandler={this.lockDocumentBodyFromScrolling}
           />
         )}
         <Draggability
