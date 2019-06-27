@@ -35,5 +35,6 @@ export default class Client {
     this.tint = clientResponse.tint;
     this.intro = clientResponse.intro;
     this.chatButton = clientResponse.chat_button;
+    this.handle = clientResponse.handle;
   }
 }

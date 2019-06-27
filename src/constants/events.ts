@@ -6,3 +6,5 @@ export const ADA_EVENT_RESET = "reset";
 export const ADA_EVENT_DELETE_HISTORY = "deleteHistory";
 export const ADA_EVENT_FOCUS = "focus";
 export const ADA_EVENT_BLUR = "blur";
+export const ADA_EVENT_GET_INFO = "getInfo";
+export const ADA_EVENT_GIVE_INFO = "giveInfo";
