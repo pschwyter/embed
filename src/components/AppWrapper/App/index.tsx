@@ -12,15 +12,19 @@ import IntroBlurb from "./IntroBlurb";
 import Drawer from "./Drawer";
 import IFrame from "./IFrame";
 import {
+  ADA_EVENT_BLUR,
+  ADA_EVENT_FOCUS,
   ADA_EVENT_RESET,
   ADA_EVENT_TOGGLE,
+  ADA_EVENT_GET_INFO,
+  ADA_EVENT_GIVE_INFO,
   ADA_EVENT_DELETE_HISTORY,
-  ADA_EVENT_SET_META_FIELDS,
-  ADA_EVENT_FOCUS,
-  ADA_EVENT_BLUR
+  ADA_EVENT_SET_META_FIELDS
 } from "constants/events";
 import { InterfaceState as AppWrapperInterfaceState } from "components/AppWrapper";
 import "./style.scss";
+import { store, retrieve, removeStore } from "services/store";
+import { CHATTER_TOKEN, CHATTER_CREATED, CHATTER_ZD_SESSION } from "constants/store";
 
 interface UnreadMessage {
   amount: number
@@ -36,6 +40,7 @@ export default class App extends Component<InterfaceApp> {
   APIURL: string;
   connectorURL: string;
   adaModalElement: HTMLDivElement;
+  appRef: HTMLDivElement;
   documentBodyOverflow: string;
   documentBodyPosition: string;
   documentBodyTop: string;
@@ -43,6 +48,9 @@ export default class App extends Component<InterfaceApp> {
   documentBodyLeft: string;
   documentBodyRight: string;
   pageYOffset: number;
+  chatterToken: string;
+  chatterCreated: string;
+  chatterZDSession: string;
 
   constructor(props: InterfaceApp) {
     super(props);
@@ -51,7 +59,8 @@ export default class App extends Component<InterfaceApp> {
       mobileOverlay,
       handle,
       cluster,
-      domain
+      domain,
+      client
     } = props;
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -121,6 +130,7 @@ export default class App extends Component<InterfaceApp> {
    */
   receiveMessage(event: MessageEvent) {
     const originURL = this.chatURL;
+    const { client } = this.props;
 
     // Ensure that event origin is the same as the Chat URL
     if (originURL && !originURL.startsWith(event.origin)) { return; }
@@ -132,7 +142,9 @@ export default class App extends Component<InterfaceApp> {
       analytics,
       closeChat,
       chatterIds,
-      newMessages
+      newMessages,
+      created,
+      zdSession
     } = event.data;
 
     const {
@@ -146,9 +158,12 @@ export default class App extends Component<InterfaceApp> {
       liveHandoffCallback(liveHandoff);
     } else if (zendeskLiveHandoff) {
       showZendeskWidget(zendeskLiveHandoff, this.toggleChat);
-    } else if (chatter && chatterTokenCallback) {
-      chatterTokenCallback(chatter);
-      this.props.setAppState({ chatter });
+    } else if (chatter) {
+      store(client, CHATTER_TOKEN, chatter);
+      if (chatterTokenCallback) {
+        chatterTokenCallback(chatter);
+        this.props.setAppState({ chatter });
+      }
     } else if (analytics && analyticsCallback) {
       analyticsCallback(analytics);
     } else if (closeChat && isDrawerOpen) {
@@ -157,6 +172,12 @@ export default class App extends Component<InterfaceApp> {
       this.fetchChatterAndSetup(chatterIds);
     } else if (newMessages) {
       this.handleNewMessages(newMessages);
+    } else if (zdSession) {
+      store(client, CHATTER_ZD_SESSION, zdSession);
+    }
+
+    if (created) {
+      store(client, CHATTER_CREATED, created);
     }
   }
 
@@ -189,8 +210,15 @@ export default class App extends Component<InterfaceApp> {
       return null;
     }
 
+    const chatterToken = this.chatterToken;
+    const chatterCreated = this.chatterCreated;
+    const chatterZDSession = this.chatterZDSession;
+
     return constructURL({
       ...this.URLParams,
+      chatterToken,
+      chatterCreated,
+      chatterZDSession,
       followUpResponseId: client.intro && client.intro.response_id
     }, false);
   }
@@ -243,6 +271,11 @@ export default class App extends Component<InterfaceApp> {
           return;
         }
 
+        // Load Chatter info from storage
+        this.chatterToken = retrieve(client, CHATTER_TOKEN);
+        this.chatterCreated = retrieve(client, CHATTER_CREATED);
+        this.chatterZDSession = retrieve(client, CHATTER_ZD_SESSION);
+
         // It should be loaded if rollout returns true, or if a parentElement is being used
         const shoudLoadEmbedUI = Boolean(parentElement) || checkRollout(rollout, handle);
 
@@ -292,65 +325,106 @@ export default class App extends Component<InterfaceApp> {
     });
   }
 
+  clearChatterInfo() {
+    const { client } = this.props;
+
+    this.chatterToken = null;
+    this.chatterCreated = null;
+    this.chatterZDSession = null;
+    // Remove Chatter token and created from storage
+    removeStore(client, CHATTER_TOKEN);
+    removeStore(client, CHATTER_CREATED);
+    removeStore(client, CHATTER_ZD_SESSION);
+  }
+
   /**
    * Event hanlder for custom Ada events
    */
   handleAdaEvent(event: CustomEvent) {
-    const { iframeRef, isIFrameLoaded, afterIFrameLoadsTasks } = this.props;
+    const {
+      chatter,
+      iframeRef,
+      isDrawerOpen,
+      isIFrameLoaded,
+      afterIFrameLoadsTasks
+    } = this.props;
     const { detail } = event;
     const { type, data } = detail;
+    const eventRequiresIFrame =
+      [ADA_EVENT_SET_META_FIELDS, ADA_EVENT_DELETE_HISTORY].includes(type);
 
-    if (type === ADA_EVENT_TOGGLE) {
-      this.toggleChat();
-      return;
-    }
+    if (eventRequiresIFrame) {
+      if (!isIFrameLoaded) {
+        afterIFrameLoadsTasks.push(event);
 
-    if (type === ADA_EVENT_RESET) {
-      const {
-        resetChatHistory = true,
-        metaFields = {},
-        language = "",
-        greeting = ""
-      } = data || {};
-
-      /**
-       * In order to reset Chat we need to remove the IFrame component and re-render it.
-       * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
-       * We can simulatenously set new values for language, greeting, and metaFields.
-       */
-      this.props.setAppState({
-        language,
-        greeting,
-        metaFields,
-        resetChatHistory,
-        forceIFrameReRender: false
-      }, () => {
         this.props.setAppState({
-          forceIFrameReRender: true
+          afterIFrameLoadsTasks
         });
-      });
+      } else {
+        switch (type) {
+          case ADA_EVENT_SET_META_FIELDS:
+            postMessage(iframeRef, data, this.chatURL);
+            return;
 
-      return;
-    }
+          case ADA_EVENT_DELETE_HISTORY:
+            // Remove the stored chatter info
+            this.clearChatterInfo();
+            postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
+            return;
+        }
+      }
+    } else {
+      switch (type) {
+        case ADA_EVENT_TOGGLE:
+          this.toggleChat();
+          return;
 
-    if (!isIFrameLoaded) {
-      afterIFrameLoadsTasks.push(event);
+        case ADA_EVENT_RESET:
+          const {
+            resetChatHistory = true,
+            metaFields = {},
+            language = "",
+            greeting = ""
+          } = data || {};
 
-      this.props.setAppState({
-        afterIFrameLoadsTasks
-      });
+          // Remove the stored chatter info
+          this.clearChatterInfo();
 
-      return;
-    }
+          /**
+           * In order to reset Chat we need to remove the IFrame component and re-render it.
+           * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
+           * We can simulatenously set new values for language, greeting, and metaFields.
+           */
+          this.props.setAppState({
+            language,
+            greeting,
+            metaFields,
+            resetChatHistory,
+            forceIFrameReRender: false
+          }, () => {
+            this.props.setAppState({
+              forceIFrameReRender: true
+            });
+          });
+          return;
 
-    switch (type) {
-      case ADA_EVENT_SET_META_FIELDS:
-        postMessage(iframeRef, data, this.chatURL);
-        break;
-
-      case ADA_EVENT_DELETE_HISTORY:
-        postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
-        break;
+        case ADA_EVENT_GET_INFO:
+          const outwardEvent = new CustomEvent(
+            "ada-event-outward",
+            {
+              detail: {
+                type: ADA_EVENT_GIVE_INFO,
+                data: {
+                  isDrawerOpen
+                }
+              },
+              bubbles: true,
+              cancelable: true
+            }
+          );
+          this.appRef.dispatchEvent(outwardEvent);
+          return;
+      }
     }
   }
 
@@ -577,28 +651,28 @@ export default class App extends Component<InterfaceApp> {
           updatePosition={this.updateButtonPosition}
           isDraggable={dragAndDrop}
         >
-         {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
-          <IntroBlurb
-            client={client}
-            toggleChat={this.toggleChat}
-            isInMobile={this.isInMobile}
-            isDraggable={dragAndDrop}
-            onShow={this.handleIntroShown}
-          />
-        )}
-        {(!isDrawerOpen || dragAndDrop) && (
-          <Button
-            client={client}
-            toggleChat={this.toggleChat}
-            showIntroEmoji={
-              showIntro &&
-              client.intro.style.toLowerCase() === "emoji" &&
-              !drawerHasBeenOpened
-            }
-            showNotification={unreadMessages > 0}
-            isDraggable={dragAndDrop}
-          />
-        )}
+          {showIntro && client.intro.style.toLowerCase() === "text" && !drawerHasBeenOpened && (
+            <IntroBlurb
+              client={client}
+              toggleChat={this.toggleChat}
+              isInMobile={this.isInMobile}
+              isDraggable={dragAndDrop}
+              onShow={this.handleIntroShown}
+            />
+          )}
+          {(!isDrawerOpen || dragAndDrop) && (
+            <Button
+              client={client}
+              toggleChat={this.toggleChat}
+              showIntroEmoji={
+                showIntro &&
+                client.intro.style.toLowerCase() === "emoji" &&
+                !drawerHasBeenOpened
+              }
+              showNotification={unreadMessages > 0}
+              isDraggable={dragAndDrop}
+            />
+          )}
         </Draggability>
         {/* This iFrame is here to connect with /chat/connect/ and pull the chatter's ID from
             both local and session storage through postMessage. Once the message is received
@@ -646,6 +720,7 @@ export default class App extends Component<InterfaceApp> {
             "ada-embed-app--inside-parent": parentElement
           }
         )}
+        ref={elem => this.appRef = elem}
       >
         {this.elementToRender}
       </div>
