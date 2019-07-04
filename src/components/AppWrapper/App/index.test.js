@@ -79,11 +79,4 @@ describe("<App />", () => {
       done();
     }, 0);
   });
-
-  it("should trigger adaReadyCallback on componentDidMount", () => {
-    const { props } = setup();
-    const adaReadyCallbackSpy = jest.spyOn(props, "adaReadyCallback");
-
-    expect(adaReadyCallbackSpy).toHaveBeenCalled();
-  });
 });
