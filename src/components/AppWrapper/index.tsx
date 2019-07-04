@@ -10,8 +10,8 @@ export interface InterfaceState extends InterfaceAppWrapper {
   // The Client record
   client: Client,
 
-  // Chatter token retrieved from Chat connection
-  chatter: string,
+  // The src for the Chat iFrame
+  chatURL: string,
 
   // Render IntroBlurb when true
   showIntro: boolean,
@@ -79,7 +79,7 @@ export default class AppWrapper extends Component<InterfaceAppWrapper, Interface
       ...props,
       privateMode,
       client: null,
-      chatter: null,
+      chatURL: null,
       iframeRef: null,
       showIntro: false,
       unreadMessages: 0,
