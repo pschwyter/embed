@@ -16,7 +16,7 @@ interface InterfaceDrawer {
   toggleChat(): void,
   setIFrameRef(ref: HTMLIFrameElement): void,
   setIFrameLoaded(): void,
-  transitionEndHandler(): void
+  transitionEndHandler(event: Event): void
 }
 
 export default class Drawer extends Component<InterfaceDrawer> {
