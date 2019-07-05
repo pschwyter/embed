@@ -60,8 +60,7 @@ export default class App extends Component<InterfaceApp> {
       mobileOverlay,
       handle,
       cluster,
-      domain,
-      client
+      domain
     } = props;
 
     this.toggleChat = this.toggleChat.bind(this);
@@ -98,7 +97,6 @@ export default class App extends Component<InterfaceApp> {
   componentDidMount() {
     this.fetchClientAndSetup();
     this.initiateAdaEventListener();
-    this.triggerAdaReadyCallback();
   }
 
   componentWillUnmount() {
@@ -131,11 +129,10 @@ export default class App extends Component<InterfaceApp> {
    * Handle incoming post message events from Chat
    */
   receiveMessage(event: MessageEvent) {
-    const originURL = this.chatURL;
-    const { client } = this.props;
+    const { client, chatURL } = this.props;
 
     // Ensure that event origin is the same as the Chat URL
-    if (originURL && !originURL.startsWith(event.origin)) { return; }
+    if (chatURL && !chatURL.startsWith(event.origin)) { return; }
 
     const {
       liveHandoff,
@@ -162,9 +159,10 @@ export default class App extends Component<InterfaceApp> {
       showZendeskWidget(zendeskLiveHandoff, this.toggleChat);
     } else if (chatter) {
       store(client, CHATTER_TOKEN, chatter);
+      this.chatterToken = chatter;
+
       if (chatterTokenCallback) {
         chatterTokenCallback(chatter);
-        this.props.setAppState({ chatter });
       }
     } else if (analytics && analyticsCallback) {
       analyticsCallback(analytics);
@@ -176,10 +174,12 @@ export default class App extends Component<InterfaceApp> {
       this.handleNewMessages(newMessages);
     } else if (zdSession) {
       store(client, CHATTER_ZD_SESSION, zdSession);
+      this.chatterZDSession = zdSession;
     }
 
     if (created) {
       store(client, CHATTER_CREATED, created);
+      this.chatterCreated = created;
     }
   }
 
@@ -200,43 +200,46 @@ export default class App extends Component<InterfaceApp> {
   }
 
   /**
-   * @returns {String|null}
+   * Set the chatURL in state. We only want to update the ChatURL when Embed
+   * initially loaded, or when reset. Otherwise, state changes can cause the Chat
+   * iFrame to erroneously reload mid lifecycle.
    */
-  get chatURL(): string | null {
+  setChatURL() {
     const {
       /** @type Client */
-      client
+      client,
+      setAppState
     } = this.props;
-
-    if (!client) {
-      return null;
-    }
 
     const chatterToken = this.chatterToken;
     const chatterCreated = this.chatterCreated;
     const chatterZDSession = this.chatterZDSession;
 
-    return constructURL({
+    const chatURL = constructURL({
       ...this.URLParams,
       chatterToken,
       chatterCreated,
       chatterZDSession,
       followUpResponseId: client.intro && client.intro.response_id
     }, false);
+
+    setAppState({
+      chatURL
+    });
   }
 
   get URLParams() {
     const {
       handle,
+      domain,
       cluster,
       language,
-      domain,
       greeting,
+      metaFields,
+      introShown,
       privateMode,
-      metaFields
+      resetChatHistory
     } = this.props;
-
-    const { introShown, resetChatHistory } = this.props;
 
     return {
       handle,
@@ -278,12 +281,19 @@ export default class App extends Component<InterfaceApp> {
         this.chatterCreated = retrieve(client, CHATTER_CREATED);
         this.chatterZDSession = retrieve(client, CHATTER_ZD_SESSION);
 
+        // Need to set chatURL after getting client, but before setting shouldLoadEmbedUI
+        this.setChatURL();
+
         // It should be loaded if rollout returns true, or if a parentElement is being used
         const shoudLoadEmbedUI = Boolean(parentElement) || checkRollout(rollout, handle);
 
         this.props.setAppState({
           shoudLoadEmbedUI
         }, () => {
+          // AdaReadyCallback should only get triggered once Client has returned,
+          // and once tokens have been retrieved.
+          this.triggerAdaReadyCallback();
+
           if (shoudLoadEmbedUI) {
             this.initiateMessageListener();
 
@@ -304,8 +314,7 @@ export default class App extends Component<InterfaceApp> {
   }
 
   fetchUnread() {
-    const { chatter } = this.props;
-    const route = `chatters/${chatter}/notification_status`;
+    const route = `chatters/${this.chatterToken}/notification_status`;
     const url = constructURL(
       Object.assign(this.URLParams, { route }),
       true
@@ -344,16 +353,18 @@ export default class App extends Component<InterfaceApp> {
    */
   handleAdaEvent(event: CustomEvent) {
     const {
-      chatter,
+      chatURL,
       iframeRef,
       isDrawerOpen,
+      parentElement,
       isIFrameLoaded,
+      drawerHasBeenOpened,
       afterIFrameLoadsTasks
     } = this.props;
     const { detail } = event;
     const { type, data } = detail;
     const eventRequiresIFrame =
-      [ADA_EVENT_SET_META_FIELDS, ADA_EVENT_DELETE_HISTORY].includes(type);
+      [ADA_EVENT_SET_META_FIELDS, ADA_EVENT_DELETE_HISTORY].indexOf(type) > -1;
 
     if (eventRequiresIFrame) {
       if (!isIFrameLoaded) {
@@ -365,13 +376,13 @@ export default class App extends Component<InterfaceApp> {
       } else {
         switch (type) {
           case ADA_EVENT_SET_META_FIELDS:
-            postMessage(iframeRef, data, this.chatURL);
+            postMessage(iframeRef, data, chatURL);
             return;
 
           case ADA_EVENT_DELETE_HISTORY:
             // Remove the stored chatter info
             this.clearChatterInfo();
-            postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, this.chatURL);
+            postMessage(iframeRef, ADA_EVENT_DELETE_HISTORY, chatURL);
             return;
         }
       }
@@ -404,6 +415,9 @@ export default class App extends Component<InterfaceApp> {
             resetChatHistory,
             forceIFrameReRender: false
           }, () => {
+            // Need to reset the chatURL before we re-open to ensure new query params are set
+            this.setChatURL();
+
             this.props.setAppState({
               forceIFrameReRender: true
             });
@@ -417,7 +431,10 @@ export default class App extends Component<InterfaceApp> {
               detail: {
                 type: ADA_EVENT_GIVE_INFO,
                 data: {
-                  isDrawerOpen
+                  isDrawerOpen,
+                  hasActiveChatter: Boolean(this.chatterToken),
+                  hasClosedChat: drawerHasBeenOpened && !isDrawerOpen,
+                  isChatOpen: isDrawerOpen || Boolean(isIFrameLoaded && parentElement)
                 }
               },
               bubbles: true,
@@ -445,14 +462,13 @@ export default class App extends Component<InterfaceApp> {
    * Handles clearing unread messages on both Embed and API
    */
   handleClearUnreadMessages() {
-    const { chatter } = this.props;
     this.props.setAppState({
       unreadMessages: 0
     });
 
-    if (!chatter) return;
+    if (!this.chatterToken) return;
     // Send request to API to clear unread messages
-    const route = `chatters/${chatter}/live_chat_unread_amount`;
+    const route = `chatters/${this.chatterToken}/live_chat_unread_amount`;
     const url = constructURL(
       Object.assign(this.URLParams, { route }),
       true
@@ -523,7 +539,7 @@ export default class App extends Component<InterfaceApp> {
    * Open/close the Drawer component, or open a new window if in mobile
    */
   toggleChat() {
-    const { isDrawerOpen, iframeRef } = this.props;
+    const { isDrawerOpen, iframeRef, chatURL } = this.props;
     const nextIsDrawerOpen = !isDrawerOpen;
 
     // Clear unread messages
@@ -531,7 +547,7 @@ export default class App extends Component<InterfaceApp> {
 
     // Open Chat in a new window if mobile
     if (this.openChatInNewWindow) {
-      window.open(this.chatURL);
+      window.open(chatURL);
 
       return;
     }
@@ -553,9 +569,9 @@ export default class App extends Component<InterfaceApp> {
         if (nextIsDrawerOpen) {
           // To ensure the input bar is always focused in Chat when the drawer is opened
           iframeRef.contentWindow.focus();
-          postMessage(iframeRef, ADA_EVENT_FOCUS, this.chatURL);
+          postMessage(iframeRef, ADA_EVENT_FOCUS, chatURL);
         } else {
-          postMessage(iframeRef, ADA_EVENT_BLUR, this.chatURL);
+          postMessage(iframeRef, ADA_EVENT_BLUR, chatURL);
 
           if (document.activeElement instanceof HTMLElement) {
             document.activeElement.blur();
@@ -606,7 +622,6 @@ export default class App extends Component<InterfaceApp> {
       <IFrame
         {...this.props}
         iframeRef={iframeRef}
-        chatURL={this.chatURL}
         isDrawerOpen={isDrawerOpen}
         setIFrameRef={this.setIFrameRef}
         setIFrameLoaded={this.setIFrameLoaded}
@@ -621,15 +636,15 @@ export default class App extends Component<InterfaceApp> {
   renderStandardConfigElements() {
     const { mobileOverlay, hideMask, dragAndDrop } = this.props;
     const {
-      isDrawerOpen,
-      drawerHasBeenOpened,
       client,
       showIntro,
       iframeRef,
+      introShown,
+      isDrawerOpen,
+      buttonPosition,
       unreadMessages,
       hasConnectedChat,
-      buttonPosition,
-      introShown
+      drawerHasBeenOpened
     } = this.props;
 
     return (
@@ -640,14 +655,13 @@ export default class App extends Component<InterfaceApp> {
             {...this.props}
             hideMask={hideMask}
             iframeRef={iframeRef}
-            chatURL={this.chatURL}
+            introShown={introShown}
             isDrawerOpen={isDrawerOpen}
             toggleChat={this.toggleChat}
             setIFrameRef={this.setIFrameRef}
             setIFrameLoaded={this.setIFrameLoaded}
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
-            introShown={introShown}
             transitionEndHandler={this.lockDocumentBodyFromScrolling}
           />
         )}
