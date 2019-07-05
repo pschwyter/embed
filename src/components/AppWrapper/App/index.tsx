@@ -47,7 +47,6 @@ export default class App extends Component<InterfaceApp> {
   documentBodyBottom: string;
   documentBodyLeft: string;
   documentBodyRight: string;
-  documentBodyLocked: boolean;
   pageYOffset: number;
   chatterToken: string;
   chatterCreated: string;
@@ -83,7 +82,6 @@ export default class App extends Component<InterfaceApp> {
     this.documentBodyBottom = window.document.body.style.bottom;
     this.documentBodyLeft = window.document.body.style.left;
     this.documentBodyRight = window.document.body.style.right;
-    this.documentBodyLocked = false;
 
     const route = "connect";
     this.connectorURL = constructURL(
@@ -505,8 +503,6 @@ export default class App extends Component<InterfaceApp> {
       return;
     }
 
-    this.documentBodyLocked = true;
-
     // save current page position so we can scroll back there
     this.pageYOffset = window.pageYOffset;
 
@@ -531,8 +527,6 @@ export default class App extends Component<InterfaceApp> {
 
     // scroll the page back to where it was before chat opened
     window.scrollTo(0, this.pageYOffset);
-
-    this.documentBodyLocked = false;
   }
 
   /**
