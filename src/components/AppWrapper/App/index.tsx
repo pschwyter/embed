@@ -47,6 +47,7 @@ export default class App extends Component<InterfaceApp> {
   documentBodyBottom: string;
   documentBodyLeft: string;
   documentBodyRight: string;
+  pageYOffset: number;
   chatterToken: string;
   chatterCreated: string;
   chatterZDSession: string;
@@ -73,6 +74,7 @@ export default class App extends Component<InterfaceApp> {
     this.handleIntroShown = this.handleIntroShown.bind(this);
     this.setIFrameLoaded = this.setIFrameLoaded.bind(this);
     this.updateButtonPosition = this.updateButtonPosition.bind(this);
+    this.lockDocumentBodyFromScrolling = this.lockDocumentBodyFromScrolling.bind(this);
 
     this.documentBodyOverflow = window.document.body.style.overflow;
     this.documentBodyPosition = window.document.body.style.position;
@@ -493,7 +495,17 @@ export default class App extends Component<InterfaceApp> {
    * Lock the document body from scrolling. If we don't do this,
    * there are SERIOUS issues on iOS.
    */
-  lockDocumentBodyFromScrolling() {
+  lockDocumentBodyFromScrolling(event) {
+    const { isDrawerOpen } = this.props;
+    const nextIsDrawerOpen = !isDrawerOpen;
+
+    if (!this.isInMobile || nextIsDrawerOpen || event.propertyName !== "transform") {
+      return;
+    }
+
+    // save current page position so we can scroll back there
+    this.pageYOffset = window.pageYOffset;
+
     window.document.body.style.overflow = "hidden";
     window.document.body.style.position = "fixed";
     window.document.body.style.top = "0";
@@ -512,6 +524,9 @@ export default class App extends Component<InterfaceApp> {
     window.document.body.style.bottom = this.documentBodyBottom;
     window.document.body.style.left = this.documentBodyLeft;
     window.document.body.style.right = this.documentBodyRight;
+
+    // scroll the page back to where it was before chat opened
+    window.scrollTo(0, this.pageYOffset);
   }
 
   /**
@@ -531,12 +546,10 @@ export default class App extends Component<InterfaceApp> {
       return;
     }
 
-    // Lock body from scrolling on mobile
+    // Unlock body from scrolling on mobile
+    // locking happens in an event listener in the Drawer component
     if (this.isInMobile) {
-      if (nextIsDrawerOpen) {
-        // Lock document.body from scrolling
-        this.lockDocumentBodyFromScrolling();
-      } else {
+      if (!nextIsDrawerOpen) {
         // Unlock body from scrolling
         this.unlockDocumentBodyFromScrolling();
       }
@@ -643,6 +656,7 @@ export default class App extends Component<InterfaceApp> {
             setIFrameLoaded={this.setIFrameLoaded}
             drawerHasBeenOpened={drawerHasBeenOpened}
             useMobileOverlay={mobileOverlay && this.isInMobile}
+            transitionEndHandler={this.lockDocumentBodyFromScrolling}
           />
         )}
         <Draggability
