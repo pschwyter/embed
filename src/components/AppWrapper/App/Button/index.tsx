@@ -5,12 +5,10 @@ import SVG from "react-inlinesvg";
 import { Component, h } from "preact";
 import "./style.scss";
 
-const CHAT_BUTTON_PADDING_SIZE_RATIO = 6.28;
 const NOTIFICATION_BADGE_SIZE_RATIO = 0.386;
 const NOTIFICATION_BADGE_BOTTOM_RATIO = 0.705;
 const NOTIFICATION_BADGE_RIGHT_RATIO = -0.09;
-const NOTIFICATION_BADGE_POSITION_RATIO = 0.193;
-const NOTIFICATION_BADGE_RADIUS_RATIO = 0.128;
+const NOTIFICATION_BADGE_BORDER_RATIO = 0.352;
 
 interface InterfaceButton {
   client: Client,
@@ -29,13 +27,26 @@ export default class Button extends Component<InterfaceButton> {
     this.setState({ customIconHasLoaded: true });
   }
 
+  get notificationStyles() {
+    const { client } = this.props;
+    const buttonSize = client.chatButton.size;
+    const heightAndWidth = Math.ceil(buttonSize * NOTIFICATION_BADGE_SIZE_RATIO);
+
+    return {
+      height: heightAndWidth,
+      width: heightAndWidth,
+      bottom: buttonSize * NOTIFICATION_BADGE_BOTTOM_RATIO,
+      right: buttonSize * NOTIFICATION_BADGE_RIGHT_RATIO,
+      borderWidth: heightAndWidth * NOTIFICATION_BADGE_BORDER_RATIO
+    };
+  }
+
   render(props: InterfaceButton) {
     const { customIconHasLoaded } = this.state;
     const {
       toggleChat, client, showIntroEmoji,
       showNotification, isDraggable
     } = props;
-
 
     const useCustomIcon = client.chatButton.icon_type === "custom" || null;
     const chatButtonURL = useCustomIcon ? client.chatButton.icon_path : "static/icons/Dialogue.svg";
@@ -87,27 +98,12 @@ export default class Button extends Component<InterfaceButton> {
           )}
         </button>
         {showNotification && (
-          <svg
+          <div
             className="ada-embed-notification"
             alt="New Message"
             role="alert"
-            style={{
-              width: Math.ceil(buttonSize * NOTIFICATION_BADGE_SIZE_RATIO),
-              height: Math.ceil(buttonSize * NOTIFICATION_BADGE_SIZE_RATIO),
-              bottom: buttonSize * NOTIFICATION_BADGE_BOTTOM_RATIO,
-              right: buttonSize * NOTIFICATION_BADGE_RIGHT_RATIO
-            }}
-          >
-              <circle
-                className="ada-embed-notification__circle"
-                style={{
-                  cx: buttonSize * NOTIFICATION_BADGE_POSITION_RATIO,
-                  cy: buttonSize * NOTIFICATION_BADGE_POSITION_RATIO,
-                  r: buttonSize * NOTIFICATION_BADGE_RADIUS_RATIO,
-                  strokeWidth: buttonSize * NOTIFICATION_BADGE_RADIUS_RATIO
-                }}
-              />
-          </svg>
+            style={this.notificationStyles}
+          />
         )}
       </div>
     );
