@@ -1,4 +1,14 @@
+_(A screenshot of what the changes look like should go here if there are UI changes)_
 
+### Description of What has Changed
+
+### Why this is Important
+
+### How to Test
+> _Bullet point instructions on how to test this PR_
+
+### Deployment Plan
+> _A step by step deployment plan and any branch dependencies should be outlined here (if required)_
 
 ---
 - [ ] PR title follows the format \<Jira Card\>: \<Change description\>

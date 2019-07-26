@@ -77,23 +77,16 @@ $button-border-color: 1px solid rgba($color-black, .05);
   }
 
   .ada-embed-notification {
-    width: 17px;
-    height: 17px;
     border-radius: 50%;
     position: absolute;
     bottom: 31px;
     right: -4px;
+    border-style: solid;
+    border-color: $color-red;
+    background-color: $color-white;
+    box-sizing: border-box;
     animation-duration: .5s;
     animation-name: notification-fade-in;
-
-    &__circle {
-      cx: 8.5px;
-      cy: 8.5px;
-      r: 6px;
-      fill: $color-white;
-      stroke-width: 6px;
-      stroke: $color-red;
-    }
   }
 }
 
