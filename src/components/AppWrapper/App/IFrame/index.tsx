@@ -72,6 +72,7 @@ export default class IFrame extends Component<InterfaceIFrame> {
         onLoad={this.onLoad}
         ref={this.handleSetRef}
         tabIndex={isDrawerOpen ? 0 : -1}
+        allowFullScreen={true}
       />
     );
   }
