@@ -10,6 +10,7 @@ preact-render-spy (1 nodes)
   title="Nic Support Chat"
   onLoad={[Function bound ]}
   tabIndex={-1}
+  allowFullScreen={true}
 >
 </iframe>
 
