@@ -35,4 +35,9 @@ describe("<IFrame />", () => {
 
     expect(PRSWrapper).toMatchSnapshot();
   });
+
+  it("should have the attribute allowFullScreen set to true", () => {
+    const { PRSWrapper } = setup();
+    expect(PRSWrapper.find(".ada-embed-iframe").attr("allowFullScreen")).toBeTruthy();
+  });
 });
