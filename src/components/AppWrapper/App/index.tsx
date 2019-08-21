@@ -290,7 +290,13 @@ export default class App extends Component<InterfaceApp> {
         }, () => {
           // AdaReadyCallback should only get triggered once Client has returned,
           // and once tokens have been retrieved.
-          this.triggerAdaReadyCallback();
+          //
+          // We need a setTimeout here to "pause" to allow rendering to catch up.
+          // This was causing an issue where adaEmbed.reset() could not be called from
+          // the adaReadyCallback.
+          setTimeout(() => {
+            this.triggerAdaReadyCallback();
+          }, 0);
 
           if (shoudLoadEmbedUI) {
             this.initiateMessageListener();
