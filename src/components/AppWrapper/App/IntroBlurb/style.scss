@@ -9,6 +9,7 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
   opacity: 0;
   max-width: 224px;
   z-index: 10000;
+  visibility: hidden;
 
   &--not-draggable {
     position: fixed;
@@ -17,15 +18,11 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
   }
 
   &--show {
-    animation-name: messageBlowup;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+    animation: messageBlowup 1s forwards;
   }
 
   &--hide {
-    animation-name: messageBlowdown;
-    animation-duration: .5s;
-    animation-fill-mode: forwards;
+    animation: messageBlowdown .5s forwards;
   }
 
   &--large {
@@ -34,14 +31,6 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
 
   &--x-large {
     right: 104px;
-  }
-
-  &:hover &__dismiss-button,
-  &__dismiss-button--mobile-show {
-    opacity: 1 !important;
-    pointer-events: all;
-    margin: 0 13px;
-    left: -13px;
   }
 
   &__dismiss-button {
@@ -60,11 +49,28 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
     height: 16px;
     filter: $intro-shadow;
     pointer-events: none;
+    background-color: transparent;
+
+    &--mobile-show {
+      top: -24px;
+    }
 
     &:focus {
       opacity: 1;
       pointer-events: all;
     }
+  }
+
+  &:hover &__dismiss-button,
+  &__dismiss-button--mobile-show {
+    opacity: 1 !important;
+    pointer-events: all;
+    margin: 0 13px;
+    left: -13px;
+  }
+
+  &__dismiss-button--mobile-show ~ &__message {
+    margin: 0;
   }
 
   &__message {
@@ -91,40 +97,44 @@ $intro-shadow: drop-shadow(0 0 2px $shadow-color);
 @keyframes messageBlowup {
   0% {
     transform: scale3d(0, 0, 0);
+    visibility: visible;
     opacity: 0;
   }
 
   60% {
     transform: scale3d(1.1, 1.1, 1.1);
-    animation-timing-function: ease-in-out;
+    visibility: visible;
     opacity: 1;
   }
 
   100% {
     transform: scale3d(1, 1, 1);
+    visibility: visible;
     opacity: 1;
   }
 }
 
 @keyframes messageBlowdown {
   0% {
+    visibility: visible;
     transform: scale3d(1, 1, 1);
     opacity: 1;
   }
 
   25% {
+    visibility: visible;
     transform: scale3d(1, 1, 1);
     opacity: 1;
   }
 
   50% {
+    visibility: visible;
     transform: scale3d(1.1, 1.1, 1.1);
-    animation-timing-function: ease-in-out;
     opacity: 1;
   }
 
   100% {
-    display: none;
+    visibility: hidden;
     transform: scale3d(0, 0, 0);
     opacity: 1;
   }
