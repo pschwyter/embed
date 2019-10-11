@@ -127,7 +127,7 @@ export default class App extends Component<InterfaceApp> {
    * Handle incoming post message events from Chat
    */
   receiveMessage(event: MessageEvent) {
-    const { client, chatURL } = this.props;
+    const { client, chatURL, metaFields } = this.props;
 
     // Ensure that event origin is the same as the Chat URL
     if (chatURL && !chatURL.startsWith(event.origin)) { return; }
@@ -141,7 +141,8 @@ export default class App extends Component<InterfaceApp> {
       chatterIds,
       newMessages,
       created,
-      zdSession
+      zdSession,
+      resetChat
     } = event.data;
 
     const {
@@ -173,6 +174,20 @@ export default class App extends Component<InterfaceApp> {
     } else if (zdSession) {
       store(client, CHATTER_ZD_SESSION, zdSession);
       this.chatterZDSession = zdSession;
+    } else if (resetChat) {
+      const resetEvent = new CustomEvent(
+        "ada-event-reset",
+        {
+          detail: {
+            type: ADA_EVENT_RESET,
+            data: { metaFields }
+          },
+          bubbles: true,
+          cancelable: true
+        }
+      );
+
+      this.handleAdaEvent(resetEvent);
     }
 
     if (created) {
