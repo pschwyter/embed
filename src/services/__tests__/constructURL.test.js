@@ -69,7 +69,7 @@ describe("constructURL", () => {
       route: "chatters"
     }, false);
 
-    expect(url).toBe("https://nic.ada.support/chat/chatters/");
+    expect(url).toBe("https://nic.ada.support/chat/chatters/?embed=1");
   });
 
   it("should set language in the query string if specified", () => {
@@ -89,7 +89,7 @@ describe("constructURL", () => {
       privateMode: true,
       greeting: "123"
     }, false);
-    expect(url.match(/&/g).length).toBe(2);
+    expect(url.match(/&/g).length).toBe(3);
     expect(url.match(/\?/g).length).toBe(1);
   });
 
@@ -102,15 +102,15 @@ describe("constructURL", () => {
       }
     }, false);
 
-    expect(url).toBe("https://nic.ada.support/chat/?test1=yolo&test2=yodo");
+    expect(url).toBe("https://nic.ada.support/chat/?embed=1&test1=yolo&test2=yodo");
   });
 
-  it("should not include metaFields if undefined", () => {
+  it("should not include metaFields if undefined (except for embed)", () => {
     const url = constructURL({
       handle: "nic"
     }, false);
 
-    expect(url).toBe("https://nic.ada.support/chat/");
+    expect(url).toBe("https://nic.ada.support/chat/?embed=1");
   });
 
   it("should add followUpResponseId to URL if provided", () => {
@@ -119,7 +119,7 @@ describe("constructURL", () => {
       followUpResponseId: "123"
     }, false);
 
-    expect(url).toBe("https://nic.ada.support/chat/?followUpResponseId=123");
+    expect(url).toBe("https://nic.ada.support/chat/?embed=1&followUpResponseId=123");
   });
 
   it("should include the greeting id in the Chat URL if specified in adaSettings", () => {
@@ -128,7 +128,7 @@ describe("constructURL", () => {
       greeting: "123"
     }, false);
 
-    expect(url).toBe("https://nic.ada.support/chat/?greeting=123");
+    expect(url).toBe("https://nic.ada.support/chat/?embed=1&greeting=123");
   });
 });
 
