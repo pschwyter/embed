@@ -67,11 +67,13 @@ export default function constructURL(
     const chatterTokenString = chatterToken ? `chatterToken=${chatterToken}` : undefined;
     const chatterCreatedString = chatterCreated ? `created=${chatterCreated}` : undefined;
     const chatterZDSessionString = chatterZDSession ? `zdSession=${chatterZDSession}` : undefined;
+    const embedString = "embed=1"; // This tells us Chat was setup with Embed, not Chaperone
     const followUpResponseIdString = followUpResponseId ?
       `followUpResponseId=${followUpResponseId}` : undefined;
 
     queryString = [
       resetMode,
+      embedString,
       newPrivateMode,
       greetingString,
       languageString,
