@@ -127,7 +127,7 @@ export default class App extends Component<InterfaceApp> {
    * Handle incoming post message events from Chat
    */
   receiveMessage(event: MessageEvent) {
-    const { client, chatURL } = this.props;
+    const { client, chatURL, metaFields } = this.props;
 
     // Ensure that event origin is the same as the Chat URL
     if (chatURL && !chatURL.startsWith(event.origin)) { return; }
@@ -141,7 +141,8 @@ export default class App extends Component<InterfaceApp> {
       chatterIds,
       newMessages,
       created,
-      zdSession
+      zdSession,
+      resetChat
     } = event.data;
 
     const {
@@ -173,6 +174,8 @@ export default class App extends Component<InterfaceApp> {
     } else if (zdSession) {
       store(client, CHATTER_ZD_SESSION, zdSession);
       this.chatterZDSession = zdSession;
+    } else if (resetChat) {
+      this.resetChat({ metaFields });
     }
 
     if (created) {
@@ -397,35 +400,7 @@ export default class App extends Component<InterfaceApp> {
           return;
 
         case ADA_EVENT_RESET:
-          const {
-            resetChatHistory = true,
-            metaFields = {},
-            language = "",
-            greeting = ""
-          } = data || {};
-
-          // Remove the stored chatter info
-          this.clearChatterInfo();
-
-          /**
-           * In order to reset Chat we need to remove the IFrame component and re-render it.
-           * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
-           * We can simulatenously set new values for language, greeting, and metaFields.
-           */
-          this.props.setAppState({
-            language,
-            greeting,
-            metaFields,
-            resetChatHistory,
-            forceIFrameReRender: false
-          }, () => {
-            // Need to reset the chatURL before we re-open to ensure new query params are set
-            this.setChatURL();
-
-            this.props.setAppState({
-              forceIFrameReRender: true
-            });
-          });
+          this.resetChat(data);
           return;
 
         case ADA_EVENT_GET_INFO:
@@ -578,6 +553,46 @@ export default class App extends Component<InterfaceApp> {
           }
         }
       }
+    });
+  }
+
+  /**
+   * Reset the chat
+   */
+  resetChat(data: {
+    resetChatHistory?: Boolean,
+    metaFields?: object,
+    language?: String,
+    greeting?: String
+  }) {
+    const {
+      resetChatHistory = true,
+      metaFields = {},
+      language = "",
+      greeting = ""
+    } = data || {};
+
+    // Remove the stored chatter info
+    this.clearChatterInfo();
+
+    /**
+     * In order to reset Chat we need to remove the IFrame component and re-render it.
+     * To do this, we set `forceIFrameReRender` to `false`, then immediately back to `true`.
+     * We can simulatenously set new values for language, greeting, and metaFields.
+     */
+    this.props.setAppState({
+      language,
+      greeting,
+      metaFields,
+      resetChatHistory,
+      forceIFrameReRender: false
+    }, () => {
+      // Need to reset the chatURL before we re-open to ensure new query params are set
+      this.setChatURL();
+
+      this.props.setAppState({
+        forceIFrameReRender: true
+      });
     });
   }
 
