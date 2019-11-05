@@ -86,7 +86,10 @@ export interface InterfaceStartOptions {
   liveHandoffCallback?(liveHandoff: any): any,
 
   // Triggered when "chatter" postMessage event received
-  chatterTokenCallback?(chatter: string): any
+  chatterTokenCallback?(chatter: string): any,
+
+  // Triggered when "javascriptEvent" postMessage event received
+  eventCallbacks?(eventData: string): any
 }
 
 interface InterfaceResetOptions {

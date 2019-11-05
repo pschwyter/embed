@@ -142,14 +142,16 @@ export default class App extends Component<InterfaceApp> {
       newMessages,
       created,
       zdSession,
-      resetChat
+      resetChat,
+      javascriptEvent
     } = event.data;
 
     const {
+      analyticsCallback,
+      chatterTokenCallback,
+      eventCallbacks,
       isDrawerOpen,
       liveHandoffCallback,
-      chatterTokenCallback,
-      analyticsCallback
     } = this.props;
 
     if (liveHandoff && liveHandoffCallback) {
@@ -176,6 +178,15 @@ export default class App extends Component<InterfaceApp> {
       this.chatterZDSession = zdSession;
     } else if (resetChat) {
       this.resetChat({ metaFields });
+    } else if (javascriptEvent && eventCallbacks) {
+        const specificCallback = eventCallbacks[javascriptEvent.event_name];
+        const genericCallback = eventCallbacks['*'];
+        if (specificCallback) {
+            specificCallback(javascriptEvent);
+        }
+        if (genericCallback) {
+            genericCallback(javascriptEvent);
+        }
     }
 
     if (created) {
