@@ -143,7 +143,7 @@ export default class App extends Component<InterfaceApp> {
       created,
       zdSession,
       resetChat,
-      javascriptEvent
+      customJavascriptEvent
     } = event.data;
 
     const {
@@ -178,14 +178,14 @@ export default class App extends Component<InterfaceApp> {
       this.chatterZDSession = zdSession;
     } else if (resetChat) {
       this.resetChat({ metaFields });
-    } else if (javascriptEvent && eventCallbacks) {
-        const specificCallback = eventCallbacks[javascriptEvent.event_name];
+    } else if (customJavascriptEvent && eventCallbacks) {
+        const specificCallback = eventCallbacks[customJavascriptEvent.event_name];
         const genericCallback = eventCallbacks['*'];
         if (specificCallback) {
-            specificCallback(javascriptEvent);
+            specificCallback(customJavascriptEvent);
         }
         if (genericCallback) {
-            genericCallback(javascriptEvent);
+            genericCallback(customJavascriptEvent);
         }
     }
 
