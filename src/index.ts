@@ -88,8 +88,10 @@ export interface InterfaceStartOptions {
   // Triggered when "chatter" postMessage event received
   chatterTokenCallback?(chatter: string): any,
 
-  // Triggered when "javascriptEvent" postMessage event received
-  eventCallbacks?(eventData: object): any
+  // Triggered when "customJavascriptEvent" postMessage event received
+  eventCallbacks?(eventCallbacks: object) : {
+      [key: string]: (customJavascriptEvent: object) => any
+  }
 }
 
 interface InterfaceResetOptions {
