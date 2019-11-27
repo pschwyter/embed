@@ -89,7 +89,7 @@ export interface InterfaceStartOptions {
   chatterTokenCallback?(chatter: string): any,
 
   // Triggered when "customJavascriptEvent" postMessage event received
-  eventCallbacks?(eventCallbacks: object) : {
+  eventCallbacks?: {
       [key: string]: (customJavascriptEvent: object) => any
   }
 }
